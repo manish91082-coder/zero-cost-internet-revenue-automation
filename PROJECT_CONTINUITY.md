@@ -162,3 +162,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - No accounts, KYC, terms acceptance, submissions, external contact, product build, tests, publication, paid use or spend were authorized by this architecture-study request.
 - Next: complete evidence-backed feasibility/architecture research for a zero-cost agent swarm; document framework/model/runtime/storage/scheduling limits and operational fallback; then propose phased implementation with manual approval gates. Only after architecture review should implementation begin.
 
+
+## 13. Zero-cost autonomous research swarm feasibility study (2026-11-14)
+- Report: docs/38_ZERO_COST_AUTONOMOUS_RESEARCH_REVENUE_SWARM_FEASIBILITY_HI.md
+- Report commit: 07c32434353914629e78873fd05fc2d988fa956c (fetch-back verification pending at checkpoint write).
+- Finding: FEASIBLE WITH BOUNDED AUTONOMY; unlimited cloud AI inference and guaranteed 24/7 operation at ₹0 are NOT feasible. Use deterministic research pipeline as backbone, specialist agents as bounded workers, free APIs as quota-limited optional inference, local CPU inference as fallback, and human approval for legal/financial/external/irreversible actions.
+- Reference architecture: LangGraph + deterministic Python state/policy engine + read-only Playwright research + GitHub Actions + GitHub/SQLite evidence store. CrewAI evaluated as alternative; AutoGen not selected because official repository is archived; n8n not default due Sustainable Use License business-use constraints. Microsoft Agent Framework is a possible alternative but not selected for initial minimal build.
+- Free inference reality: OpenRouter free variants currently 50 requests/day (20 RPM); higher 1,000/day requires purchased credits and is prohibited. Gemini free tier has limited models/quotas and free-tier content may be used to improve Google products. Hugging Face free inference credit is only $0.10/month subject to change. No provider is treated as unlimited or guaranteed.
+- Free infrastructure reality: public GitHub Actions standard runners are free under GitHub policy; Cloudflare Workers Free is suitable only for lightweight scheduling/webhooks (100k requests/day, 10ms CPU, 128MB, five Cron triggers); D1 free is limited and optional. Do not run long browser/LLM tasks inside Workers.
+- No implementation, account/KYC, legal acceptance, submission, outreach, build/test, publication, paid use or spend was authorized or performed.
+- Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
+- Next recommended engineering action: Phase A machine-readable constitution, schemas and destination registry validation; then Phase B read-only research engine. Phase 25 Batch 4 remains pending and its original sequence is preserved.
+
