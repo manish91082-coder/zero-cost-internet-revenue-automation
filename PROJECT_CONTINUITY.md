@@ -53,14 +53,14 @@ Keep those groups separate. Do not confuse free inference providers with platfor
 13. Salesforce AgentExchange — appexchange.salesforce.com
 
 ## 4. Completed work recorded in chat
-First seven destinations received an interim official-source audit:
+All 13 destinations in Phase 23 have now received interim official-source audits:
 - Google AI Studio/Gemini: free tier exists but unpaid-tier prompts/responses may be used for product improvement and may be reviewed by humans; do not submit sensitive/confidential/personal data. Prototype-only conditional, not production-approved.
 - Groq: free limits are model/organization-specific; exact limits depend on account. Commercial/data-policy verification remains incomplete.
 - OpenRouter: free model limits include 20 RPM and 50 requests/day; higher daily allowance requires cumulative paid credits, disallowed by the ₹0 rule. Model/provider data terms vary. Experimental fallback only.
 - Cloudflare Workers AI: free Workers plan allocation documented as 10,000 Neurons/day; exceeding allocation fails unless paid plan. Prototype candidate, workload and data terms need further review.
 Interim status for all four: no production approval; no customer-data deployment approval; no evidence of settled revenue.
 
-Batch 5–7 has now been audited and recorded in `docs/27_PHASE_23_DESTINATIONS_05_07_AUDIT_HI.md`. Summary:
+Batch 5–7 audit is recorded in `docs/27_PHASE_23_DESTINATIONS_05_07_AUDIT_HI.md`. Summary:
 - Relevance AI: paid marketplace listings exist but creator submission is restricted to verified Relevance Builders; affiliate program separately offers 15% recurring commission for 12 months on qualified referrals, Wise payout, $50 threshold. India settlement remains unverified. Affiliate is referral income, not agent rental.
 - Agent.ai: official docs explicitly say credits have no monetary value and cannot be exchanged for money; no creator cash payout verified.
 - Enso: no open creator marketplace/revenue share verified. Its Growth Lab bounty offers $250–$2,500+ for verified original distribution research, paid via wire/Wise/PayPal, but is a one-off manually submitted bounty with 90-day exclusive embargo and use/publish/adapt rights for Enso. India settlement remains unverified.
@@ -75,18 +75,28 @@ Batch 8–10 has now been audited and recorded in `docs/28_PHASE_23_DESTINATIONS
 - India automated commercial calling requires TRAI compliance; promotional autodialer/robocalls use designated 140 series under applicable rules, with sender registration/consent requirements. Exact call type and current regulations need legal validation.
 - Batch 8–10 result: HOLD; no build/list/registration/submission; no settled revenue.
 
-Next planned research batch is destinations 11–13:
-11. Yellow.ai / Kore.ai partner.
-12. Direct sales to local businesses (monthly agent rental; customer advance must fund human/model costs).
-13. Salesforce AgentExchange.
-Official sources first. Verify actual partner payout/revenue share, India onboarding, fees, customer demand, IP/data rights, payment settlement, and fully loaded zero-cost fulfilment.
+Batch 11–13 is complete and recorded in `docs/29_PHASE_23_FINAL_AUDIT_13_DESTINATIONS_HI.md`. Summary:
+- Yellow.ai offers referral, channel/reseller and technology partner models; public commission, payout threshold, India settlement and fees are undisclosed.
+- Kore.ai offers partner/referral models; qualified referrals may receive a fee after contract, subject to terms. SI/ISV partner applications currently show a waiting list; exact commission and India payout are undisclosed.
+- Direct local-business agent rental is the most controllable route, but market research only shows broad digitalisation context. No project-specific buyer intent, interview, LOI, deposit, paid pilot or sale exists. Customer advance only helps if cleared before cost-bearing work and covers all model, hosting, telephony, messaging, tax, payment, refund, support and human costs with no owner-funded cash gap.
+- Salesforce Partner Program enrollment is advertised as no-fee, but publication requires business approval, PADA and security review. Checkout is limited to companies based in US/UK/EU; Checkout share is 15% plus $0.30/card transaction. India-based seller cannot rely on this Checkout route.
+- Phase 23 final disposition: 13/13 interim audits complete; 0 destinations pass all five gates; no build/list/launch approval; ₹0 spend and ₹0 settled revenue.
+
+## Phase 23 closeout
+- Full final audit: `docs/29_PHASE_23_FINAL_AUDIT_13_DESTINATIONS_HI.md`.
+- Batch 8–10: `docs/28_PHASE_23_DESTINATIONS_08_10_AUDIT_HI.md`.
+- Batch 5–7: `docs/27_PHASE_23_DESTINATIONS_05_07_AUDIT_HI.md`.
+- Phase status: RESEARCH COMPLETE; COMMERCIAL EXECUTION HOLD.
+- Recommended candidate for a future validation-only test: destination 12 direct local-business rental, but Gate 1 buyer demand is not passed. No outreach or customer contact has occurred.
+
+Next phase action is not a new category pivot: conduct a controlled reconciliation of Phase 23 evidence with the original integrated P1–P4 strategy and controlling source priorities. Preserve original category order; classify payout vs referral vs bounty vs marketplace vs direct revenue; identify gate failures and the single next no-spend validation action. Do not start a build or outreach.
 ## 5. Non-negotiable status ledger
 - Spend authorized: ₹0.
 - Settled revenue evidenced: ₹0.
 - Approved commercial products: 0.
 - Approved paid accounts / paid infrastructure: 0.
-- Phase 23 completed destinations: 10/13 interim audited.
-- Phase 23 remaining: 3/13.
+- Phase 23 completed destinations: 13/13 interim audits complete.
+- Phase 23 remaining: 0/13.
 - Build/list/publish status: HOLD pending five-gate approval.
 - GitHub sync: this checkpoint and README are now committed; prior research bundles/reports from other local phases are not assumed synced unless separately fetched and verified from remote.
 
@@ -99,4 +109,4 @@ After every meaningful phase increment:
 5. Record commit SHA and remote verification status in the next checkpoint.
 
 ## 7. Next action
-Continue Phase 23 in exact source order with destinations 11, 12, and 13: Yellow.ai / Kore.ai partner; direct sales to local businesses; Salesforce AgentExchange. Verify actual partner payout/revenue share, India onboarding, fees, buyer demand, IP/data rights, payment settlement, and fully loaded zero-cost fulfilment using official sources first. For direct local sales, test whether customer advance can fully fund model, telephony, infrastructure, human support and refund/liability exposure without any owner outlay. Do not build, list, register, submit, contact customers, or spend. After all 13 are audited, produce one consolidated Phase 23 report and evidence register, then reconcile with integrated P1–P4 without silently changing source sequence.
+Phase 23 is closed as RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD. Next: reconcile the 13-destination audit with the original integrated P1–P4 strategy and controlling source priorities. Produce a decision memo classifying revenue mechanisms, gate failures, true fully-loaded ₹0 feasibility, and one no-spend validation action. Do not build, list, register, submit, contact customers, or spend.
