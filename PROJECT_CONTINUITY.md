@@ -89,7 +89,7 @@ Batch 11–13 is complete and recorded in `docs/29_PHASE_23_FINAL_AUDIT_13_DESTI
 - Phase status: RESEARCH COMPLETE; COMMERCIAL EXECUTION HOLD.
 - Recommended candidate for a future validation-only test: destination 12 direct local-business rental, but Gate 1 buyer demand is not passed. No outreach or customer contact has occurred.
 
-Next phase action is not a new category pivot: conduct a controlled reconciliation of Phase 23 evidence with the original integrated P1–P4 strategy and controlling source priorities. Preserve original category order; classify payout vs referral vs bounty vs marketplace vs direct revenue; identify gate failures and the single next no-spend validation action. Do not start a build or outreach.
+The reconciliation is complete and recorded in `docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md`. Category 24 remains B (sales-led, half automation), not P1. The integrated source order is retained: P1 first; P2 alongside; P3 after; P4 later; P5/B/M later or owner choice. Apify P1 is treated as PRIORITY-1 CANDIDATE / VALIDATION HOLD because its own source section leaves AI-generated Actor rules, median creator earnings, model/automation costs and actual demand unresolved. No build, account creation, publication, outreach or spend is authorized.
 ## 5. Non-negotiable status ledger
 - Spend authorized: ₹0.
 - Settled revenue evidenced: ₹0.
