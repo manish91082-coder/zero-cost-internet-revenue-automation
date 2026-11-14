@@ -1,0 +1,130 @@
+{
+  "registry_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "source": {
+    "filename": "02_complete-research-hi.md",
+    "library_file_id": "file_00000000c8088211912536fa0fe8badd",
+    "version_id": "1",
+    "sha256": "c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e",
+    "section": "Embedded plan/final-plan-hi.md, Appendix A",
+    "extraction": "15 priority rows P1 and P2 transcribed from original source table. Counts and labels are source values, not current eligibility."
+  },
+  "source_category_totals": {
+    "total": 219,
+    "P1": 3,
+    "P2": 12,
+    "P3": 24,
+    "P4": 26,
+    "P5": 55,
+    "B": 81,
+    "M": 18
+  },
+  "original_priority_sequence": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "B",
+    "M"
+  ],
+  "p1_p2_category_rows": [
+    "1,\"Scraper और automation tool stores\",P1,पूरा,store,₹0,4,4,0,0,3,—,\"Appendix A\"",
+    "2,\"API marketplaces\",P1,पूरा,store,\"₹0 (शर्त)\",6,6,0,0,0,ApyHub,\"Appendix A\"",
+    "34,\"AI agents को प्रति call बिकने वाले tools\",P1,पूरा,store,₹0,12,10,0,2,4,—,\"Appendix A\"",
+    "138,Hackathons,P2,आधा,sponsor,₹0,21,18,1,2,0,Reskilll,\"Appendix A\"",
+    "139,\"ML और data-science competitions\",P2,आधा,sponsor,₹0,22,22,0,0,1,—,\"Appendix A\"",
+    "141,\"Forecasting tournaments\",P2,पूरा,sponsor,₹0,9,5,0,4,3,—,\"Appendix A\"",
+    "142,\"Web bug bounty\",P2,आधा,sponsor,₹0,22,21,0,1,2,—,\"Appendix A\"",
+    "143,\"Smart-contract audit contests\",P2,आधा,sponsor,₹0,10,10,0,0,2,AuditOne,\"Appendix A\"",
+    "144,\"AI red-teaming bounty\",P2,आधा,sponsor,₹0,14,13,0,1,2,\"0din (Mozilla)\",\"Appendix A\"",
+    "145,\"Plugin और open-source की कमज़ोरी पर bounty\",P2,आधा,sponsor,₹0,11,8,0,3,1,—,\"Appendix A\"",
+    "147,\"Crypto ecosystem bounty\",P2,आधा,sponsor,₹0,11,10,0,1,2,—,\"Appendix A\"",
+    "155,\"Research bounty\",P2,आधा,sponsor,₹0,12,11,0,1,2,\"ERROR; Poseidon cryptanalysis bounties\",\"Appendix A\"",
+    "162,\"Crypto ecosystem grants\",P2,आधा,sponsor,₹0,45,44,0,1,5,—,\"Appendix A\"",
+    "164,\"Open-source और internet grants\",P2,आधा,sponsor,₹0,16,15,0,1,1,\"FLOSS/fund (Zerodha); Open Technology Fund; GitHub Secure Open Source Fund; NLnet (NGI Zero)\",\"Appendix A\"",
+    "170,\"Labs के लिए RL environments और task sets\",P2,आधा,बिक्री,₹0,12,12,0,0,6,—,\"Appendix A\""
+  ],
+  "destination_registry": {
+    "P1": [
+      {
+        "category_id": 1,
+        "known_core_destinations": [
+          "Apify Store"
+        ],
+        "source_destination_count": 4,
+        "additional_destination_names_status": "NOT_ENUMERATED_IN_APPENDIX_A"
+      },
+      {
+        "category_id": 2,
+        "known_core_destinations": [
+          "RapidAPI",
+          "ApyHub"
+        ],
+        "source_destination_count": 6,
+        "additional_destination_names_status": "NOT_ENUMERATED_IN_APPENDIX_A"
+      },
+      {
+        "category_id": 34,
+        "known_core_destinations": [
+          "Apify Store"
+        ],
+        "source_destination_count": 12,
+        "additional_destination_names_status": "NOT_ENUMERATED_IN_APPENDIX_A"
+      }
+    ],
+    "P2": [
+      {
+        "category_ids": [
+          138,
+          139,
+          141,
+          142,
+          143,
+          144,
+          145,
+          147,
+          155,
+          162,
+          164,
+          170
+        ],
+        "source_preserved_named_destination_set": [
+          "PATROLL",
+          "Solana India grant",
+          "Superteam agent listings",
+          "Wordfence",
+          "Vesuvius",
+          "Metaculus (free only)",
+          "NLnet",
+          "0din",
+          "Gray Swan",
+          "Devpost",
+          "Kaggle",
+          "Prime Intellect only if paid bounties reappear"
+        ],
+        "category_to_destination_exact_mapping": "NOT_PROVEN_BY_INTEGRATED_PLAN_LIST; do not infer one-to-one mapping"
+      }
+    ]
+  },
+  "controls": {
+    "original_priority_is_not_current_gate_approval": true,
+    "category_24_id_24_priority_B_must_not_be_promoted": true,
+    "no_missing_destination_names_may_be_invented": true,
+    "exact_destination_lists_for_all_219_categories_require_source_part7_extraction": true
+  },
+  "validation": {
+    "extracted_priority_counts": {
+      "P1": 3,
+      "P2": 12,
+      "P3": 24,
+      "P4": 26,
+      "P5": 55,
+      "B": 81,
+      "M": 18
+    },
+    "extracted_priority_total": 219,
+    "p1_p2_rows": 15,
+    "status": "PARTIAL_A2_REGISTRY; P1/P2 source rows recorded; full 219-category and 3,482-destination name-level registry not yet committed"
+  }
+}
