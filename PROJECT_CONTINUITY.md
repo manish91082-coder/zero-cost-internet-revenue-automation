@@ -53,14 +53,20 @@ Keep those groups separate. Do not confuse free inference providers with platfor
 13. Salesforce AgentExchange — appexchange.salesforce.com
 
 ## 4. Completed work recorded in chat
-First four destinations received an interim official-source audit:
+First seven destinations received an interim official-source audit:
 - Google AI Studio/Gemini: free tier exists but unpaid-tier prompts/responses may be used for product improvement and may be reviewed by humans; do not submit sensitive/confidential/personal data. Prototype-only conditional, not production-approved.
 - Groq: free limits are model/organization-specific; exact limits depend on account. Commercial/data-policy verification remains incomplete.
 - OpenRouter: free model limits include 20 RPM and 50 requests/day; higher daily allowance requires cumulative paid credits, disallowed by the ₹0 rule. Model/provider data terms vary. Experimental fallback only.
 - Cloudflare Workers AI: free Workers plan allocation documented as 10,000 Neurons/day; exceeding allocation fails unless paid plan. Prototype candidate, workload and data terms need further review.
 Interim status for all four: no production approval; no customer-data deployment approval; no evidence of settled revenue.
 
-Next planned research batch is destinations 5–7:
+Batch 5–7 has now been audited and recorded in `docs/27_PHASE_23_DESTINATIONS_05_07_AUDIT_HI.md`. Summary:
+- Relevance AI: paid marketplace listings exist but creator submission is restricted to verified Relevance Builders; affiliate program separately offers 15% recurring commission for 12 months on qualified referrals, Wise payout, $50 threshold. India settlement remains unverified. Affiliate is referral income, not agent rental.
+- Agent.ai: official docs explicitly say credits have no monetary value and cannot be exchanged for money; no creator cash payout verified.
+- Enso: no open creator marketplace/revenue share verified. Its Growth Lab bounty offers $250–$2,500+ for verified original distribution research, paid via wire/Wise/PayPal, but is a one-off manually submitted bounty with 90-day exclusive embargo and use/publish/adapt rights for Enso. India settlement remains unverified.
+- Batch 5–7 result: all HOLD; no product/build/list approval; no revenue.
+
+Next planned research batch is destinations 8–10:
 5. Relevance AI: current builder application status, seller monetization, country eligibility, payout.
 6. Agent.ai: creator monetization versus agent discovery/usage, payout and India eligibility.
 7. Enso: builder/partner program, actual earning mechanism, payout and India eligibility.
@@ -71,8 +77,8 @@ For each, distinguish creator revenue, affiliate/partner commissions, platform s
 - Settled revenue evidenced: ₹0.
 - Approved commercial products: 0.
 - Approved paid accounts / paid infrastructure: 0.
-- Phase 23 completed destinations: 4/13 interim audited.
-- Phase 23 remaining: 9/13.
+- Phase 23 completed destinations: 7/13 interim audited.
+- Phase 23 remaining: 6/13.
 - Build/list/publish status: HOLD pending five-gate approval.
 - GitHub sync: this checkpoint and README are now committed; prior research bundles/reports from other local phases are not assumed synced unless separately fetched and verified from remote.
 
@@ -85,4 +91,4 @@ After every meaningful phase increment:
 5. Record commit SHA and remote verification status in the next checkpoint.
 
 ## 7. Next action
-Continue Phase 23 in order with destinations 5, 6, and 7 (Relevance AI, Agent.ai, Enso). Complete official-source verification of monetization, creator eligibility, India availability, payout/settlement, platform fees, customer demand, and owner workload. Do not start a product build. After all 13 are audited, produce one consolidated Phase 23 report and evidence register, then reconcile with the integrated P1–P4 plan without changing the source sequence silently.
+Continue Phase 23 in exact source order with destinations 8, 9, and 10: Microsoft Agent Store / Copilot agents; AWS Marketplace (AI agents); Vapi / Retell / Bland partner programs (source site vapi.ai), including India telephony/regulatory requirements. Verify seller/creator eligibility, commercial terms, fees, India eligibility, payout settlement, demand, IP/data rights, and operational workload using official sources first. Do not build, list, register, submit, or spend. After all 13 are audited, produce one consolidated Phase 23 report and evidence register, then reconcile with the integrated P1–P4 plan without changing the source sequence silently.
