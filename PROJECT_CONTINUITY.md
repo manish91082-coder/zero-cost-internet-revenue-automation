@@ -109,4 +109,4 @@ After every meaningful phase increment:
 5. Record commit SHA and remote verification status in the next checkpoint.
 
 ## 7. Next action
-Phase 23 is closed as RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD. Next: reconcile the 13-destination audit with the original integrated P1–P4 strategy and controlling source priorities. Produce a decision memo classifying revenue mechanisms, gate failures, true fully-loaded ₹0 feasibility, and one no-spend validation action. Do not build, list, register, submit, contact customers, or spend.
+Phase 23 is closed as RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD. Reconciliation is recorded in `docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md`. Next: conduct P1 Apify gate-validation audit (research only): current AI-generated Actor policy and commercial terms; India seller/KYC/tax/payout; fully-loaded ₹0 cost stack; platform-wide versus median creator earnings; demand evidence for our specific tools. Return PASS / FAIL / UNKNOWN across all five gates. Do not build, list, register, submit, contact customers, create accounts, publish, or spend.
