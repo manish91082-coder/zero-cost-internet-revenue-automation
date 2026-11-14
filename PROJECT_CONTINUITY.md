@@ -211,3 +211,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Phase A2 status remains PARTIAL pending name-level normalization and de-duplication.
 - No accounts/KYC/terms acceptance/submissions/outreach/build/test/publication/paid use/spend. Ledger unchanged: ₹0 authorized and incurred; ₹0 evidenced settled revenue; commercial HOLD.
 - Next: Phase A2.3 — extract all destination names from 219 category sections and eight shared lists, preserve [S]/[V]/[K] markers, URLs, original status and source notes; build explicit category mapping; deduplicate only with provenance and aliases retained.
+
+
+## 17. Phase A2.3 — destination-name structural extraction audit (2026-11-14)
+- Report: `docs/40_PHASE_A2_3_DESTINATION_NAME_NORMALIZATION_STRUCTURAL_AUDIT_HI.md`.
+- Report commit: `791ebab4bdb28b6dc18966e3c5914900b2a3b1a1` (fetch-back verification pending).
+- Reopened the controlling Library source `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1; embedded destinations section hash matches Phase A2.2: `37607f76d56cd4d7810ff48d33956adc95de68899170377af54475e624c15281`.
+- First strict structural pass detected 178 detailed numbered category headings, whose declared destination counts sum to 2,747. The source's total remains 219 categories / 3,482 slots.
+- Eight shared lists remain 168 slots. After accounting for those, 567 slots remain outside this strict heading pass. This is a parser/structure reconciliation gap, not evidence that any category has zero destinations.
+- No full name extraction, category mapping or deduplication is claimed. Source has multiple batch/heading formats; strict pass is only a discovery aid.
+- Integrity rules: preserve original IDs, exact labels, [S]/[V]/[K] markers, URLs, notes and provenance; category-specific rows remain distinct from shared-list rows; do not infer batch-level shared-list mappings; deduplicate only with identity evidence and retain aliases/occurrences.
+- Phase A2.3 remains IN PROGRESS. Next exact action: A2.3-B tolerant parser for all six batch formats and eight shared lists; reconcile all 219 Appendix A IDs and all 3,314 category-specific + 168 shared slots; emit raw occurrence ledger with source line/section provenance before normalization/deduplication.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
