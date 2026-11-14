@@ -237,3 +237,10 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Hash-scope discrepancy remains open: prior checkpoint recorded section hash `37607f76d56cd4d7810ff48d33956adc95de68899170377af54475e624c15281`; current extraction scope (start heading included, end marker excluded) gives `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`. Do not assume equivalence; reconcile exact byte boundaries.
 - Next: reconcile hash scope; compare all 219 extracted category IDs/names against original Appendix A; verify batch membership 27/27/41/51/38/35; derive explicit shared-list/category links only from source summary tables; then perform provenance-preserving duplicate review. A3 schemas follow only after source registry validation.
 - Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD. Priority order unchanged.
+
+
+### Phase A2.3-B parser correction note
+- Fetch-back review caught over-escaped regexes in the first committed extractor revision (`3528b59e4ed9c2012b9dd7d697b42a3e11a36239`). That revision must be treated as superseded and not used.
+- Corrected parser commit: `2177293acd5371e7e74fe9cad9b7b93de6fec950`; corrected report commit: `6aed9a466f00ba17e0dc8783f306fb1e252e4f4a`.
+- The 3,482/3,482 extraction counts came from the corrected independently executed parsing logic. The corrected committed script still requires an executable reproduction run against the original archive before it is certified.
+- Next immediate action: execute the corrected committed parser against the source archive, compare every per-section count and marker count to the recorded result, and only then proceed to Appendix A/batch/shared-list mapping reconciliation.
