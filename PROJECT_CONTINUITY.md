@@ -199,3 +199,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
 - Next: Phase A2.2 — extract remaining 204 category rows and destination-name mappings from the source archive; then validate category totals and P1/P2 destination exactness before Phase A3 schemas.
 
+
+## 16. Phase A2.2 — 219-category and 3,482-destination count reconciliation (2026-11-14)
+- Report: docs/39_PHASE_A2_2_CATEGORY_DESTINATION_COUNT_RECONCILIATION_HI.md
+- Report commit: b16e93fa4d18f935fe76c3d32f32e25a46fa7447
+- Reopened original Library archive 02_complete-research-hi.md, file_id file_00000000c8088211912536fa0fe8badd, version 1; embedded destinations source SHA-256 37607f76d56cd4d7810ff48d33956adc95de68899170377af54475e624c15281.
+- Reconciled six batches: 27/447, 27/644, 41/567, 51/752, 38/617, 35/455; totals 219 categories and 3,482 destination slots.
+- Parsed all 219 category headings and destination counts. Category-specific destination slots total 3,314. Eight shared lists total 168: A=24, B=16, C=31, P=23, F=26, G=16, T=20, L=12. Combined 3,482.
+- Original Appendix A priority totals reconcile: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18. Category #24 remains B. No priority/order changes.
+- Important: count reconciliation is complete, but individual destination names and category-to-shared-list cross-references have not yet been normalized. 3,482 are source destination slots, not a verified unique-platform count. No claim of name-level completeness.
+- Phase A2 status remains PARTIAL pending name-level normalization and de-duplication.
+- No accounts/KYC/terms acceptance/submissions/outreach/build/test/publication/paid use/spend. Ledger unchanged: ₹0 authorized and incurred; ₹0 evidenced settled revenue; commercial HOLD.
+- Next: Phase A2.3 — extract all destination names from 219 category sections and eight shared lists, preserve [S]/[V]/[K] markers, URLs, original status and source notes; build explicit category mapping; deduplicate only with provenance and aliases retained.
