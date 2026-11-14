@@ -93,10 +93,9 @@ After every meaningful phase increment:
 
 ## 7. Next action
 Continue Phase 24 — P1 Apify Tool Factory gate-validation audit, research only. Next research tasks:
-1. Verify India-specific Apify creator payout eligibility, payout rail, KYC/tax requirements and actual Indian bank settlement.
-2. Resolve RapidAPI official 20% vs 25% marketplace-fee conflict and confirm India PayPal payout/withdrawal.
-3. Verify ApyHub publisher Stripe Connect India eligibility separately from affiliate payout terms.
-4. Build a fully loaded zero-cost runtime/test/support/refund/maintenance cost model; no free-tier assumptions without commercial terms.
-5. Research project-specific buyer demand and median creator earnings using reliable evidence; do not infer from marketplace-wide claims.
-6. Complete IP/data-source rights matrix and AI-generated code provenance review.
+1. Build a fully loaded runtime/test/support/refund/maintenance cost model for candidate Actor patterns, testing whether any path can remain ₹0; do not assume free tiers are sustainable.
+2. Seek platform-side written answers for unresolved payout questions: Apify India creator eligibility; RapidAPI PayPal acceptance and 20%/25% fee conflict; ApyHub Netherlands Stripe Connect India route.
+3. Research median creator earnings and distribution using reliable evidence; do not infer project revenue from platform-wide totals.
+4. Research project-specific buyer demand for candidate tools without initiating outreach.
+5. Complete IP/data-source rights matrix and AI-generated code provenance review.
 Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, listing, registration, publication, outreach, paid use or spend until all five gates pass.
