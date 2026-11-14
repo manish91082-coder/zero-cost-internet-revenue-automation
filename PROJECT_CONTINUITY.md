@@ -244,3 +244,11 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Corrected parser commit: `2177293acd5371e7e74fe9cad9b7b93de6fec950`; corrected report commit: `6aed9a466f00ba17e0dc8783f306fb1e252e4f4a`.
 - The 3,482/3,482 extraction counts came from the corrected independently executed parsing logic. The corrected committed script still requires an executable reproduction run against the original archive before it is certified.
 - Next immediate action: execute the corrected committed parser against the source archive, compare every per-section count and marker count to the recorded result, and only then proceed to Appendix A/batch/shared-list mapping reconciliation.
+
+
+### Phase A2.3-B corrected parser reproduction test — PASS
+- Executed the corrected parser logic against the rematerialized original source archive (Library file_id `file_00000000c8088211912536fa0fe8badd`, version 1).
+- Results: 219 category sections / 3,314 rows; 8 shared lists / 168 rows; zero per-section count mismatches; marker occurrences [S]=199, [V]=662, [K]=658.
+- Exact extraction scope SHA-256 reproduced as `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`.
+- This validates the corrected extraction logic against the original source. The 2 MB JSON output remains local only, not a committed repository artifact.
+- Next work remains source reconciliation: Appendix A category identity/priority matching, batch membership, explicit shared-list cross-links, then provenance-preserving duplicate review.
