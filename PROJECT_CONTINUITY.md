@@ -252,3 +252,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Exact extraction scope SHA-256 reproduced as `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`.
 - This validates the corrected extraction logic against the original source. The 2 MB JSON output remains local only, not a committed repository artifact.
 - Next work remains source reconciliation: Appendix A category identity/priority matching, batch membership, explicit shared-list cross-links, then provenance-preserving duplicate review.
+
+
+## 19. Research Swarm S1 — machine-readable agent roster/control contract (2026-11-14)
+- User asked whether the multiple-AI-agent swarm is actually progressing. Direct status: architecture research was complete, but the swarm runtime was NOT implemented or running. No agents had been launched, no scheduled swarm workflow existed, and no acceptance tests had run.
+- New machine-readable artifact: `config/research_swarm_roster.v1.json`; commit `2f407a5c046954912b758018596168febf260852`.
+- Report: `docs/42_RESEARCH_SWARM_S1_AGENT_ROSTER_CONTROL_CONTRACT_HI.md`; commit `ef5c2cdf8ddf754d49e9526c2ac2915e17ab94b8`.
+- Roster defines 9 logical roles: Mission Controller; Opportunity Discovery; Official Source Research A; independent Official Source Research B; Eligibility/Payout; IP/Licensing; Unit Economics/Workload; Adversarial Auditor; Evidence Publisher. Maximum two parallel research workers; Evidence Publisher is the only repository writer.
+- Contract locks project identity, priority order, Category 24=B, all five gates, UNKNOWN != PASS, ₹0 spend, paid routes disabled, prompt-injection controls and owner approval for legal/financial/external/irreversible actions.
+- Roster status is `DESIGN_CONTRACT_ONLY_NOT_EXECUTABLE`. Runtime, agent processes, LLM calls, scheduled swarm workflows, SQLite/task queue and acceptance tests are all NOT implemented/run.
+- Reason for no runtime yet: source registry is still under A2.4 reconciliation; task/evidence schemas and a verified no-cost test plan must precede safe execution.
+- Next: continue Phase A2.4 source identity reconciliation; then Phase A3 machine-readable task/evidence/run schemas; then no-cost test plan; only then read-only research engine and bounded worker execution.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
