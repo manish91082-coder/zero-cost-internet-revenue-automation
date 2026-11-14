@@ -277,3 +277,17 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Phase A2 remains PARTIAL. Next: A2.4-B batch-ID evidence; A2.4-C shared-list cross-reference extraction; A2.5 duplicate candidate review; then A3 schemas.
 - Swarm S1 roster remains design-only. No runtime/agents/schedule/tests.
 - Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
+
+
+## 21. Phase S2 — 24x7 zero-cost agentic swarm architecture decision (2026-11-14)
+- Architecture report: `docs/44_PHASE_S2_24X7_ZERO_COST_AGENTIC_SWARM_ARCHITECTURE_HI.md`.
+- Report commit: `06fcb234c62dc94a7eb71414b153f424aa1e2b65`; fetch-back verified report blob: `8d35343d7f08e7c182dabe8115c083769e1528bb` (19,961 characters).
+- Selected staged architecture: LangGraph OSS + deterministic Python policy/control plane + Cloudflare Workers Free lightweight Cron watchdog candidate + GitHub Actions public-repository burst execution + durable task/evidence/run-state store. This is a design decision only; no runtime/service/account/schedule/model was activated.
+- Important 24x7 distinction: best-effort continuously resumable/event-driven operation is feasible as a target; guaranteed uninterrupted free compute is not established. GitHub standard public runners are documented free/unlimited, but GitHub scheduled events can be delayed or dropped under high load. Cloudflare Workers Free documents 100,000 requests/day, 10 ms CPU per invocation/Cron, five Cron triggers/account and 15-minute Cron wall time; use only for tiny heartbeat/dispatch, never LangGraph or heavy research.
+- LangGraph selected as OSS stateful orchestration library for graph control, checkpoint/resume and interrupts; not a free hosting service. Persistent checkpointer required; in-memory state is not durable across restarts.
+- Routine tasks should be deterministic Python; LLM inference optional, quota-capped and fail-closed. No unlimited free inference assumption. Ollama is optional local fallback only, not 24x7 cloud backbone; user's no-GPU laptop constraint remains.
+- Architecture preserves S1 nine logical roles, max two parallel research workers, single Evidence Publisher, project isolation, ₹0 cap, paid routes disabled, five gates, UNKNOWN != PASS, approvals and untrusted-web-content controls.
+- Report defines 7 versioned schemas (task, evidence, source snapshot, gate decision, run state, agent message, approval), queue/lease/idempotency/retry/recovery controls, SSRF and prompt-injection controls, quota guards, observability, kill switch, implementation stages S1-S10 and acceptance gates.
+- Next: continue A2.4-B/C and A2.5 source registry reconciliation; in parallel begin A3 schemas and synthetic fixtures. Do not activate Cloudflare/GitHub schedules, create cloud DB, call model endpoints, or start live agents until exact terms/quotas/no-billing controls are verified and approvals are obtained where required.
+- Previous Phase A2.4 checkpoint commit remains `640e11fbe18dd5212a01a45d412512dbd286d3de`; this S2 report supplements, does not overwrite, that work.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; no accounts/KYC/terms acceptance/submissions/outreach/build/test/publication/scheduled runtime; commercial HOLD.
