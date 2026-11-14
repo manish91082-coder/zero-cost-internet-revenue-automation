@@ -93,15 +93,8 @@ After every meaningful phase increment:
 4. Commit only verified files; never claim a push unless the GitHub commit and resulting remote file/tree have been fetched back and checked.
 5. Record commit SHA and remote verification status in the next checkpoint.
 
-## 7. Next action
-Continue Phase 24 — P1 Apify Tool Factory gate-validation audit, research only. Next research tasks:
-1. Define candidate Actor workload profiles on paper (input size, run duration, RAM, concurrency, external calls, output size, storage retention, free/paid user mix).
-2. Calculate per-event margins from official rates including payout, refunds and support; do not run tests until a separately approved no-cost test plan exists.
-3. Obtain written Apify clarification on platform usage deductions for PPE, multi-tenant and free/promotional users.
-4. Continue platform-side payout clarifications from Batch 2; no applications or account setup.
-5. Research median creator earnings and project-specific buyer demand using reliable evidence, without buyer outreach.
-6. Complete IP/data-source rights matrix and AI-generated code provenance review.
-Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, listing, registration, publication, outreach, paid use or spend until all five gates pass.
+## 7. Historical next action (superseded)
+The Phase 24 work items in this section were completed in Phase 24 Batches 1–4 and Phase 25 Batches 1–2. The current next action is recorded in Section 10 below.
 
 
 ## 8. Phase 24 Batch 4 — workload profiles and demand reality (2026-11-14)
@@ -126,3 +119,22 @@ Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, li
 - No account creation, KYC, legal acceptance, testing, submissions, buyer outreach, publication, paid use or spend.
 - Ledger remains: spend authorized ₹0; spend incurred ₹0; settled revenue ₹0; products 0; submissions 0; KYC 0; commercial HOLD.
 - Next: P2 Batch 2 named opportunity shortlisting and full terms/payout checks; P1 Apify written-clarification question dossier; product IP/data provenance matrix.
+
+
+## 10. Phase 25 Batch 2 — parallel P1/P2 opportunity gate audit (2026-11-14)
+- Report: docs/36_PHASE_25_PARALLEL_P1_P2_OPPORTUNITY_GATE_AUDIT_BATCH_2_HI.md
+- Report commit: cb9ca73e3c5c041589b8d444438a89e1c1e7b3d4 (pending fetch-back verification at checkpoint write).
+- P2 destination names/order and category IDs remain exactly as in docs/30 and docs/35: PATROLL; Solana India grant; Superteam agent listings; Wordfence; Vesuvius; Metaculus (free only); NLnet; 0din; Gray Swan; Devpost; Kaggle; Prime Intellect only if paid bounties reappear. IDs #138,139,141,142,143,144,145,147,155,162,164,170. No remapping.
+- Material update: NLnet User-operated Internet Fund currently explicitly paused; no new proposals. NLnet GenAI policy v2.0 (20 Oct 2026) prohibits GenAI use in proposal writing and interactive proposal evaluation. The previously noted Jan 3, 2027 date must not be treated as an open UOI submission deadline.
+- Kaya AI Grand Challenge is a named event for India working professionals, but requires 2–4 member teams, solo entry excluded, $1,500 cash to winning professional team, submission Nov 30–Dec 6 2026; IP terms are to be supplied before launch and remain unreviewed. Not approved.
+- Wordfence: PayPal-only payouts twice monthly; bulk automated bounty hunting prohibited; India programme-specific settlement not verified.
+- 0DIN: discretionary USD 500–15k; government ID and non-US W-8; payment within 30 days after contract; India payout rail unknown.
+- Metaculus: human forecasts only for prizes unless event-specific exception; AI may assist but final decision must be participant's own; bot accounts generally ineligible.
+- Superteam Earn India current index displays named bounty opportunities (Vaultline, MozaikPay, Panta x NectarFi, $CHIMP, worm, MultiHopper); exact IP/network/KYC/deliverables and India settlement remain per-opportunity unknown. Token prizes are not settled INR revenue.
+- Kaggle live index has active events but no full named-event India payout/IP/cost audit; PATROLL, Vesuvius and Gray Swan still lack verified current paid terms; Prime Intellect remains discretionary security disclosure only with no fixed amount or India payout.
+- P1 Apify: canonical terms page currently renders 20 Feb 2026; official preview page in Batch 1 renders 15 Sep 2026. Governing version remains unresolved. Canonical terms confirm 80% share less configured platform usage, KYC, $20 PayPal/$100 other threshold, 12-month below-threshold forfeiture, 3-day invoice review, maintenance/response obligations, and worldwide non-exclusive royalty-free licence to host/run/display/market/distribute Actor.
+- P1 clarification dossier completed as a question pack only; no outreach sent. Product-level IP/data provenance matrix defined; no product selected and no code built.
+- P1 gates remain: demand UNKNOWN; IP/licensing UNKNOWN; fully loaded ₹0 economics FAIL; India payout UNKNOWN; autonomous fulfilment FAIL. Build/list/publish HOLD.
+- Ledger: spend authorized ₹0; spend incurred ₹0; settled revenue evidenced ₹0; approved products 0; submissions 0; accounts/KYC 0; outreach 0; build/test/publication 0.
+- No account creation, KYC, terms acceptance, proposal, submission, exploit/security test, bounty hunting, buyer/platform outreach, build, publication, paid use or spend.
+- Next sequence: Phase 25 Batch 3, continue P2 official primary-source verification for PATROLL/Vesuvius/Kaggle/Gray Swan/Prime Intellect and capture individual Superteam bounty terms; in parallel resolve Apify terms version, India creator eligibility and payout questions from public official documentation, then refine provenance controls. If primary evidence remains absent, preserve UNKNOWN/HOLD. No contact or submission without explicit authorization.
