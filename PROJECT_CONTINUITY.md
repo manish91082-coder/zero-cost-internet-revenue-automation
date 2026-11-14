@@ -78,7 +78,7 @@ The reconciliation is complete and recorded in `docs/30_PHASE_23_RECONCILIATION_
 - Approved paid accounts / paid infrastructure: 0.
 - Phase 23: 13/13 audited and closed; 0/13 pass all five gates.
 - Phase 24 P1 Apify audit: Batch 1 report committed; research in progress.
-- Current P1 gate state: demand UNKNOWN; IP/licensing UNKNOWN; ₹0 economics FAIL on current evidence; India payout UNKNOWN; autonomous fulfilment FAIL on current evidence.
+- Current P1 gate state: demand UNKNOWN; IP/licensing UNKNOWN; ₹0 economics FAIL on current evidence (Apify free plan has capped $5/month usage credit; compute, proxies, data transfer and storage have published nonzero rates); India payout UNKNOWN; autonomous fulfilment FAIL on current evidence.
 - Build/list/publish status: HOLD pending all five gates.
 - Latest report: docs/31_PHASE_24_P1_APIFY_GATE_AUDIT_BATCH_1_HI.md
 - Report commit: 8f7f6e3b54af810cea83ab959aa26774c12d61df (created; fetch-back verification pending at checkpoint update time).
@@ -93,9 +93,10 @@ After every meaningful phase increment:
 
 ## 7. Next action
 Continue Phase 24 — P1 Apify Tool Factory gate-validation audit, research only. Next research tasks:
-1. Build a fully loaded runtime/test/support/refund/maintenance cost model for candidate Actor patterns, testing whether any path can remain ₹0; do not assume free tiers are sustainable.
-2. Seek platform-side written answers for unresolved payout questions: Apify India creator eligibility; RapidAPI PayPal acceptance and 20%/25% fee conflict; ApyHub Netherlands Stripe Connect India route.
-3. Research median creator earnings and distribution using reliable evidence; do not infer project revenue from platform-wide totals.
-4. Research project-specific buyer demand for candidate tools without initiating outreach.
-5. Complete IP/data-source rights matrix and AI-generated code provenance review.
+1. Define candidate Actor workload profiles on paper (input size, run duration, RAM, concurrency, external calls, output size, storage retention, free/paid user mix).
+2. Calculate per-event margins from official rates including payout, refunds and support; do not run tests until a separately approved no-cost test plan exists.
+3. Obtain written Apify clarification on platform usage deductions for PPE, multi-tenant and free/promotional users.
+4. Continue platform-side payout clarifications from Batch 2; no applications or account setup.
+5. Research median creator earnings and project-specific buyer demand using reliable evidence, without buyer outreach.
+6. Complete IP/data-source rights matrix and AI-generated code provenance review.
 Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, listing, registration, publication, outreach, paid use or spend until all five gates pass.
