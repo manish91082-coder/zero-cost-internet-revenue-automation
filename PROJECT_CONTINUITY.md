@@ -264,3 +264,16 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Reason for no runtime yet: source registry is still under A2.4 reconciliation; task/evidence schemas and a verified no-cost test plan must precede safe execution.
 - Next: continue Phase A2.4 source identity reconciliation; then Phase A3 machine-readable task/evidence/run schemas; then no-cost test plan; only then read-only research engine and bounded worker execution.
 - Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
+
+
+## 20. Phase A2.4 — Appendix A identity/priority/hash reconciliation (2026-11-14)
+- Report: `docs/43_PHASE_A2_4_APPENDIX_A_IDENTITY_PRIORITY_HASH_RECONCILIATION_HI.md`.
+- Report commit: `c4c57fc63b6bea624cc8e06bd62cf5ad7d3385e4`; fetch-back verified report blob: `0d24e4447ea6200d9c972db4a8935d8f76303daa`.
+- Reopened exact controlling Library archive `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1.
+- Appendix A ↔ embedded destination headings: 219/219 IDs exact; 0 missing IDs; 0 extra IDs; 0 same-ID name mismatches. Category-specific destination rows remain 3,314/3,314.
+- Priority totals independently recomputed and exact: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; total 219. Category #24 remains B.
+- Embedded-section hash scope discrepancy RESOLVED as documentation/scope mismatch. Canonical UTF-8 SHA-256 includes start heading `# भाग 7: \`plan/destinations-hi.md\`` and excludes end marker: `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`. Earlier `37607f...` remains historical with its scope undocumented; do not use it as canonical.
+- Still pending: source-explicit category membership across six batches (aggregate counts alone are insufficient); explicit category-to-shared-list cross-references; provenance-preserving duplicate identity audit. 3,482 slots are not yet a unique platform count. The ~2MB occurrence ledger is not committed.
+- Phase A2 remains PARTIAL. Next: A2.4-B batch-ID evidence; A2.4-C shared-list cross-reference extraction; A2.5 duplicate candidate review; then A3 schemas.
+- Swarm S1 roster remains design-only. No runtime/agents/schedule/tests.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
