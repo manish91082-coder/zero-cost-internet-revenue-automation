@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
-"""Extract a source-faithful occurrence ledger from embedded plan/destinations-hi.md.
-
-Usage:
-  python scripts/extract_destination_occurrences.py SOURCE.md OUTPUT.json
-
-This performs literal table-row extraction only. It does not deduplicate, infer
-shared-list/category links, validate URLs, or judge commercial eligibility.
-"""
+"""Extract a source-faithful occurrence ledger from embedded plan/destinations-hi.md."""
 from pathlib import Path
 import hashlib, json, re, sys
 
-START = "# भाग 7: `plan/destinations-hi.md`"
+START = "# भाग 7: \`plan/destinations-hi.md\`"
 END = "<!-- SOURCE END: plan/destinations-hi.md -->"
-CATEGORY = re.compile(r"^#{2,4}\\s+(\\d+)\\.\\s+(.+?)\\s+[—-]\\s+(\\d+)\\s+(?:destinations|अपनी destinations)\\s*$", re.I)
-SHARED = re.compile(r"^#{2,4}\\s+साझा सूची\\s+([A-Z])\\s+[—-]\\s+(.+?)\\s+[—-]\\s+(\\d+)\\s*$", re.I)
+CATEGORY = re.compile(r"^#{2,4}\s+(\d+)\.\s+(.+?)\s+[—-]\s+(\d+)\s+(?:destinations|अपनी destinations)\s*$", re.I)
+SHARED = re.compile(r"^#{2,4}\s+साझा सूची\s+([A-Z])\s+[—-]\s+(.+?)\s+[—-]\s+(\d+)\s*$", re.I)
 ANY_HEADING = re.compile(r"^#{2,4} ")
 
 def main():
@@ -37,7 +30,7 @@ def main():
     headings.sort()
     all_headings = [i for i, line in enumerate(lines) if ANY_HEADING.match(line)]
     records, audit = [], []
-    for i, (start, kind, ident, name, declared) in enumerate(headings):
+    for start, kind, ident, name, declared in headings:
         stop = next((x for x in all_headings if x > start), len(lines))
         extracted = []
         for row_i in range(start + 1, stop):
@@ -60,7 +53,7 @@ def main():
                 "notes_raw": notes,
                 "source_line_start_1based": row_i + 1,
                 "source_heading_line_1based": start + 1,
-                "markers": re.findall(r"\\[(S|V|K)\\]", notes),
+                "markers": re.findall(r"\[(S|V|K)\]", notes),
             })
         records.extend(extracted)
         audit.append({
@@ -76,7 +69,7 @@ def main():
         "source_filename": Path(sys.argv[1]).name,
         "embedded_section": "plan/destinations-hi.md",
         "embedded_section_sha256_scope_includes_start_heading_excludes_end_marker": hashlib.sha256(section.encode("utf-8")).hexdigest(),
-        "method": "Literal numbered Markdown table rows under each category/shared-list heading; no deduplication or inferred mappings.",
+        "method": "Literal numbered Markdown table rows; no deduplication or inferred mappings.",
         "category_section_count": len(categories),
         "shared_list_count": len(shared),
         "declared_category_slots": sum(x["declared_count"] for x in categories),
@@ -88,7 +81,7 @@ def main():
         "records": records,
         "section_audit": audit,
     }
-    Path(sys.argv[2]).write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    Path(sys.argv[2]).write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({k: out[k] for k in out if k not in ("records", "section_audit")}, ensure_ascii=False, indent=2))
     if not out["all_section_counts_match"] or len(categories) != 219 or len(shared) != 8:
         raise SystemExit("validation failed")
