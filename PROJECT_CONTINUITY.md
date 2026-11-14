@@ -77,11 +77,13 @@ The reconciliation is complete and recorded in `docs/30_PHASE_23_RECONCILIATION_
 - Approved commercial products: 0.
 - Approved paid accounts / paid infrastructure: 0.
 - Phase 23: 13/13 audited and closed; 0/13 pass all five gates.
-- Phase 24 P1 Apify audit: Batch 1 report committed; research in progress.
-- Current P1 gate state: demand UNKNOWN; IP/licensing UNKNOWN; ₹0 economics FAIL on current evidence (Apify free plan has capped $5/month usage credit; compute, proxies, data transfer and storage have published nonzero rates); India payout UNKNOWN; autonomous fulfilment FAIL on current evidence.
+- Phase 24 P1 Apify audit: Batch 1 (platform monetization/policy), Batch 2 (India payout/settlement), and Batch 3 (fully loaded ₹0 unit economics) committed and fetch-back verified.
+- Current P1 gate state: demand UNKNOWN; IP/licensing UNKNOWN; ₹0 economics FAIL on current evidence; India payout UNKNOWN; autonomous fulfilment FAIL on current evidence.
 - Build/list/publish status: HOLD pending all five gates.
-- Latest report: docs/31_PHASE_24_P1_APIFY_GATE_AUDIT_BATCH_1_HI.md
-- Report commit: 8f7f6e3b54af810cea83ab959aa26774c12d61df (created; fetch-back verification pending at checkpoint update time).
+- Latest reports: docs/31_PHASE_24_P1_APIFY_GATE_AUDIT_BATCH_1_HI.md; docs/32_PHASE_24_P1_INDIA_PAYOUT_SETTLEMENT_AUDIT_HI.md; docs/33_PHASE_24_P1_APIFY_ZERO_COST_UNIT_ECONOMICS_AUDIT_HI.md.
+- Batch 1 commit: 8f7f6e3b54af810cea83ab959aa26774c12d61df (fetch-back verified; blob f1d6fde156d929eb7ff817a3e4704a05c6c0cdeb).
+- Batch 2 commit: daae1b0e9b4175a85cfda7e1a90527996c9cf1a2 (fetch-back verified; blob 3d1e0c3b3657132630ed94103c11437f05d6d6c2).
+- Batch 3 commit: a8498d4e6e922fa7314753839b50df8e23993679 (fetch-back verified; blob 8cb03fd20aa0e92331ff0b6262a960824c48bd7d).
 
 ## 6. GitHub sync protocol
 After every meaningful phase increment:
