@@ -185,3 +185,17 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Phase A1 status: COMPLETE. Next in sequence: Phase A2 — create/validate the source-faithful category and destination registry from the controlling original research archive; do not invent missing labels or destination data. Phase A3 schemas follows A2.
 - Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
 
+
+## 15. Phase A2.1 — source-faithful P1/P2 registry seed (2026-11-14)
+- Artifact: `config/category_destination_registry_p1_p2.v1.json`.
+- Source reopened from personal Library: `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1; exact original source SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e`.
+- Original Appendix A contains 219 category rows and source priority counts P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18. Extracted counts reconcile exactly to 219.
+- Registered all 15 P1/P2 rows with original IDs, names, automation/payer/zero-cost labels, destination-count breakdowns and original verified-destination labels.
+- P1 IDs: #1, #2, #34. P2 IDs: #138,#139,#141,#142,#143,#144,#145,#147,#155,#162,#164,#170. Original P2 named destination set retained without inventing one-to-one category mapping.
+- Important: Appendix A supplies destination counts, not the full names of all 3,482 destinations. P1/P2 core names are retained only where source material explicitly names them; all other destination names remain NOT_ENUMERATED / NOT_PROVEN.
+- Registry remote blob SHA: a6c82d5108c6779f71dfc0c4caf58782f62239f9; JSON parsed successfully; 15 rows and priority totals checked.
+- Phase A2 status: PARTIAL. P1/P2 seed complete; remaining P3/P4/P5/B/M category rows and source destination-name lists from embedded `plan/destinations-hi.md` still require exact extraction. Do not mark A2 complete until the entire 219-category and relevant 3,482-destination source map has been reconciled.
+- No runtime, account, KYC, legal acceptance, submission, outreach, build, test, publication, paid use or spend.
+- Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
+- Next: Phase A2.2 — extract remaining 204 category rows and destination-name mappings from the source archive; then validate category totals and P1/P2 destination exactness before Phase A3 schemas.
+
