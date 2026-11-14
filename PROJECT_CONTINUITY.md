@@ -66,19 +66,27 @@ Batch 5–7 has now been audited and recorded in `docs/27_PHASE_23_DESTINATIONS_
 - Enso: no open creator marketplace/revenue share verified. Its Growth Lab bounty offers $250–$2,500+ for verified original distribution research, paid via wire/Wise/PayPal, but is a one-off manually submitted bounty with 90-day exclusive embargo and use/publish/adapt rights for Enso. India settlement remains unverified.
 - Batch 5–7 result: all HOLD; no product/build/list approval; no revenue.
 
-Next planned research batch is destinations 8–10:
-5. Relevance AI: current builder application status, seller monetization, country eligibility, payout.
-6. Agent.ai: creator monetization versus agent discovery/usage, payout and India eligibility.
-7. Enso: builder/partner program, actual earning mechanism, payout and India eligibility.
-For each, distinguish creator revenue, affiliate/partner commissions, platform subscription costs, and free agent-building features. Official sources first. Do not infer payout eligibility from a generic payment provider being supported.
+Batch 8–10 has now been audited and recorded in `docs/28_PHASE_23_DESTINATIONS_08_10_AUDIT_HI.md`. Summary:
+- Microsoft: internal Agent Store is an org deployment surface, not by itself an independent creator payout marketplace. Independent AI app/agent publishers use Partner Center / Commercial Marketplace. Official docs state no listing fee, 3% store service fee on transacted offers, monthly payouts and $50 minimum threshold. India-specific payout route requires Partner Center validation; runtime fulfilment costs remain.
+- AWS: India seller path is officially supported for eligible entities. Requires standalone AWS India account, Partner Central registration, GSTIN/PAN, e-invoicing and Indian bank account. INR disbursements to India bank via NEFT/RTGS; India sellers' offers limited to India buyers. Listing fees plus 18% GST are deducted from proceeds; exact current fee schedule must be checked. Strict ₹0 unit economics not established.
+- Vapi: solution partner/co-sell program exists but public commission/payout terms not published. Creator program advertises 15% referral revenue but applications are on hold. Free number is US inbound-only; calls/platform usage are chargeable.
+- Retell: affiliate advertises 15% referral revenue for 12 months, monthly payout and no threshold; India payout route remains unverified. Solution Partner economics require written agreement. Voice-agent usage is paid ($0.07–$0.31/min headline range, telephony/add-ons can add cost).
+- Bland: no official public creator payout/commission terms verified.
+- India automated commercial calling requires TRAI compliance; promotional autodialer/robocalls use designated 140 series under applicable rules, with sender registration/consent requirements. Exact call type and current regulations need legal validation.
+- Batch 8–10 result: HOLD; no build/list/registration/submission; no settled revenue.
 
+Next planned research batch is destinations 11–13:
+11. Yellow.ai / Kore.ai partner.
+12. Direct sales to local businesses (monthly agent rental; customer advance must fund human/model costs).
+13. Salesforce AgentExchange.
+Official sources first. Verify actual partner payout/revenue share, India onboarding, fees, customer demand, IP/data rights, payment settlement, and fully loaded zero-cost fulfilment.
 ## 5. Non-negotiable status ledger
 - Spend authorized: ₹0.
 - Settled revenue evidenced: ₹0.
 - Approved commercial products: 0.
 - Approved paid accounts / paid infrastructure: 0.
-- Phase 23 completed destinations: 7/13 interim audited.
-- Phase 23 remaining: 6/13.
+- Phase 23 completed destinations: 10/13 interim audited.
+- Phase 23 remaining: 3/13.
 - Build/list/publish status: HOLD pending five-gate approval.
 - GitHub sync: this checkpoint and README are now committed; prior research bundles/reports from other local phases are not assumed synced unless separately fetched and verified from remote.
 
@@ -91,4 +99,4 @@ After every meaningful phase increment:
 5. Record commit SHA and remote verification status in the next checkpoint.
 
 ## 7. Next action
-Continue Phase 23 in exact source order with destinations 8, 9, and 10: Microsoft Agent Store / Copilot agents; AWS Marketplace (AI agents); Vapi / Retell / Bland partner programs (source site vapi.ai), including India telephony/regulatory requirements. Verify seller/creator eligibility, commercial terms, fees, India eligibility, payout settlement, demand, IP/data rights, and operational workload using official sources first. Do not build, list, register, submit, or spend. After all 13 are audited, produce one consolidated Phase 23 report and evidence register, then reconcile with the integrated P1–P4 plan without changing the source sequence silently.
+Continue Phase 23 in exact source order with destinations 11, 12, and 13: Yellow.ai / Kore.ai partner; direct sales to local businesses; Salesforce AgentExchange. Verify actual partner payout/revenue share, India onboarding, fees, buyer demand, IP/data rights, payment settlement, and fully loaded zero-cost fulfilment using official sources first. For direct local sales, test whether customer advance can fully fund model, telephony, infrastructure, human support and refund/liability exposure without any owner outlay. Do not build, list, register, submit, contact customers, or spend. After all 13 are audited, produce one consolidated Phase 23 report and evidence register, then reconcile with integrated P1–P4 without silently changing source sequence.
