@@ -174,3 +174,14 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
 - Next recommended engineering action: Phase A machine-readable constitution, schemas and destination registry validation; then Phase B read-only research engine. Phase 25 Batch 4 remains pending and its original sequence is preserved.
 
+
+## 14. Phase A1 — machine-readable mission constitution (2026-11-14)
+- Artifact: `config/mission_constitution.v1.json`, constitution_version 1.0.0.
+- Commit: 4facf2d555cc0a1c83fd9ec752e46159d3d9102a (fetch-back verification recorded below).
+- The constitution encodes project isolation, ₹0 spend and no-paid-fallback rules, locked P1/P2/P3/P4 order, Category 24 B restriction, five commercial gates, PASS/FAIL/UNKNOWN/HOLD semantics, action approval matrix, agent/prompt-injection governance, evidence requirements, quota-exhaustion behaviour, GitHub write protocol, ledger and change control.
+- No runtime, model provider, agent, account, workflow, build, test, external action or spend was started. This is a policy artifact only.
+- Validation: fetched remote JSON parsed successfully; project ID, five gates, zero spend cap and paid-route disablement checked.
+- Verified policy blob SHA: 8acbdf73aa2efb8bddc917bffaa08514009c8bf5.
+- Phase A1 status: COMPLETE. Next in sequence: Phase A2 — create/validate the source-faithful category and destination registry from the controlling original research archive; do not invent missing labels or destination data. Phase A3 schemas follows A2.
+- Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; approved products 0; accounts/KYC 0; submissions 0; outreach 0; builds/tests/publications 0; commercial HOLD.
+
