@@ -38,3 +38,8 @@ Phase A2.3 के पहले strict heading pass ने 178 headings पकड
 
 ## Mission ledger
 Spend authorized/incurred ₹0; settled revenue evidence ₹0; accounts/KYC/submissions/outreach/build/test/publication 0; commercial execution HOLD. P1/P2/P3/P4 order and category priorities unchanged.
+
+## Parser integrity correction (same phase)
+- Initial committed parser revision had over-escaped regex patterns. This was caught during fetch-back inspection before treating the script as a valid executable artifact.
+- Corrected parser commit: `2177293acd5371e7e74fe9cad9b7b93de6fec950`. The committed parser now uses normal Python raw-regex escapes for whitespace, category numbers and [S]/[V]/[K] markers.
+- Extraction counts above are from the independently executed corrected extraction logic, not from the defective initial parser revision. The corrected committed script must still be run against the original archive as a final executable reproduction test.
