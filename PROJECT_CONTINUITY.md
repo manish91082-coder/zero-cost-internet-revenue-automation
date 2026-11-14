@@ -223,3 +223,17 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Integrity rules: preserve original IDs, exact labels, [S]/[V]/[K] markers, URLs, notes and provenance; category-specific rows remain distinct from shared-list rows; do not infer batch-level shared-list mappings; deduplicate only with identity evidence and retain aliases/occurrences.
 - Phase A2.3 remains IN PROGRESS. Next exact action: A2.3-B tolerant parser for all six batch formats and eight shared lists; reconcile all 219 Appendix A IDs and all 3,314 category-specific + 168 shared slots; emit raw occurrence ledger with source line/section provenance before normalization/deduplication.
 - Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD.
+
+
+## 18. Phase A2.3-B — source-faithful destination occurrence extraction (2026-11-14)
+- Parser: `scripts/extract_destination_occurrences.py`; commit `3528b59e4ed9c2012b9dd7d697b42a3e11a36239`.
+- Report: `docs/41_PHASE_A2_3B_DESTINATION_OCCURRENCE_EXTRACTION_HI.md`; commit `dd2b04d4291dc82bf6fe6958b05980c02fb71df1`.
+- Reopened the exact controlling Library archive, `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1. The embedded destinations source section was parsed directly.
+- Corrected the prior strict parser false-negative: the source uses both “N destinations” and “N अपनी destinations” heading forms. Tolerant extraction identified all 219 category sections and all 8 shared-list sections.
+- Declared category-specific slots 3,314; extracted numbered category rows 3,314. Declared shared-list slots 168; extracted rows 168. Total 3,482/3,482. Every section row count matches its declared heading count; 219 unique category IDs, no duplicate category IDs.
+- Marker occurrence counts in notes: [S]=199, [V]=662, [K]=658. These are marker occurrences, not unique destinations.
+- Extractor preserves source category/shared-list ID, section name, ordinal, display name, site, purpose, notes and source line provenance. No deduplication, URL verification, commercial eligibility judgement or inferred category-to-shared-list mapping.
+- Generated JSON occurrence ledger is approximately 2 MB and was reconstructed locally; it was NOT committed because a safe transfer/verification route for the generated payload through the repository contents API was not established. Do not claim it is a durable repository artifact yet.
+- Hash-scope discrepancy remains open: prior checkpoint recorded section hash `37607f76d56cd4d7810ff48d33956adc95de68899170377af54475e624c15281`; current extraction scope (start heading included, end marker excluded) gives `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`. Do not assume equivalence; reconcile exact byte boundaries.
+- Next: reconcile hash scope; compare all 219 extracted category IDs/names against original Appendix A; verify batch membership 27/27/41/51/38/35; derive explicit shared-list/category links only from source summary tables; then perform provenance-preserving duplicate review. A3 schemas follow only after source registry validation.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidenced; accounts/KYC/submissions/outreach/build/test/publication 0; commercial HOLD. Priority order unchanged.
