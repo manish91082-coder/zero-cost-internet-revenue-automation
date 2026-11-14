@@ -114,3 +114,15 @@ Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, li
 - Gate state unchanged: demand UNKNOWN; IP/licensing UNKNOWN; fully loaded ₹0 economics FAIL; India payout UNKNOWN; autonomous fulfilment FAIL. Build/list/publish HOLD.
 - Spend authorized ₹0; spend incurred ₹0; settled revenue evidenced ₹0.
 - Next: parallel P2 bounty/grant eligibility and terms audit plus P1 Apify written-clarification question pack and product-level IP/data-rights matrix. No submissions, outreach, account actions or spend.
+
+
+## 9. Phase 25 Batch 1 — parallel P1/P2 opportunity and gate audit (2026-11-14)
+- Report: docs/35_PHASE_25_PARALLEL_P1_P2_OPPORTUNITY_GATE_AUDIT_BATCH_1_HI.md
+- P2 destination set preserved exactly from docs/30: PATROLL; Solana India grant; Superteam agent listings; Wordfence; Vesuvius; Metaculus (free only); NLnet; 0din; Gray Swan; Devpost; Kaggle; Prime Intellect only if paid bounties reappear. Category IDs #138,139,141,142,143,144,145,147,155,162,164,170 preserved; no remapping attempted.
+- Strongest research leads: NLnet FOSS grants (EUR 5k–50k, milestone/cost-recovery, Jan 3 2027 deadline for general next call); 0DIN GenAI security bounty (USD 500–15k discretionary, W-8/ID, payment within 30 days after contract); Wordfence vulnerability bounty (up to USD 31.2k advertised, PayPal twice monthly, strict scope); Metaculus active prize tournaments (free participation, human forecast required for prize; AI/bot accounts ineligible unless event-specific exception); Superteam Earn live inventory, but key grant listings show Applications Paused.
+- Solana Foundation India Grants explicitly allow India-based applicants, up to USDG 10k, but current status Applications Paused. Agentic Engineering Grants USDG 200 also paused and is tool-funding conditional on KYC, shipped Solana product and receipts, not unrestricted income.
+- Gray Swan historical challenge payouts are not evidence of currently open paid challenge. Prime Intellect policy supports discretionary security rewards, no fixed public payout guarantee. PATROLL/Vesuvius/Kaggle full primary terms and India payout not verified. Devpost event eligibility is event-specific; many events exclude professionals or are non-cash.
+- P1 Apify terms: official preview docs show last updated Sep 15 2026. Promotional user payouts use highest configured Store Discount Tier, regardless of actual spend tier/price paid; Apify determines promo status. 80% less platform usage; $20 PayPal/$100 other minimum; KYC and 3-day invoice review. This resolves prior version discrepancy but not India-specific creator payout.
+- No account creation, KYC, legal acceptance, testing, submissions, buyer outreach, publication, paid use or spend.
+- Ledger remains: spend authorized ₹0; spend incurred ₹0; settled revenue ₹0; products 0; submissions 0; KYC 0; commercial HOLD.
+- Next: P2 Batch 2 named opportunity shortlisting and full terms/payout checks; P1 Apify written-clarification question dossier; product IP/data provenance matrix.
