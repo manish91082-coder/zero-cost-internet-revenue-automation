@@ -26,31 +26,11 @@ Hard constraints:
 - Preserve the source's category order, exact destination counts, labels, evidence grades, and exclusions. Never fabricate destinations or earnings.
 - Hindi-first reporting. Assistant leads the work and records a durable checkpoint at each meaningful step.
 
-## 2. Continuity correction
-The previous response in the chat incorrectly pivoted from the active destination-by-destination Phase 23 audit to the integrated plan's P1 tool-factory priority. These are two different planning layers. The P1 integrated strategy is reference context, not permission to skip the active phase sequence. Resume the active phase below. Do not repeat the P1 pivot until Phase 23 is closed or the phase sequence is formally reconciled against the controlling source.
+## 2. Continuity reconciliation
+Phase 23 Category 24 is closed as RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD. The integrated strategy priority order was reconciled against the controlling source in docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md. P1 Tool Factory is now the correct next integrated-plan workstream, but remains validation-only until all five gates pass. Category 24 remains B and is not promoted.
 
-## 3. Active phase
-Phase 23 — Category 24: "AI कर्मचारी" किराये पर — 13 original destinations.
-Source priority: B.
-The source distinguishes:
-- Agent-selling / agent marketplace destinations.
-- Free model/inference facilities whose quotas and terms can change.
-Keep those groups separate. Do not confuse free inference providers with platforms that actually pay agent creators.
-
-### Original destination list (preserve exact 13)
-1. Google AI Studio / Gemini API free tier — aistudio.google.com
-2. Groq free tier — groq.com
-3. OpenRouter free models — openrouter.ai
-4. Cloudflare Workers AI — developers.cloudflare.com/workers-ai
-5. Relevance AI marketplace — relevanceai.com
-6. Agent.ai — agent.ai
-7. Enso — enso.bot
-8. Microsoft Agent Store — microsoft.com/microsoft-365/copilot
-9. AWS Marketplace (AI agents) — aws.amazon.com/marketplace
-10. Vapi / Retell / Bland partner programs — source site vapi.ai; verify India telephony/regulatory conditions
-11. Yellow.ai / Kore.ai partner — yellow.ai
-12. Direct sales to local businesses — monthly agent rental; source notes customer advance should fund human work/model costs
-13. Salesforce AgentExchange — appexchange.salesforce.com
+## 3. Closed phase record: Phase 23
+Phase 23 — Category 24: "AI कर्मचारी" किराये पर — all 13 original destinations audited. Source priority B. Full audit: docs/29_PHASE_23_FINAL_AUDIT_13_DESTINATIONS_HI.md. Reconciliation: docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md. Final status: RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD; 0/13 pass all five gates. Category 24 is not the active phase.
 
 ## 4. Completed work recorded in chat
 All 13 destinations in Phase 23 have now received interim official-source audits:
@@ -92,13 +72,16 @@ Batch 11–13 is complete and recorded in `docs/29_PHASE_23_FINAL_AUDIT_13_DESTI
 The reconciliation is complete and recorded in `docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md`. Category 24 remains B (sales-led, half automation), not P1. The integrated source order is retained: P1 first; P2 alongside; P3 after; P4 later; P5/B/M later or owner choice. Apify P1 is treated as PRIORITY-1 CANDIDATE / VALIDATION HOLD because its own source section leaves AI-generated Actor rules, median creator earnings, model/automation costs and actual demand unresolved. No build, account creation, publication, outreach or spend is authorized.
 ## 5. Non-negotiable status ledger
 - Spend authorized: ₹0.
+- Spend incurred: ₹0.
 - Settled revenue evidenced: ₹0.
 - Approved commercial products: 0.
 - Approved paid accounts / paid infrastructure: 0.
-- Phase 23 completed destinations: 13/13 interim audits complete.
-- Phase 23 remaining: 0/13.
-- Build/list/publish status: HOLD pending five-gate approval.
-- GitHub sync: this checkpoint and README are now committed; prior research bundles/reports from other local phases are not assumed synced unless separately fetched and verified from remote.
+- Phase 23: 13/13 audited and closed; 0/13 pass all five gates.
+- Phase 24 P1 Apify audit: Batch 1 report committed; research in progress.
+- Current P1 gate state: demand UNKNOWN; IP/licensing UNKNOWN; ₹0 economics FAIL on current evidence; India payout UNKNOWN; autonomous fulfilment FAIL on current evidence.
+- Build/list/publish status: HOLD pending all five gates.
+- Latest report: docs/31_PHASE_24_P1_APIFY_GATE_AUDIT_BATCH_1_HI.md
+- Report commit: 8f7f6e3b54af810cea83ab959aa26774c12d61df (created; fetch-back verification pending at checkpoint update time).
 
 ## 6. GitHub sync protocol
 After every meaningful phase increment:
@@ -109,4 +92,11 @@ After every meaningful phase increment:
 5. Record commit SHA and remote verification status in the next checkpoint.
 
 ## 7. Next action
-Phase 23 is closed as RESEARCH COMPLETE / COMMERCIAL EXECUTION HOLD. Reconciliation is recorded in `docs/30_PHASE_23_RECONCILIATION_P1_P4_DECISION_MEMO_HI.md`. Next: conduct P1 Apify gate-validation audit (research only): current AI-generated Actor policy and commercial terms; India seller/KYC/tax/payout; fully-loaded ₹0 cost stack; platform-wide versus median creator earnings; demand evidence for our specific tools. Return PASS / FAIL / UNKNOWN across all five gates. Do not build, list, register, submit, contact customers, create accounts, publish, or spend.
+Continue Phase 24 — P1 Apify Tool Factory gate-validation audit, research only. Next research tasks:
+1. Verify India-specific Apify creator payout eligibility, payout rail, KYC/tax requirements and actual Indian bank settlement.
+2. Resolve RapidAPI official 20% vs 25% marketplace-fee conflict and confirm India PayPal payout/withdrawal.
+3. Verify ApyHub publisher Stripe Connect India eligibility separately from affiliate payout terms.
+4. Build a fully loaded zero-cost runtime/test/support/refund/maintenance cost model; no free-tier assumptions without commercial terms.
+5. Research project-specific buyer demand and median creator earnings using reliable evidence; do not infer from marketplace-wide claims.
+6. Complete IP/data-source rights matrix and AI-generated code provenance review.
+Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, listing, registration, publication, outreach, paid use or spend until all five gates pass.
