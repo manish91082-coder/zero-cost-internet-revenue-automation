@@ -102,3 +102,15 @@ Continue Phase 24 — P1 Apify Tool Factory gate-validation audit, research only
 5. Research median creator earnings and project-specific buyer demand using reliable evidence, without buyer outreach.
 6. Complete IP/data-source rights matrix and AI-generated code provenance review.
 Return PASS / FAIL / UNKNOWN for each gate. No account creation, Actor build, listing, registration, publication, outreach, paid use or spend until all five gates pass.
+
+
+## 8. Phase 24 Batch 4 — workload profiles and demand reality (2026-11-14)
+- Report: docs/34_PHASE_24_P1_APIFY_WORKLOAD_PROFILES_DEMAND_AUDIT_HI.md
+- Three illustrative workload profiles modelled: lightweight deterministic utility, user-input data transformation, and proxy-heavy scraper. No execution or spend.
+- Bare platform-cost break-even floors under PPE at FREE-tier rates: A ~$0.00418/event; B ~$0.01504/event; C ~$1.42084/event. Excludes refunds, payout/FX, support, maintenance, compliance, taxes, monitoring and labour; not retail prices or forecasts.
+- Best future technical candidate: deterministic user-input utility, no proxies/external APIs, bounded runtime/RAM, minimal retention. Proxy-heavy scraping rejected as default due high variable cost.
+- New independent marketplace analysis reports median developer had 5 users across paid Apify listings in 30 days and top 10% about 93% of users; payout split is an untested inference, not audited earnings. No product-specific buyer demand demonstrated.
+- Apify source-version discrepancy found: indexed terms result says 2026-09-15, fetched canonical page renders 2026-02-20. Promotional-user treatment must be clarified in writing; no assumption accepted.
+- Gate state unchanged: demand UNKNOWN; IP/licensing UNKNOWN; fully loaded ₹0 economics FAIL; India payout UNKNOWN; autonomous fulfilment FAIL. Build/list/publish HOLD.
+- Spend authorized ₹0; spend incurred ₹0; settled revenue evidenced ₹0.
+- Next: parallel P2 bounty/grant eligibility and terms audit plus P1 Apify written-clarification question pack and product-level IP/data-rights matrix. No submissions, outreach, account actions or spend.
