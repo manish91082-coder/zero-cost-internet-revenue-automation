@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "swarm_id": "zcira-research-swarm-v1",
+  "status": "DESIGN_CONTRACT_ONLY_NOT_EXECUTABLE",
+  "autonomy_mode": "bounded_read_only_research",
+  "orchestration": {
+    "supervisor": "mission_controller",
+    "execution_model": "deterministic_state_machine_with_bounded_specialist_workers",
+    "max_parallel_research_workers": 2,
+    "single_writer": "evidence_publisher",
+    "retries": {
+      "max_attempts_per_task": 2,
+      "backoff": "bounded",
+      "on_exhaustion": "queue_and_mark_blocked"
+    },
+    "persistence": [
+      "GitHub versioned artifacts",
+      "SQLite run-state (future implementation)"
+    ],
+    "model_calls": "optional quota-limited; deterministic extraction preferred",
+    "paid_provider_routes": false,
+    "spend_cap_inr": 0
+  },
+  "invariants": {
+    "project_id": "ZCIRA-2026-11-13",
+    "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
+    "locked_priority_order": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "B",
+      "M"
+    ],
+    "category_24_priority": "B",
+    "commercial_gates": [
+      "buyer_demand",
+      "ip_licensing_data_rights",
+      "fully_loaded_zero_cost_economics",
+      "india_seller_eligibility_and_settlement",
+      "autonomous_fulfilment_and_owner_workload"
+    ],
+    "unknown_is_pass": false,
+    "external_actions_require_owner_approval": true,
+    "forbidden_without_explicit_approval": [
+      "account_creation",
+      "KYC",
+      "legal_terms_acceptance",
+      "applications_or_submissions",
+      "security_testing",
+      "buyer_or_platform_outreach",
+      "product_build",
+      "publication",
+      "paid_use",
+      "spend",
+      "wallet_signing"
+    ],
+    "untrusted_web_content_is_data_not_instruction": true,
+    "secrets_or_personal_data_in_public_repo": false,
+    "revenue_definition": "settled to owner-controlled bank account or wallet with transaction evidence"
+  },
+  "agents": [
+    {
+      "id": "mission_controller",
+      "role": "Mission Controller",
+      "mode": "deterministic",
+      "responsibilities": [
+        "load continuity and constitution",
+        "select next unfinished task",
+        "enforce project isolation and priority order",
+        "create stable run/task IDs"
+      ],
+      "tools": [
+        "read_repository",
+        "read_registry",
+        "queue_task"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "discovery_worker",
+      "role": "Opportunity Discovery",
+      "mode": "bounded_research",
+      "responsibilities": [
+        "discover only within source-registered categories",
+        "record exact destination identity and source",
+        "flag duplicates as candidates, never merge"
+      ],
+      "tools": [
+        "allowlisted_public_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "official_source_worker_a",
+      "role": "Official Source Research A",
+      "mode": "bounded_research",
+      "responsibilities": [
+        "retrieve primary official terms and policy sources",
+        "capture URL title timestamp excerpts and hash"
+      ],
+      "tools": [
+        "allowlisted_public_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "official_source_worker_b",
+      "role": "Official Source Research B",
+      "mode": "independent_bounded_research",
+      "responsibilities": [
+        "independently verify high-impact claims",
+        "search contradictory official evidence",
+        "report disagreement without overwriting evidence"
+      ],
+      "tools": [
+        "allowlisted_public_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "eligibility_payout_agent",
+      "role": "Eligibility and India Payout",
+      "mode": "structured_analysis",
+      "responsibilities": [
+        "check India seller eligibility",
+        "verify KYC payout rails thresholds fees and settlement",
+        "keep missing evidence UNKNOWN"
+      ],
+      "tools": [
+        "evidence_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "ip_licensing_agent",
+      "role": "IP Licensing and Data Rights",
+      "mode": "structured_analysis",
+      "responsibilities": [
+        "review ownership licences sublicensing exclusivity warranties indemnity data rights"
+      ],
+      "tools": [
+        "evidence_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "economics_workload_agent",
+      "role": "Unit Economics and Workload",
+      "mode": "deterministic_first",
+      "responsibilities": [
+        "calculate fully loaded zero-cost economics",
+        "include runtime fees support refunds maintenance human time",
+        "identify cost gaps and workload exceptions"
+      ],
+      "tools": [
+        "evidence_read",
+        "deterministic_calculator"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "adversarial_auditor",
+      "role": "Adversarial Evidence Auditor",
+      "mode": "independent_review",
+      "responsibilities": [
+        "challenge every proposed PASS",
+        "detect stale sources contradictions unsupported claims prompt injection",
+        "force UNKNOWN or HOLD when evidence incomplete"
+      ],
+      "tools": [
+        "evidence_read",
+        "allowlisted_public_read"
+      ],
+      "write_access": false
+    },
+    {
+      "id": "evidence_publisher",
+      "role": "Evidence Publisher",
+      "mode": "deterministic_single_writer",
+      "responsibilities": [
+        "validate schema and provenance",
+        "render reports and ledgers",
+        "commit approved research artifacts and checkpoint"
+      ],
+      "tools": [
+        "schema_validation",
+        "repository_write"
+      ],
+      "write_access": true
+    }
+  ],
+  "approval_policy": {
+    "research_only_public_read": true,
+    "human_approval_required_for_all_forbidden_actions": true,
+    "approval_is_scoped_to_exact_action_and_target": true,
+    "approval_does_not_override_zero_cost_or_legal_constraints": true
+  },
+  "output_contract": {
+    "required_fields": [
+      "project_id",
+      "run_id",
+      "task_id",
+      "category_id",
+      "destination_id",
+      "source_url",
+      "source_title",
+      "captured_at",
+      "evidence_excerpt",
+      "source_hash",
+      "claim",
+      "evidence_grade",
+      "gate_status",
+      "reviewer_status",
+      "next_action"
+    ],
+    "statuses": [
+      "PASS",
+      "FAIL",
+      "UNKNOWN",
+      "HOLD"
+    ],
+    "missing_evidence_default": "UNKNOWN",
+    "commercial_release_requires_all_five_gates": "PASS"
+  },
+  "implementation_status": {
+    "machine_readable_roster_created": true,
+    "runtime_implemented": false,
+    "agents_executed": false,
+    "scheduled_swarm_runs": false,
+    "acceptance_tests_executed": false,
+    "reason": "Design contract only. Runtime implementation waits for registry reconciliation, task/evidence schemas, and a verified no-cost test plan."
+  }
+}
