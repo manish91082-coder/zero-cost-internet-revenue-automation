@@ -153,3 +153,12 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - P2 status: no route passes all gates. NLnet paused; 0DIN/Wordfence conditional with India payout unknown; Metaculus human-only; PATROLL conditional/high IP risk; Vesuvius/Gray Swan unknown; Kaggle named example excluded.
 - Ledger unchanged: spend authorized ₹0; incurred ₹0; settled revenue ₹0; products 0; submissions 0; accounts/KYC 0; outreach 0; build/test/publication 0; commercial HOLD.
 - Next: Phase 25 Batch 4 close remaining P2 evidence gaps for 0DIN India payout, Wordfence India programme payout, Metaculus named tournament terms, suitable Kaggle open cash event, Gray Swan current programme and Vesuvius identity. In parallel investigate Apify public India payout eligibility and customer-run cost allocation. PATROLL live contest requires exact contest rules and IP/payment review before any owner decision. No account, KYC, acceptance, submission, testing, outreach, build, publication, paid use or spend.
+
+## 12. Autonomous research swarm feasibility study (2026-11-14)
+- User requested a deep feasibility study and design for replacing response-by-response manual research with a multi-expert AI-agent swarm, using zero-cost resources and maximum practical automation.
+- Confirmed latest prior work: Phase 25 Batch 3 report `docs/37_PHASE_25_PARALLEL_P1_P2_OPPORTUNITY_GATE_AUDIT_BATCH_3_HI.md`; report blob `1c5c77037331a3182029bb0abc2e51395cd3f4f2`; report commit `074e332279abc754f4cc6ca0315aed24b28b2382`; checkpoint blob before this update `fd352dcd159a9aa30cdeb660f2ed47da6718f731`.
+- Batch 3 is the last completed research checkpoint. Its findings and ledger remain controlling; no P2 Batch 4 work is represented as completed by this update.
+- Swarm architecture research is now a separate cross-cutting engineering workstream within this project. It must preserve original P1/P2/P3/P4 order, destination IDs/counts, five gates, ₹0 rules, approvals and settlement evidence requirements.
+- No accounts, KYC, terms acceptance, submissions, external contact, product build, tests, publication, paid use or spend were authorized by this architecture-study request.
+- Next: complete evidence-backed feasibility/architecture research for a zero-cost agent swarm; document framework/model/runtime/storage/scheduling limits and operational fallback; then propose phased implementation with manual approval gates. Only after architecture review should implementation begin.
+
