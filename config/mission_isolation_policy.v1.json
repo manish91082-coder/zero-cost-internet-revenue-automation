@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
+  "canonical_branch": "main",
+  "identity_handling": {
+    "owner_email_persisted": false,
+    "owner_email_used_as_global_credential": false,
+    "shared_google_login_means_all_services_authorized": false,
+    "oauth_scope_is_per_application_and_provider": true,
+    "access_tokens_may_be_committed_to_repository": false,
+    "secrets_or_personal_identifiers_may_be_committed_to_public_repo": false
+  },
+  "thread_isolation": {
+    "canonical_state_authority": "PROJECT_CONTINUITY.md plus canonical main branch",
+    "read_access_for_other_threads": "ALLOWED",
+    "write_access": "ONE_WRITER_AT_A_TIME_ONLY",
+    "all_writers_must_check_latest_branch_head": true,
+    "compare_and_swap_required": true,
+    "durable_writer_lease_required": true,
+    "research_workers_are_read_only": true,
+    "single_writer_role": "evidence_publisher",
+    "other_threads_must_handoff_to_canonical_writer": true
+  },
+  "repo_isolation": {
+    "mission_id_is_unique": true,
+    "canonical_repo_is_fixed": true,
+    "branch_is_fixed": "main",
+    "environment_namespace": "zcira-readonly-research",
+    "state_namespace": "zcira-2026-11-13/main",
+    "cross_mission_shared_state_allowed": false,
+    "cross_mission_write_allowed": false,
+    "feature_branch_without_owner_approval_allowed": false
+  },
+  "shared_account_resources": {
+    "shared_github_identity_may_cause_rate_limit_contention": true,
+    "shared_cloud_account_may_cause_quota_contention": true,
+    "independent_repositories_do_not_guarantee_independent_account_quotas": true,
+    "global_owner_resource_ledger_required_before_multi_project_cloud_deployment": true,
+    "global_owner_resource_ledger_status": "DESIGN_ONLY_NOT_IMPLEMENTED"
+  },
+  "enforcement_status": {
+    "mission_registry_present": true,
+    "canonical_branch_compare_and_swap_core_present": true,
+    "in_memory_lease_core_present": true,
+    "durable_writer_lock_file": "NOT_IMPLEMENTED",
+    "github_branch_protection": "NOT_CONFIGURED",
+    "github_actions_concurrency_group": "NOT_CONFIGURED",
+    "cloud_resource_ledger": "NOT_IMPLEMENTED",
+    "cross_project_lock": "NOT_IMPLEMENTED"
+  },
+  "approval_policy": {
+    "exact_service_and_oauth_scope_required": true,
+    "exact_data_access_and_purpose_required": true,
+    "duration_and_revocation_path_required": true,
+    "billing_and_payment_method_requirement_must_be_disclosed": true,
+    "unknown_billing_is_not_eligible": true,
+    "billing_or_payment_method_required_is_not_eligible": true,
+    "owner_approval_cannot_override_zero_cost_cap": true
+  }
+}
