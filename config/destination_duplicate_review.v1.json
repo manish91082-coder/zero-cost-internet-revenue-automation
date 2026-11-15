@@ -1,0 +1,486 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "status": "REVIEW_ONLY_NO_IDENTITY_MERGES",
+  "source": {
+    "archive_name": "02_complete-research-hi.md",
+    "library_file_id": "file_00000000c8088211912536fa0fe8badd",
+    "version": 1,
+    "archive_sha256": "c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e",
+    "embedded_section_sha256": "7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24"
+  },
+  "input_counts": {
+    "category_occurrences": 3314,
+    "shared_list_occurrences": 168,
+    "total_occurrences": 3482
+  },
+  "normalization": {
+    "display_name": "Unicode NFKC, casefold, trim, collapse whitespace; punctuation and brand aliases are not rewritten",
+    "hostname": "lowercase hostname; strip leading www.; assume https:// when scheme absent",
+    "not_performed": [
+      "public-suffix equivalence",
+      "brand/parent-company inference",
+      "path equivalence",
+      "redirect resolution",
+      "live URL verification",
+      "commercial eligibility review"
+    ]
+  },
+  "metrics": {
+    "repeated_normalized_name_groups": 315,
+    "repeated_normalized_name_group_occurrences": 747,
+    "repeated_normalized_name_excess_occurrences": 432,
+    "strict_same_name_and_same_host_groups": 283,
+    "strict_same_name_and_same_host_occurrences": 665,
+    "strict_same_name_and_same_host_excess_occurrences": 382,
+    "strict_groups_spanning_multiple_category_ids": 261,
+    "strict_groups_containing_shared_list_occurrence": 40,
+    "strict_groups_with_same_category_repetition": 0,
+    "ambiguous_same_name_groups": 32,
+    "ambiguous_same_name_occurrences": 82,
+    "ambiguous_same_name_excess_occurrences": 50,
+    "repeated_host_groups": 489,
+    "repeated_host_excess_occurrences": 946,
+    "repeated_host_groups_with_multiple_display_names": 298,
+    "unique_platform_count": "NOT_ESTABLISHED"
+  },
+  "strict_candidate_examples": [
+    {
+      "candidate_id": "dupname-gumroad",
+      "normalized_name": "gumroad",
+      "site_host": "gumroad.com",
+      "occurrence_count": 11,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 7,
+          "ordinal": 5,
+          "source_line": 4814
+        },
+        {
+          "record_type": "category",
+          "category_id": 13,
+          "ordinal": 19,
+          "source_line": 4896
+        },
+        {
+          "record_type": "category",
+          "category_id": 36,
+          "ordinal": 8,
+          "source_line": 5010
+        },
+        {
+          "record_type": "category",
+          "category_id": 37,
+          "ordinal": 5,
+          "source_line": 5022
+        },
+        {
+          "record_type": "category",
+          "category_id": 64,
+          "ordinal": 29,
+          "source_line": 5121
+        },
+        {
+          "record_type": "category",
+          "category_id": 65,
+          "ordinal": 1,
+          "source_line": 5135
+        },
+        {
+          "record_type": "category",
+          "category_id": 66,
+          "ordinal": 12,
+          "source_line": 5191
+        },
+        {
+          "record_type": "category",
+          "category_id": 67,
+          "ordinal": 13,
+          "source_line": 5212
+        },
+        {
+          "record_type": "category",
+          "category_id": 71,
+          "ordinal": 19,
+          "source_line": 5283
+        },
+        {
+          "record_type": "category",
+          "category_id": 236,
+          "ordinal": 3,
+          "source_line": 5336
+        },
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "P",
+          "ordinal": 1,
+          "source_line": 5502
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-etsy",
+      "normalized_name": "etsy",
+      "site_host": "etsy.com",
+      "occurrence_count": 9,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 37,
+          "ordinal": 8,
+          "source_line": 5025
+        },
+        {
+          "record_type": "category",
+          "category_id": 64,
+          "ordinal": 35,
+          "source_line": 5127
+        },
+        {
+          "record_type": "category",
+          "category_id": 65,
+          "ordinal": 34,
+          "source_line": 5168
+        },
+        {
+          "record_type": "category",
+          "category_id": 66,
+          "ordinal": 13,
+          "source_line": 5192
+        },
+        {
+          "record_type": "category",
+          "category_id": 67,
+          "ordinal": 19,
+          "source_line": 5218
+        },
+        {
+          "record_type": "category",
+          "category_id": 71,
+          "ordinal": 21,
+          "source_line": 5285
+        },
+        {
+          "record_type": "category",
+          "category_id": 74,
+          "ordinal": 13,
+          "source_line": 5793
+        },
+        {
+          "record_type": "category",
+          "category_id": 78,
+          "ordinal": 19,
+          "source_line": 5819
+        },
+        {
+          "record_type": "category",
+          "category_id": 90,
+          "ordinal": 19,
+          "source_line": 8598
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-payhip",
+      "normalized_name": "payhip",
+      "site_host": "payhip.com",
+      "occurrence_count": 6,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 37,
+          "ordinal": 6,
+          "source_line": 5023
+        },
+        {
+          "record_type": "category",
+          "category_id": 64,
+          "ordinal": 30,
+          "source_line": 5122
+        },
+        {
+          "record_type": "category",
+          "category_id": 65,
+          "ordinal": 2,
+          "source_line": 5136
+        },
+        {
+          "record_type": "category",
+          "category_id": 71,
+          "ordinal": 20,
+          "source_line": 5284
+        },
+        {
+          "record_type": "category",
+          "category_id": 236,
+          "ordinal": 4,
+          "source_line": 5337
+        },
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "P",
+          "ordinal": 2,
+          "source_line": 5503
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-whop",
+      "normalized_name": "whop",
+      "site_host": "whop.com",
+      "occurrence_count": 6,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 7,
+          "ordinal": 6,
+          "source_line": 4815
+        },
+        {
+          "record_type": "category",
+          "category_id": 33,
+          "ordinal": 10,
+          "source_line": 4976
+        },
+        {
+          "record_type": "category",
+          "category_id": 37,
+          "ordinal": 7,
+          "source_line": 5024
+        },
+        {
+          "record_type": "category",
+          "category_id": 65,
+          "ordinal": 6,
+          "source_line": 5140
+        },
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "P",
+          "ordinal": 6,
+          "source_line": 5507
+        },
+        {
+          "record_type": "category",
+          "category_id": 55,
+          "ordinal": 6,
+          "source_line": 7597
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-linkedin",
+      "normalized_name": "linkedin",
+      "site_host": "linkedin.com",
+      "occurrence_count": 5,
+      "occurrences": [
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "C",
+          "ordinal": 12,
+          "source_line": 5477
+        },
+        {
+          "record_type": "category",
+          "category_id": 42,
+          "ordinal": 14,
+          "source_line": 7412
+        },
+        {
+          "record_type": "category",
+          "category_id": 62,
+          "ordinal": 14,
+          "source_line": 7705
+        },
+        {
+          "record_type": "category",
+          "category_id": 108,
+          "ordinal": 10,
+          "source_line": 7829
+        },
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "T",
+          "ordinal": 19,
+          "source_line": 8501
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-turing",
+      "normalized_name": "turing",
+      "site_host": "turing.com",
+      "occurrence_count": 5,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 170,
+          "ordinal": 5,
+          "source_line": 7022
+        },
+        {
+          "record_type": "category",
+          "category_id": 172,
+          "ordinal": 4,
+          "source_line": 7056
+        },
+        {
+          "record_type": "category",
+          "category_id": 111,
+          "ordinal": 13,
+          "source_line": 7898
+        },
+        {
+          "record_type": "category",
+          "category_id": 130,
+          "ordinal": 16,
+          "source_line": 8254
+        },
+        {
+          "record_type": "category",
+          "category_id": 95,
+          "ordinal": 6,
+          "source_line": 8659
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-buymeacoffee",
+      "normalized_name": "buy me a coffee",
+      "site_host": "buymeacoffee.com",
+      "occurrence_count": 4,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 65,
+          "ordinal": 4,
+          "source_line": 5138
+        },
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "P",
+          "ordinal": 8,
+          "source_line": 5509
+        },
+        {
+          "record_type": "category",
+          "category_id": 167,
+          "ordinal": 2,
+          "source_line": 6947
+        },
+        {
+          "record_type": "category",
+          "category_id": 55,
+          "ordinal": 3,
+          "source_line": 7594
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-cgtrader",
+      "normalized_name": "cgtrader",
+      "site_host": "cgtrader.com",
+      "occurrence_count": 4,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 14,
+          "ordinal": 9,
+          "source_line": 4912
+        },
+        {
+          "record_type": "category",
+          "category_id": 63,
+          "ordinal": 44,
+          "source_line": 5076
+        },
+        {
+          "record_type": "category",
+          "category_id": 67,
+          "ordinal": 7,
+          "source_line": 5206
+        },
+        {
+          "record_type": "category",
+          "category_id": 236,
+          "ordinal": 14,
+          "source_line": 5347
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-fab-epic",
+      "normalized_name": "fab (epic)",
+      "site_host": "fab.com",
+      "occurrence_count": 4,
+      "occurrences": [
+        {
+          "record_type": "category",
+          "category_id": 14,
+          "ordinal": 2,
+          "source_line": 4905
+        },
+        {
+          "record_type": "category",
+          "category_id": 63,
+          "ordinal": 45,
+          "source_line": 5077
+        },
+        {
+          "record_type": "category",
+          "category_id": 67,
+          "ordinal": 15,
+          "source_line": 5214
+        },
+        {
+          "record_type": "category",
+          "category_id": 236,
+          "ordinal": 13,
+          "source_line": 5346
+        }
+      ]
+    },
+    {
+      "candidate_id": "dupname-instagram",
+      "normalized_name": "instagram",
+      "site_host": "instagram.com",
+      "occurrence_count": 4,
+      "occurrences": [
+        {
+          "record_type": "shared_list",
+          "shared_list_id": "C",
+          "ordinal": 6,
+          "source_line": 5471
+        },
+        {
+          "record_type": "category",
+          "category_id": 79,
+          "ordinal": 3,
+          "source_line": 5830
+        },
+        {
+          "record_type": "category",
+          "category_id": 62,
+          "ordinal": 1,
+          "source_line": 7692
+        },
+        {
+          "record_type": "category",
+          "category_id": 127,
+          "ordinal": 6,
+          "source_line": 8187
+        }
+      ]
+    }
+  ],
+  "review_rules": [
+    "Never delete or collapse a source occurrence.",
+    "Same normalized name plus same host is a high-confidence identity candidate, not automatic authorization to merge.",
+    "Same host with different display names is a product/service-family collision unless independent evidence proves alias identity.",
+    "Same display name with missing or conflicting hosts remains ambiguous.",
+    "Preserve category ID, shared-list ID, ordinal and source line on every candidate occurrence.",
+    "A future canonical identity registry may link occurrences to an entity ID while retaining all original rows."
+  ],
+  "durability_note": "The complete 3,482-row occurrence ledger and complete 315-group candidate output were reconstructed in the analysis workspace only and are not committed. This repository artifact is a compact audit index with reproducible aggregate counts and ten fully provenance-linked examples; it is not represented as the complete occurrence ledger."
+}
