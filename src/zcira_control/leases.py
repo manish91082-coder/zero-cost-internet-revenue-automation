@@ -26,6 +26,8 @@ def _parse_time(value: str) -> datetime:
 
 
 def lease_is_active(lease: Mapping[str, Any], now: datetime) -> bool:
+    if now.tzinfo is None:
+        raise PolicyError("lease comparison time must include a timezone")
     return lease.get("status") == "ACTIVE" and _parse_time(lease["expires_at"]) > now.astimezone(timezone.utc)
 
 
@@ -42,7 +44,15 @@ def validate_lease(lease: Mapping[str, Any], now: datetime) -> None:
     for key, value in expected.items():
         if lease.get(key) != value:
             raise PolicyError(f"lease scope mismatch: {key}")
+    if lease.get("lease_kind") not in {"REPOSITORY_SINGLE_WRITER", "TASK_EXECUTION"}:
+        raise PolicyError("unknown lease kind")
+    if lease.get("status") not in {"ACTIVE", "RELEASED", "EXPIRED", "CONFLICTED"}:
+        raise PolicyError("unknown lease status")
+    if now.tzinfo is None:
+        raise PolicyError("lease validation time must include a timezone")
     if lease.get("lease_kind") == "REPOSITORY_SINGLE_WRITER":
+        if lease.get("resource_key") != "repo-main-single-writer":
+            raise PolicyError("repository writer lease must use the canonical resource key")
         if lease.get("holder_role") != SINGLE_WRITER_ROLE or lease.get("write_access") is not True:
             raise PolicyError("only evidence_publisher may hold the repository single-writer lease")
     elif lease.get("write_access") is True and lease.get("holder_role") != SINGLE_WRITER_ROLE:
@@ -60,7 +70,10 @@ def acquire_lease(
     candidate = dict(proposed)
     validate_lease(candidate, now)
     for lease in existing:
-        if lease.get("resource_key") == candidate.get("resource_key") and lease_is_active(lease, now):
+        same_scope = (lease.get("project_id"), lease.get("canonical_repo"), lease.get("state_namespace")) == (candidate.get("project_id"), candidate.get("canonical_repo"), candidate.get("state_namespace"))
+        if same_scope and lease.get("resource_key") == candidate.get("resource_key") and lease_is_active(lease, now):
             if lease.get("lease_id") != candidate.get("lease_id"):
                 raise PolicyError("resource already has an active lease")
+            if dict(lease) != candidate:
+                raise PolicyError("lease idempotency collision: same lease ID has different content")
     return candidate

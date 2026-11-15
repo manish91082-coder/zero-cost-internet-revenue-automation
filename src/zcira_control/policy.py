@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import re
+from fnmatch import fnmatchcase
+from pathlib import PurePosixPath
 from datetime import datetime, timezone
 from typing import Any, Mapping
 
@@ -51,10 +53,34 @@ def validate_mission_context(context: Mapping[str, Any]) -> None:
         "trial_credit_dependency_allowed": False,
         "shared_state_with_other_missions": False,
         "cross_mission_write_allowed": False,
+        "active": True,
     }
     for key, value in expected.items():
         if context.get(key) != value:
             raise PolicyError(f"mission context mismatch: {key}")
+    allowed = context.get("allowed_action_classes")
+    denied = context.get("denied_action_classes")
+    if not isinstance(allowed, list) or not set(allowed).issubset(ALLOWED_TASK_ACTIONS):
+        raise PolicyError("mission action allowlist is invalid")
+    required_denials = {"PAID_FALLBACK", "BILLING_ENABLE", "ACCOUNT_CREATE", "KYC", "ACCEPT_TERMS", "CONTACT_EXTERNAL", "SUBMIT", "SECURITY_TEST", "PUBLISH_PRODUCT", "WALLET_SIGN", "TRANSFER_FUNDS"}
+    if not isinstance(denied, list) or not required_denials.issubset(set(denied)):
+        raise PolicyError("mission action denylist is incomplete")
+    if not isinstance(context.get("allowed_paths"), list) or not isinstance(context.get("denied_paths"), list):
+        raise PolicyError("mission path allowlist/denylist is missing")
+
+
+
+def validate_repo_path(path: str, context: Mapping[str, Any]) -> None:
+    """Validate a repository-relative path against mission allow/deny patterns."""
+    if not isinstance(path, str) or not path or path.startswith("/") or "\\" in path:
+        raise PolicyError("repository path must be relative POSIX path")
+    normalized = str(PurePosixPath(path))
+    if normalized != path or ".." in PurePosixPath(path).parts or "." in PurePosixPath(path).parts:
+        raise PolicyError("repository path traversal or non-canonical path")
+    if any(fnmatchcase(path, pattern) for pattern in context["denied_paths"]):
+        raise PolicyError("repository path is explicitly denied")
+    if not any(fnmatchcase(path, pattern) for pattern in context["allowed_paths"]):
+        raise PolicyError("repository path is outside the mission allowlist")
 
 
 def validate_task(task: Mapping[str, Any], context: Mapping[str, Any]) -> None:
@@ -91,10 +117,15 @@ def validate_task(task: Mapping[str, Any], context: Mapping[str, Any]) -> None:
     }:
         raise PolicyError("unknown agent role")
     actions = task.get("allowed_actions", [])
-    if not isinstance(actions, list) or not set(actions).issubset(ALLOWED_TASK_ACTIONS):
+    if not isinstance(actions, list) or not set(actions).issubset(ALLOWED_TASK_ACTIONS) or not set(actions).issubset(set(context["allowed_action_classes"])):
         raise PolicyError("task contains an unapproved action class")
-    if "WRITE_REPO_VALIDATED" in actions and role != SINGLE_WRITER_ROLE:
-        raise PolicyError("only evidence_publisher may request validated repository writes")
+    if task.get("status") not in {"QUEUED", "LEASED", "RUNNING", "BLOCKED", "COMPLETED", "FAILED", "DEAD_LETTER", "CANCELLED"}:
+        raise PolicyError("unknown task status")
+    if "WRITE_REPO_VALIDATED" in actions:
+        if role != SINGLE_WRITER_ROLE:
+            raise PolicyError("only evidence_publisher may request validated repository writes")
+        target_path = task.get("parameters", {}).get("target_path")
+        validate_repo_path(target_path, context)
     key = task.get("idempotency_key", "")
     if not isinstance(key, str) or not SHA256_RE.fullmatch(key):
         raise PolicyError("idempotency_key must be a SHA-256 hex digest")

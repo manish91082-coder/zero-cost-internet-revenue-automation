@@ -11,7 +11,7 @@ from zcira_control.checkpoints import StaleCheckpoint, compare_and_swap_checkpoi
 from zcira_control.leases import acquire_lease
 from zcira_control.policy import (
     CANONICAL_REPO, ENVIRONMENT_NAMESPACE, PROJECT_ID, STATE_NAMESPACE,
-    PolicyError, evaluate_commercial_release, validate_mission_context, validate_task,
+    PolicyError, evaluate_commercial_release, validate_mission_context, validate_task, validate_repo_path,
 )
 from zcira_control.queue import plan_batch, plan_publisher_task
 from zcira_control.quota import provider_eligibility, record_failure, record_successful_probe
@@ -24,6 +24,10 @@ MISSION = {
     "branch": "main", "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
     "max_parallel_research_workers": 2, "single_writer_role": "evidence_publisher", "spend_cap_inr": 0,
     "paid_fallback_allowed": False, "trial_credit_dependency_allowed": False, "shared_state_with_other_missions": False, "cross_mission_write_allowed": False,
+    "active": True, "allowed_paths": ["PROJECT_CONTINUITY.md", "docs/**", "config/**", "schemas/**", "tests/**", "scripts/**", "src/**", "requirements-test.txt"],
+    "denied_paths": [".github/workflows/**", "secrets/**", "private/**"],
+    "allowed_action_classes": ["READ_PUBLIC", "PARSE_PUBLIC", "HASH_PUBLIC", "CREATE_INTERNAL_DRAFT", "WRITE_REPO_VALIDATED"],
+    "denied_action_classes": ["PURCHASE", "PAID_FALLBACK", "BILLING_ENABLE", "ACCOUNT_CREATE", "KYC", "ACCEPT_TERMS", "CONTACT_EXTERNAL", "SUBMIT", "SECURITY_TEST", "PUBLISH_PRODUCT", "WALLET_SIGN", "TRANSFER_FUNDS"],
 }
 
 def make_task(task_id="zcira-task-001", priority="P1", created="2026-11-15T02:00:00Z", key=None, category_id=1):
@@ -74,6 +78,11 @@ class ControlPlaneTests(unittest.TestCase):
         task = make_task(category_id=24, priority="P1")
         with self.assertRaises(PolicyError): validate_task(task, MISSION)
 
+    def test_repository_path_allowlist_blocks_workflows_and_traversal(self):
+        validate_repo_path("docs/report.md", MISSION)
+        with self.assertRaises(PolicyError): validate_repo_path(".github/workflows/auto.yml", MISSION)
+        with self.assertRaises(PolicyError): validate_repo_path("../other-repo/file", MISSION)
+
     def test_external_action_is_rejected(self):
         task = make_task()
         task["allowed_actions"] = ["PUBLISH"]
@@ -84,6 +93,7 @@ class ControlPlaneTests(unittest.TestCase):
         task["allowed_actions"] = ["WRITE_REPO_VALIDATED"]
         with self.assertRaises(PolicyError): validate_task(task, MISSION)
         task["assigned_role"] = "evidence_publisher"
+        task["parameters"] = {"target_path": "docs/report.md"}
         validate_task(task, MISSION)
 
     def test_paid_route_is_rejected(self):
@@ -101,6 +111,7 @@ class ControlPlaneTests(unittest.TestCase):
         publisher = make_task("zcira-publisher", "P1")
         publisher["assigned_role"] = "evidence_publisher"
         publisher["allowed_actions"] = ["WRITE_REPO_VALIDATED"]
+        publisher["parameters"] = {"target_path": "docs/report.md"}
         research = make_task("zcira-research", "P2")
         planned = plan_batch([publisher, research], MISSION)
         self.assertEqual([x["task_id"] for x in planned], ["zcira-research"])
@@ -109,9 +120,11 @@ class ControlPlaneTests(unittest.TestCase):
         first = make_task("zcira-publisher-a", "P2")
         first["assigned_role"] = "evidence_publisher"
         first["allowed_actions"] = ["WRITE_REPO_VALIDATED"]
+        first["parameters"] = {"target_path": "docs/report-a.md"}
         second = make_task("zcira-publisher-b", "P1")
         second["assigned_role"] = "evidence_publisher"
         second["allowed_actions"] = ["WRITE_REPO_VALIDATED"]
+        second["parameters"] = {"target_path": "docs/report-b.md"}
         self.assertEqual(plan_publisher_task([first, second], MISSION, [], NOW)["task_id"], "zcira-publisher-b")
         self.assertIsNone(plan_publisher_task([first, second], MISSION, [make_lease()], NOW))
 
