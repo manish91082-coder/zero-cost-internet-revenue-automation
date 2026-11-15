@@ -335,3 +335,20 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - 3,482 remains occurrence slots, not unique platform count. No deduplication or commercial eligibility judgement in A2.4-B/C.
 - Next: A2.5 provenance-preserving duplicate-candidate review. Then S3 versioned schemas and synthetic fixtures. No deployment or external action.
 - Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/worker execution/tests/outreach/submissions/build/publication; commercial HOLD.
+
+
+## 24. Phase A2.5 — provenance-preserving duplicate-candidate review (2026-11-15)
+- Report: `docs/49_PHASE_A2_5_DUPLICATE_CANDIDATE_REVIEW_HI.md`.
+- Compact machine-readable review index: `config/destination_duplicate_review.v1.json`.
+- Artifact commit: `abc80cb1e3e47d65964b7b34a30d80c2360ebd97`; commit URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/commit/abc80cb1e3e47d65964b7b34a30d80c2360ebd97.
+- Fetch-back verified blobs: duplicate index `2f26fc0819a723be4e4a4220655abcd96328b429`; report 49 `0a727043e185d8caa0b6c204c2fd9069130dd028`.
+- Reprocessed 3,482 original source occurrences: 3,314 category-specific + 168 shared-list rows. Source archive/version and embedded section hashes remain those in Sections 20 and 23.
+- Deterministic candidate metrics: 315 repeated normalized display-name groups / 747 occurrences / 432 excess; of these 283 same-name+same-host groups / 665 occurrences / 382 excess, and 32 ambiguous same-name groups / 82 occurrences / 50 excess.
+- Strict candidate group audit: 261 of 283 span multiple category IDs; 40 include a shared-list occurrence; zero contain repeated occurrences inside the same category ID.
+- Host collision audit: 489 repeated-host groups / 1,435 occurrences / 946 excess; 298 contain multiple display names. Same-host does not establish alias or duplicate identity.
+- No source occurrence was deleted or merged. Ten high-frequency strict candidate examples retain category/shared-list ID, ordinal and source-line provenance. Normalization is intentionally conservative; no public-suffix, redirect, brand-parent or path equivalence.
+- The complete 3,482-row occurrence ledger and full 315-group output remain analysis-workspace-only, not committed. The committed JSON is a compact audit index, not a complete destination ledger.
+- Unique platform count remains NOT_ESTABLISHED. A2.5 is complete as candidate generation and provenance review; identity resolution/merging remains HOLD pending stronger independent evidence. No claim of unique destinations is made.
+- A2.4-B/C and A2.5 source reconciliation work is complete for this implementation sequence. Next: S3 versioned task/evidence/source-snapshot/gate/run-state/agent-message/approval/quota/resource-lease/mission-registry schemas plus synthetic contract fixtures and validation. Do not deploy.
+- Priority order/counts remain unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
+- Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/worker execution/cloud tests/outreach/submissions/build/publication; commercial HOLD.
