@@ -372,3 +372,21 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Next: S4 deterministic Python control plane with pure policy/state functions, queue/idempotency, lease expiry, single-writer enforcement, checkpoint compare-and-swap, quota circuit breakers and mission isolation. Keep model inference optional and never let an LLM override deterministic policy.
 - Priority order/counts unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
 - Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; commercial HOLD; no account/KYC/terms acceptance/deployment/external submission/outreach/product publication.
+
+
+## 26. Phase S3-B and S4 deterministic control plane core (2026-11-15)
+- S3-B hardening and S4 report: `docs/50_PHASE_S3_VERSIONED_SCHEMA_CONTRACTS_HI.md` and `docs/51_PHASE_S4_DETERMINISTIC_CONTROL_PLANE_HI.md`.
+- Report/manifest commit: `b5fb9dd82d97e009c3dbcbc66fa329c4366037d8`; commit URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/commit/b5fb9dd82d97e009c3dbcbc66fa329c4366037d8.
+- Fetch-back verified blobs: schema manifest `b9749ba379185b4cdb20f5afdd5203c6bf80b7bf`; S3 report `54d73f1962aa62fe6a6e0f7e97d03d0ce643f4fb`; S4 report `f4f734abd3721669e8f828253f99f75de6bd6009`.
+- S3 final contract count: 10 schemas, 10 valid fixtures, 28 Python contract test cases (10 valid + 18 negative). Targeted preflight against fetched GitHub schemas/fixtures: 10/10 valid accepted and 18/18 adversarial mutations rejected. Full pytest and JSON Schema meta-schema validation remain NOT RUN; no CI workflow exists.
+- S3 hardening commits include trial-credit dependency false in mission registry, task `assigned_role` binding and publisher-only `WRITE_REPO_VALIDATED), HTTP(S)-only source URLs, and scoped `src/**` path permission. Workflow/secrets/private paths remain denied.
+- S4 implementation files: `src/zcira_control/policy.py`, `queue.py`, `leases.py`, `quota.py`, `checkpoints.py`, `scripts/zcira_control.py`, `tests/test_control_plane.py`.
+- S4 code commits: core `52986407120e2462d07e5b9c8199fa87d236ef4b`; tests `00653496bef88fc6f218acee2eacc384c3960948`; mission path scope `80aa12662d0c5ebdc79eca731e206af3d2639f71`; policy/lease/path hardening `ca94c0d3e8182464c09e0370eae75003ef0c21ef`.
+- S4 standard-library unit tests executed in isolated tool container: 27/27 PASS. CLI synthetic plan returned exactly two read-only tasks in P1 then P2 order and reported `execution_performed=false). This is a synthetic offline test, not a cloud runner execution.
+- Deterministic engine enforces mission/repo/branch/namespace identity; fixed P1/P2/P3/P4/P5/B/M order and Category #24=B; ₹0 and no paid/trial route; max two read-only research tasks; one publisher; idempotency; path allowlist; single-writer lease/expiry; quota circuit breaker; stale checkpoint compare-and-swap; five gates and exact, unexpired, scope-matched owner approval.
+- Commercial release decision never executes the external action. It returns `external_action_performed=false`; user/platform interaction remains separately gated.
+- S4 core status: IMPLEMENTED and unit-tested. Durable queue/lease persistence, GitHub artifact checkpoint I/O, branch-head API compare-and-swap, retry/dead-letter scheduler and runtime adapters remain pending.
+- Latest root tree was rechecked: no `.github/workflows/` directory. Latest commit workflow-run lookup returned no runs. No GitHub Actions workflow, Cloudflare Worker/Cron/D1, LangGraph runtime, agent process or failover deployment exists.
+- No OAuth consent, account creation, KYC, legal acceptance, billing activation, payment method, cloud deployment or external action occurred. No user laptop/desktop/self-hosted runner is a runtime dependency.
+- Next: S4-B durable state bundle/checkpoint adapter and persistence contract, then S5 LangGraph adapter. No deployment before zero-billing eligibility and explicit owner approval.
+- Ledger unchanged: authorized/incurred spend ₹0; settled revenue evidence ₹0; commercial HOLD.
