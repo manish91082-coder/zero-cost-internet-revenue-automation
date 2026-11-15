@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:gate-decision:1.0.0",
+  "title": "ZCIRA Five-Gate Decision Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^decision-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "category_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 245
+    },
+    "destination_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "buyer_demand": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN",
+                "HOLD"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            }
+          },
+          "required": [
+            "status",
+            "evidence_ids",
+            "rationale"
+          ]
+        },
+        "ip_licensing_data_rights": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN",
+                "HOLD"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            }
+          },
+          "required": [
+            "status",
+            "evidence_ids",
+            "rationale"
+          ]
+        },
+        "zero_cost_economics": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN",
+                "HOLD"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            }
+          },
+          "required": [
+            "status",
+            "evidence_ids",
+            "rationale"
+          ]
+        },
+        "india_seller_eligibility_settlement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN",
+                "HOLD"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            }
+          },
+          "required": [
+            "status",
+            "evidence_ids",
+            "rationale"
+          ]
+        },
+        "autonomous_fulfilment_workload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "UNKNOWN",
+                "HOLD"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1200
+            }
+          },
+          "required": [
+            "status",
+            "evidence_ids",
+            "rationale"
+          ]
+        }
+      },
+      "required": [
+        "buyer_demand",
+        "ip_licensing_data_rights",
+        "zero_cost_economics",
+        "india_seller_eligibility_settlement",
+        "autonomous_fulfilment_workload"
+      ]
+    },
+    "overall_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "HOLD"
+      ]
+    },
+    "release_authorized": {
+      "type": "boolean"
+    },
+    "owner_approval_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "decision_rationale": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "decision_id",
+    "category_id",
+    "destination_id",
+    "evaluated_at",
+    "gates",
+    "overall_status",
+    "release_authorized",
+    "owner_approval_id",
+    "decision_rationale"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "overall_status": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "overall_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "release_authorized": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_authorized": {
+            "const": true
+          }
+        },
+        "required": [
+          "release_authorized"
+        ]
+      },
+      "then": {
+        "properties": {
+          "overall_status": {
+            "const": "PASS"
+          },
+          "owner_approval_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "gates": {
+            "properties": {
+              "buyer_demand": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                }
+              },
+              "ip_licensing_data_rights": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                }
+              },
+              "zero_cost_economics": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                }
+              },
+              "india_seller_eligibility_settlement": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                }
+              },
+              "autonomous_fulfilment_workload": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

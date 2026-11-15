@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:resource-lease:1.0.0",
+  "title": "ZCIRA Resource Lease Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "lease_id": {
+      "type": "string",
+      "pattern": "^lease-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "mission_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "canonical_repo": {
+      "const": "manish91082-coder/zero-cost-internet-revenue-automation"
+    },
+    "branch": {
+      "const": "main"
+    },
+    "environment_namespace": {
+      "const": "zcira-readonly-research"
+    },
+    "state_namespace": {
+      "const": "zcira-2026-11-13/main"
+    },
+    "resource_key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "lease_kind": {
+      "enum": [
+        "REPOSITORY_SINGLE_WRITER",
+        "TASK_EXECUTION"
+      ]
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^zcira-[a-z0-9][a-z0-9._-]{2,90}$"
+    },
+    "holder_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "holder_role": {
+      "enum": [
+        "mission_controller",
+        "discovery_worker",
+        "official_source_worker_a",
+        "official_source_worker_b",
+        "eligibility_payout_agent",
+        "ip_licensing_agent",
+        "economics_workload_agent",
+        "adversarial_auditor",
+        "evidence_publisher"
+      ]
+    },
+    "write_access": {
+      "type": "boolean"
+    },
+    "cross_mission_share_allowed": {
+      "const": false
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "RELEASED",
+        "EXPIRED",
+        "CONFLICTED"
+      ]
+    },
+    "acquired_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "released_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "base_commit_sha": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "lease_id",
+    "mission_id",
+    "canonical_repo",
+    "branch",
+    "environment_namespace",
+    "state_namespace",
+    "resource_key",
+    "lease_kind",
+    "task_id",
+    "holder_id",
+    "holder_role",
+    "write_access",
+    "cross_mission_share_allowed",
+    "status",
+    "acquired_at",
+    "expires_at",
+    "released_at",
+    "base_commit_sha",
+    "idempotency_key"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lease_kind": {
+            "const": "REPOSITORY_SINGLE_WRITER"
+          }
+        },
+        "required": [
+          "lease_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "holder_role": {
+            "const": "evidence_publisher"
+          },
+          "write_access": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "holder_role": {
+            "const": "evidence_publisher"
+          }
+        },
+        "required": [
+          "holder_role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "write_access": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "holder_role": {
+            "enum": [
+              "mission_controller",
+              "discovery_worker",
+              "official_source_worker_a",
+              "official_source_worker_b",
+              "eligibility_payout_agent",
+              "ip_licensing_agent",
+              "economics_workload_agent",
+              "adversarial_auditor"
+            ]
+          }
+        },
+        "required": [
+          "holder_role"
+        ]
+      },
+      "then": {
+        "properties": {
+          "write_access": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}

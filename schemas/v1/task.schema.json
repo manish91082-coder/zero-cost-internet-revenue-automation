@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:task:1.0.0",
+  "title": "ZCIRA Task Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "mission_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^zcira-[a-z0-9][a-z0-9._-]{2,90}$"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "task_type": {
+      "enum": [
+        "registry_reconciliation",
+        "public_source_research",
+        "source_snapshot",
+        "evidence_review",
+        "gate_evaluation",
+        "schema_validation",
+        "continuity_audit"
+      ]
+    },
+    "priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "B",
+        "M"
+      ]
+    },
+    "category_id": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 245
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "destination_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "status": {
+      "enum": [
+        "QUEUED",
+        "LEASED",
+        "RUNNING",
+        "BLOCKED",
+        "COMPLETED",
+        "FAILED",
+        "DEAD_LETTER",
+        "CANCELLED"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "attempt_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "max_attempts": {
+      "const": 2
+    },
+    "allowed_actions": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 5,
+      "items": {
+        "enum": [
+          "READ_PUBLIC",
+          "PARSE_PUBLIC",
+          "HASH_PUBLIC",
+          "CREATE_INTERNAL_DRAFT",
+          "WRITE_REPO_VALIDATED"
+        ]
+      }
+    },
+    "external_actions_allowed": {
+      "const": false
+    },
+    "paid_provider_routes_enabled": {
+      "const": false
+    },
+    "parameters": {
+      "type": "object",
+      "maxProperties": 30
+    },
+    "source_snapshot_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "lease_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "checkpoint": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commit_sha": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "artifact_path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "artifact_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "commit_sha",
+            "artifact_path",
+            "artifact_sha256"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "mission_id",
+    "task_id",
+    "idempotency_key",
+    "task_type",
+    "priority",
+    "category_id",
+    "destination_id",
+    "status",
+    "created_at",
+    "updated_at",
+    "attempt_count",
+    "max_attempts",
+    "allowed_actions",
+    "external_actions_allowed",
+    "paid_provider_routes_enabled",
+    "parameters",
+    "source_snapshot_ids",
+    "evidence_ids",
+    "lease_id",
+    "checkpoint"
+  ]
+}

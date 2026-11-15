@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:run-state:1.0.0",
+  "title": "ZCIRA Run State Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^zcira-run-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "mission_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "canonical_repo": {
+      "const": "manish91082-coder/zero-cost-internet-revenue-automation"
+    },
+    "branch": {
+      "const": "main"
+    },
+    "environment_namespace": {
+      "const": "zcira-readonly-research"
+    },
+    "state_namespace": {
+      "const": "zcira-2026-11-13/main"
+    },
+    "status": {
+      "enum": [
+        "QUEUED",
+        "RUNNING",
+        "COMPLETED",
+        "PARTIAL",
+        "PAUSED",
+        "FAILED"
+      ]
+    },
+    "executor": {
+      "enum": [
+        "github_actions_ephemeral",
+        "cloudflare_dispatcher",
+        "test_sandbox_non_runtime"
+      ]
+    },
+    "run_mode": {
+      "enum": [
+        "READ_ONLY_RESEARCH",
+        "SCHEMA_TEST"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_heartbeat_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "current_task_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "pending_task_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "completed_task_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "blocked_task_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "base_commit_sha": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "latest_commit_sha": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "max_parallel_research_workers": {
+      "const": 2
+    },
+    "single_writer_role": {
+      "const": "evidence_publisher"
+    },
+    "paid_provider_routes_enabled": {
+      "const": false
+    },
+    "spend_cap_inr": {
+      "const": 0
+    },
+    "kill_switch": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "run_id",
+    "mission_id",
+    "canonical_repo",
+    "branch",
+    "environment_namespace",
+    "state_namespace",
+    "status",
+    "executor",
+    "run_mode",
+    "started_at",
+    "last_heartbeat_at",
+    "finished_at",
+    "current_task_id",
+    "pending_task_ids",
+    "completed_task_ids",
+    "blocked_task_ids",
+    "base_commit_sha",
+    "latest_commit_sha",
+    "max_parallel_research_workers",
+    "single_writer_role",
+    "paid_provider_routes_enabled",
+    "spend_cap_inr",
+    "kill_switch"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kill_switch": {
+            "const": true
+          }
+        },
+        "required": [
+          "kill_switch"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": "PAUSED"
+          }
+        }
+      }
+    }
+  ]
+}

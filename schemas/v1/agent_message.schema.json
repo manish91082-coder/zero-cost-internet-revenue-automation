@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:agent-message:1.0.0",
+  "title": "ZCIRA Agent Message Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "message_id": {
+      "type": "string",
+      "pattern": "^message-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^zcira-run-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^zcira-[a-z0-9][a-z0-9._-]{2,90}$"
+    },
+    "from_agent": {
+      "enum": [
+        "mission_controller",
+        "discovery_worker",
+        "official_source_worker_a",
+        "official_source_worker_b",
+        "eligibility_payout_agent",
+        "ip_licensing_agent",
+        "economics_workload_agent",
+        "adversarial_auditor",
+        "evidence_publisher"
+      ]
+    },
+    "to_agent": {
+      "enum": [
+        "mission_controller",
+        "discovery_worker",
+        "official_source_worker_a",
+        "official_source_worker_b",
+        "eligibility_payout_agent",
+        "ip_licensing_agent",
+        "economics_workload_agent",
+        "adversarial_auditor",
+        "evidence_publisher"
+      ]
+    },
+    "message_type": {
+      "enum": [
+        "TASK_ASSIGNMENT",
+        "EVIDENCE_PROPOSAL",
+        "REVIEW_RESULT",
+        "BLOCKED",
+        "HANDOFF",
+        "TASK_RESULT"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "maxProperties": 30
+    },
+    "evidence_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_text_trust": {
+      "const": "UNTRUSTED_DATA_ONLY"
+    },
+    "policy_mutation_allowed": {
+      "const": false
+    },
+    "action_request": {
+      "enum": [
+        "NONE",
+        "READ_PUBLIC",
+        "VALIDATED_REPO_WRITE",
+        "OWNER_APPROVAL_REQUIRED"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "message_id",
+    "run_id",
+    "task_id",
+    "from_agent",
+    "to_agent",
+    "message_type",
+    "created_at",
+    "payload",
+    "evidence_ids",
+    "source_text_trust",
+    "policy_mutation_allowed",
+    "action_request"
+  ]
+}

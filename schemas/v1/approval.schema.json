@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:approval:1.0.0",
+  "title": "ZCIRA Owner Approval Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^approval-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "mission_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "requested_action": {
+      "enum": [
+        "OAUTH_SCOPE",
+        "ACCOUNT_CREATE",
+        "LOGIN_ACCOUNT_ACTION",
+        "KYC",
+        "ACCEPT_TERMS",
+        "CONTACT_EXTERNAL",
+        "SUBMIT_APPLICATION",
+        "SECURITY_TEST",
+        "BUILD_PRODUCT",
+        "PUBLISH_PRODUCT",
+        "CLOUD_DEPLOYMENT",
+        "BILLING_CHANGE",
+        "WALLET_SIGN",
+        "FINANCIAL_TRANSFER"
+      ]
+    },
+    "target_service": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "target_resource": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "scopes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/-]{0,120}$"
+      }
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "data_access": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "duration_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 31536000
+    },
+    "billing_requirement": {
+      "enum": [
+        "NO_BILLING_REQUIRED",
+        "PAYMENT_METHOD_REQUIRED",
+        "BILLING_ACCOUNT_REQUIRED",
+        "UNKNOWN"
+      ]
+    },
+    "zero_cost_eligible": {
+      "type": "boolean"
+    },
+    "spend_cap_inr": {
+      "const": 0
+    },
+    "paid_fallback_allowed": {
+      "const": false
+    },
+    "status": {
+      "enum": [
+        "PENDING",
+        "APPROVED",
+        "DENIED",
+        "EXPIRED",
+        "REVOKED"
+      ]
+    },
+    "owner_actor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decision_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revocation_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "approval_is_exact_scope_only": {
+      "const": true
+    },
+    "cannot_override_zero_cost_or_prohibited_actions": {
+      "const": true
+    },
+    "automatic_external_action_allowed": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "approval_id",
+    "mission_id",
+    "requested_action",
+    "target_service",
+    "target_resource",
+    "scopes",
+    "purpose",
+    "data_access",
+    "duration_seconds",
+    "billing_requirement",
+    "zero_cost_eligible",
+    "spend_cap_inr",
+    "paid_fallback_allowed",
+    "status",
+    "owner_actor",
+    "requested_at",
+    "decision_at",
+    "expires_at",
+    "revocation_path",
+    "approval_is_exact_scope_only",
+    "cannot_override_zero_cost_or_prohibited_actions",
+    "automatic_external_action_allowed"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "billing_requirement": {
+            "enum": [
+              "PAYMENT_METHOD_REQUIRED",
+              "BILLING_ACCOUNT_REQUIRED"
+            ]
+          }
+        },
+        "required": [
+          "billing_requirement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "zero_cost_eligible": {
+            "const": false
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "DENIED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

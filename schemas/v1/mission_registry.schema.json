@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:mission-registry:1.0.0",
+  "title": "ZCIRA Mission Isolation Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "mission_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "canonical_repo": {
+      "const": "manish91082-coder/zero-cost-internet-revenue-automation"
+    },
+    "branch": {
+      "const": "main"
+    },
+    "environment_namespace": {
+      "const": "zcira-readonly-research"
+    },
+    "state_namespace": {
+      "const": "zcira-2026-11-13/main"
+    },
+    "credential_scope": {
+      "const": "repository-scoped-contents-write"
+    },
+    "allowed_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(?!.*\\.\\.).+$"
+      }
+    },
+    "denied_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "allowed_action_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "READ_PUBLIC",
+          "PARSE_PUBLIC",
+          "HASH_PUBLIC",
+          "CREATE_INTERNAL_DRAFT",
+          "WRITE_REPO_VALIDATED"
+        ]
+      }
+    },
+    "denied_action_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "PURCHASE",
+          "PAID_FALLBACK",
+          "BILLING_ENABLE",
+          "ACCOUNT_CREATE",
+          "KYC",
+          "ACCEPT_TERMS",
+          "CONTACT_EXTERNAL",
+          "SUBMIT",
+          "SECURITY_TEST",
+          "PUBLISH_PRODUCT",
+          "WALLET_SIGN",
+          "TRANSFER_FUNDS"
+        ]
+      }
+    },
+    "max_parallel_research_workers": {
+      "const": 2
+    },
+    "single_writer_role": {
+      "const": "evidence_publisher"
+    },
+    "spend_cap_inr": {
+      "const": 0
+    },
+    "paid_fallback_allowed": {
+      "const": false
+    },
+    "shared_state_with_other_missions": {
+      "const": false
+    },
+    "cross_mission_write_allowed": {
+      "const": false
+    },
+    "branch_isolation_required": {
+      "const": true
+    },
+    "active": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "mission_id",
+    "canonical_repo",
+    "branch",
+    "environment_namespace",
+    "state_namespace",
+    "credential_scope",
+    "allowed_paths",
+    "denied_paths",
+    "allowed_action_classes",
+    "denied_action_classes",
+    "max_parallel_research_workers",
+    "single_writer_role",
+    "spend_cap_inr",
+    "paid_fallback_allowed",
+    "shared_state_with_other_missions",
+    "cross_mission_write_allowed",
+    "branch_isolation_required",
+    "active"
+  ]
+}

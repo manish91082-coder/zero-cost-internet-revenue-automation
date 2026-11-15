@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:source-snapshot:1.0.0",
+  "title": "ZCIRA Source Snapshot Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^snapshot-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "source_domain": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 253
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "page_title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_updated_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "excerpt": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "fetch_status": {
+      "enum": [
+        "CAPTURED",
+        "UNAVAILABLE",
+        "BLOCKED_BY_POLICY",
+        "CHANGED",
+        "ERROR"
+      ]
+    },
+    "trust_boundary": {
+      "const": "UNTRUSTED_DATA_ONLY"
+    },
+    "access_mode": {
+      "const": "PUBLIC_READ_ONLY"
+    },
+    "access_control_bypass": {
+      "const": false
+    },
+    "content_ref": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "snapshot_id",
+    "source_url",
+    "source_domain",
+    "publisher",
+    "page_title",
+    "captured_at",
+    "last_updated_at",
+    "content_sha256",
+    "excerpt",
+    "fetch_status",
+    "trust_boundary",
+    "access_mode",
+    "access_control_bypass",
+    "content_ref"
+  ]
+}

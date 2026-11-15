@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:evidence:1.0.0",
+  "title": "ZCIRA Evidence Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "const": "ZCIRA-2026-11-13"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^evidence-[a-z0-9][a-z0-9-]{2,80}$"
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^zcira-[a-z0-9][a-z0-9._-]{2,90}$"
+    },
+    "category_id": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 245
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "destination_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "source_snapshot_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_excerpt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "evidence_grade": {
+      "enum": [
+        "A_PRIMARY_OFFICIAL",
+        "B_OFFICIAL_SUPPORT",
+        "C_SECONDARY",
+        "D_UNVERIFIED"
+      ]
+    },
+    "reviewer_verdict": {
+      "enum": [
+        "PENDING",
+        "CONFIRMED",
+        "CONTRADICTED",
+        "INSUFFICIENT"
+      ]
+    },
+    "gate_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "HOLD"
+      ]
+    },
+    "source_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_row_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        },
+        "source_line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "archive_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source_row_ref",
+        "source_line",
+        "archive_sha256"
+      ]
+    },
+    "model_provider": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 512
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "evidence_id",
+    "claim_id",
+    "task_id",
+    "category_id",
+    "destination_id",
+    "claim",
+    "source_snapshot_ids",
+    "evidence_excerpt",
+    "evidence_grade",
+    "reviewer_verdict",
+    "gate_status",
+    "source_provenance",
+    "model_provider",
+    "created_at"
+  ]
+}
