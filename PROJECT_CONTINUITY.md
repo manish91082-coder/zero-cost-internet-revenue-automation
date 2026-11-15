@@ -320,3 +320,18 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Automatic failover only to independently verified permitted free resources. When unavailable, preserve checkpoint and pause with explicit blocked state; deterministic tasks continue without LLM. No paid fallback, alternate identities, quota evasion or proxy bypass.
 - Existing architecture remains target only. No OAuth, account, secret, cloud resource, workflow, agent, deployment, billing, KYC or external submission created in this phase. Spend ₹0; settled revenue evidence ₹0; swarm NOT IMPLEMENTED/NOT DEPLOYED.
 - Next: S3 versioned schemas and synthetic fixtures including cross-mission collision, duplicate-thread writer, expired lease, OAuth scope escalation, quota exhaustion and kill-switch tests; continue A2.4-B/C/A2.5 source reconciliation. No deployment before no-cost eligibility verification and exact approval.
+
+
+## 23. Phase A2.4-B / A2.4-C — source batch membership and shared-list cross-reference reconciliation (2026-11-15)
+- Reports: `docs/47_PHASE_A2_4B_BATCH_MEMBERSHIP_AUDIT_HI.md` and `docs/48_PHASE_A2_4C_SHARED_LIST_CROSS_REFERENCE_AUDIT_HI.md`.
+- Machine-readable registry: `config/destination_batch_shared_map.v1.json`.
+- Phase artifact commit: `6097ec54c2c736f449ea6fd8545c6e5ddec21057`; commit URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/commit/6097ec54c2c736f449ea6fd8545c6e5ddec21057.
+- Fetch-back verified blobs: registry `0def796a7ec985ad7f39ff75154ba0e28d4f48fc`; report 47 `702558eaccfe4293939f636c37ae7639758a6ddc`; report 48 `7c5a6d48c597d0d8c01c458a06614479a77a7492`.
+- Reopened exact Library source archive `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1; archive SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e`; embedded destination-section SHA-256 `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`.
+- A2.4-B PASS: source summary tables explicitly assign 27/27/41/51/38/35 category IDs to batches 1–6; 219 total rows, 219 unique IDs, zero missing, extra or duplicate IDs; all 219 summary labels match same-ID destination headings. Category-specific slots: 447/550/567/710/585/455 = 3,314.
+- Newly introduced shared-list slots: Batch 2 A/B/C/P = 94; Batch 4 F/G = 42; Batch 5 T/L = 32. Adding only each batch's newly introduced lists reproduces totals 447/644/567/752/617/455 = 3,482 exactly.
+- A2.4-C PASS for explicit cross-references: all 8 shared lists reconcile 168/168 rows; 213 category-to-list reference edges are preserved in the machine-readable registry. Batches 2/4/5/6 have explicit shared-list columns; batches 1/3 do not. Missing column is recorded NOT_LISTED, not inferred as no relationship. Dash in a table with the column is explicit no-reference.
+- Category #24 explicitly references F/G/C/P but remains priority B. All original priority counts/order remain unchanged.
+- 3,482 remains occurrence slots, not unique platform count. No deduplication or commercial eligibility judgement in A2.4-B/C.
+- Next: A2.5 provenance-preserving duplicate-candidate review. Then S3 versioned schemas and synthetic fixtures. No deployment or external action.
+- Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/worker execution/tests/outreach/submissions/build/publication; commercial HOLD.
