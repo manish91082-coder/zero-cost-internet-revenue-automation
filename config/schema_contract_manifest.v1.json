@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "json_schema_draft": "https://json-schema.org/draft/2020-12/schema",
+  "contracts": {
+    "task": "schemas/v1/task.schema.json",
+    "evidence": "schemas/v1/evidence.schema.json",
+    "source_snapshot": "schemas/v1/source_snapshot.schema.json",
+    "gate_decision": "schemas/v1/gate_decision.schema.json",
+    "run_state": "schemas/v1/run_state.schema.json",
+    "agent_message": "schemas/v1/agent_message.schema.json",
+    "approval": "schemas/v1/approval.schema.json",
+    "quota_ledger": "schemas/v1/quota_ledger.schema.json",
+    "resource_lease": "schemas/v1/resource_lease.schema.json",
+    "mission_registry": "schemas/v1/mission_registry.schema.json"
+  },
+  "mission_registry": "config/mission_registry.v1.json",
+  "test_suite": "tests/test_contract_schemas.py",
+  "test_requirements": "requirements-test.txt",
+  "valid_fixture_directory": "tests/fixtures/s3_v1/",
+  "invariant_summary": {
+    "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
+    "canonical_branch": "main",
+    "max_parallel_read_only_workers": 2,
+    "single_repository_writer_role": "evidence_publisher",
+    "spend_cap_inr": 0,
+    "paid_fallback_allowed": false,
+    "trial_credit_dependency_allowed": false,
+    "public_source_content_trust": "UNTRUSTED_DATA_ONLY",
+    "cross_mission_shared_state_allowed": false,
+    "cross_mission_write_allowed": false,
+    "commercial_release_requires_all_five_gates_pass": true,
+    "unknown_is_pass": false,
+    "cloud_deployment_or_external_action_approval_required": true
+  },
+  "status": {
+    "schemas_published": true,
+    "valid_fixtures": 10,
+    "targeted_contract_preflight": "PASS_10_VALID_16_NEGATIVE",
+    "pytest_execution": "NOT_RUN",
+    "github_actions_ci": "NOT_CONFIGURED",
+    "cloud_runtime": "NOT_IMPLEMENTED"
+  }
+}
