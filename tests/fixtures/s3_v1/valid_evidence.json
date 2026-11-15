@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "evidence_id": "evidence-fixture-001",
+  "claim_id": "claim-fixture-001",
+  "task_id": "zcira-s3-schema-validation-001",
+  "category_id": 1,
+  "destination_id": "apify-store",
+  "claim": "Synthetic evidence fixture validates the evidence contract shape only.",
+  "source_snapshot_ids": [
+    "snapshot-github-actions-001"
+  ],
+  "evidence_excerpt": "Synthetic fixture excerpt. It is not evidence for a commercial gate.",
+  "evidence_grade": "D_UNVERIFIED",
+  "reviewer_verdict": "PENDING",
+  "gate_status": "UNKNOWN",
+  "source_provenance": {
+    "source_row_ref": "category:1:destination:1",
+    "source_line": 4721,
+    "archive_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "model_provider": null,
+  "created_at": "2026-11-15T03:00:00Z"
+}

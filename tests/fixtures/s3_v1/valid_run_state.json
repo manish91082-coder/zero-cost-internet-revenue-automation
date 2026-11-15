@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "run_id": "zcira-run-s3-contract-test-001",
+  "mission_id": "ZCIRA-2026-11-13",
+  "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
+  "branch": "main",
+  "environment_namespace": "zcira-readonly-research",
+  "state_namespace": "zcira-2026-11-13/main",
+  "status": "COMPLETED",
+  "executor": "test_sandbox_non_runtime",
+  "run_mode": "SCHEMA_TEST",
+  "started_at": "2026-11-15T03:00:00Z",
+  "last_heartbeat_at": "2026-11-15T03:01:00Z",
+  "finished_at": "2026-11-15T03:01:00Z",
+  "current_task_id": null,
+  "pending_task_ids": [],
+  "completed_task_ids": [
+    "zcira-s3-schema-validation-001"
+  ],
+  "blocked_task_ids": [],
+  "base_commit_sha": "a0e06a91ab7a338da7cd020b20503ea63d54e5f4",
+  "latest_commit_sha": "a0e06a91ab7a338da7cd020b20503ea63d54e5f4",
+  "max_parallel_research_workers": 2,
+  "single_writer_role": "evidence_publisher",
+  "paid_provider_routes_enabled": false,
+  "spend_cap_inr": 0,
+  "kill_switch": false
+}

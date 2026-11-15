@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "mission_id": "ZCIRA-2026-11-13",
+  "task_id": "zcira-s3-schema-validation-001",
+  "idempotency_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "task_type": "schema_validation",
+  "priority": "P1",
+  "category_id": 1,
+  "destination_id": "apify-store",
+  "status": "QUEUED",
+  "created_at": "2026-11-15T03:00:00Z",
+  "updated_at": "2026-11-15T03:00:00Z",
+  "attempt_count": 0,
+  "max_attempts": 2,
+  "allowed_actions": [
+    "READ_PUBLIC",
+    "PARSE_PUBLIC",
+    "HASH_PUBLIC"
+  ],
+  "external_actions_allowed": false,
+  "paid_provider_routes_enabled": false,
+  "parameters": {
+    "fixture_only": true
+  },
+  "source_snapshot_ids": [],
+  "evidence_ids": [],
+  "lease_id": null,
+  "checkpoint": null
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "lease_id": "lease-fixture-001",
+  "mission_id": "ZCIRA-2026-11-13",
+  "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
+  "branch": "main",
+  "environment_namespace": "zcira-readonly-research",
+  "state_namespace": "zcira-2026-11-13/main",
+  "resource_key": "repo-main-single-writer",
+  "lease_kind": "REPOSITORY_SINGLE_WRITER",
+  "task_id": "zcira-s3-schema-validation-001",
+  "holder_id": "publisher-fixture",
+  "holder_role": "evidence_publisher",
+  "write_access": true,
+  "cross_mission_share_allowed": false,
+  "status": "RELEASED",
+  "acquired_at": "2026-11-15T03:00:00Z",
+  "expires_at": "2026-11-15T03:05:00Z",
+  "released_at": "2026-11-15T03:01:00Z",
+  "base_commit_sha": "a0e06a91ab7a338da7cd020b20503ea63d54e5f4",
+  "idempotency_key": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}

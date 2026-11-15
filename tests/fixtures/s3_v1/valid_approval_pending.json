@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "approval_id": "approval-fixture-001",
+  "mission_id": "ZCIRA-2026-11-13",
+  "requested_action": "OAUTH_SCOPE",
+  "target_service": "example-provider",
+  "target_resource": "read-only-profile",
+  "scopes": [
+    "profile.read"
+  ],
+  "purpose": "Synthetic schema validation only",
+  "data_access": "Public profile metadata only",
+  "duration_seconds": 3600,
+  "billing_requirement": "UNKNOWN",
+  "zero_cost_eligible": false,
+  "spend_cap_inr": 0,
+  "paid_fallback_allowed": false,
+  "status": "PENDING",
+  "owner_actor": "owner",
+  "requested_at": "2026-11-15T03:00:00Z",
+  "decision_at": null,
+  "expires_at": "2026-11-15T04:00:00Z",
+  "revocation_path": "Provider security settings",
+  "approval_is_exact_scope_only": true,
+  "cannot_override_zero_cost_or_prohibited_actions": true,
+  "automatic_external_action_allowed": false
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "snapshot_id": "snapshot-github-actions-001",
+  "source_url": "https://docs.github.com/en/actions",
+  "source_domain": "docs.github.com",
+  "publisher": "GitHub",
+  "page_title": "GitHub Actions documentation",
+  "captured_at": "2026-11-15T03:00:00Z",
+  "last_updated_at": null,
+  "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "excerpt": "Synthetic fixture only. Public documentation URL used to validate schema shape.",
+  "fetch_status": "CAPTURED",
+  "trust_boundary": "UNTRUSTED_DATA_ONLY",
+  "access_mode": "PUBLIC_READ_ONLY",
+  "access_control_bypass": false,
+  "content_ref": null
+}

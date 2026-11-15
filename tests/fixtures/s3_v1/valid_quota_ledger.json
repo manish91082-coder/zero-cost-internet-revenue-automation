@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "provider_id": "github-actions-public-runner",
+  "provider_type": "EXECUTOR",
+  "provider_plan": "FREE",
+  "verified_free": true,
+  "billing_required": false,
+  "payment_method_required": false,
+  "trial_credit_dependency": false,
+  "paid_fallback_allowed": false,
+  "approved_for_use": true,
+  "verified_at": "2026-11-15T03:00:00Z",
+  "verification_source_ids": [
+    "snapshot-github-actions-001"
+  ],
+  "quota_limits": {
+    "requests_per_minute": null,
+    "requests_per_day": null,
+    "tokens_per_day": null,
+    "cpu_ms_per_invocation": null,
+    "job_minutes_per_month": null,
+    "storage_bytes": null
+  },
+  "consumption": {
+    "requests_today": 0,
+    "tokens_today": 0,
+    "job_minutes_this_month": 0,
+    "storage_bytes": 0
+  },
+  "circuit_breaker": {
+    "state": "CLOSED",
+    "failure_count": 0,
+    "opened_at": null,
+    "next_retry_at": null,
+    "reason": null
+  },
+  "blocked_reason": null
+}

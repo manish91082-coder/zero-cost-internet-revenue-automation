@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "mission_id": "ZCIRA-2026-11-13",
+  "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
+  "branch": "main",
+  "environment_namespace": "zcira-readonly-research",
+  "state_namespace": "zcira-2026-11-13/main",
+  "credential_scope": "repository-scoped-contents-write",
+  "allowed_paths": [
+    "PROJECT_CONTINUITY.md",
+    "README.md",
+    "docs/**",
+    "config/**",
+    "schemas/**",
+    "tests/**",
+    "scripts/**",
+    "requirements-test.txt"
+  ],
+  "denied_paths": [
+    ".github/workflows/**",
+    "secrets/**",
+    "private/**"
+  ],
+  "allowed_action_classes": [
+    "READ_PUBLIC",
+    "PARSE_PUBLIC",
+    "HASH_PUBLIC",
+    "CREATE_INTERNAL_DRAFT",
+    "WRITE_REPO_VALIDATED"
+  ],
+  "denied_action_classes": [
+    "PURCHASE",
+    "PAID_FALLBACK",
+    "BILLING_ENABLE",
+    "ACCOUNT_CREATE",
+    "KYC",
+    "ACCEPT_TERMS",
+    "CONTACT_EXTERNAL",
+    "SUBMIT",
+    "SECURITY_TEST",
+    "PUBLISH_PRODUCT",
+    "WALLET_SIGN",
+    "TRANSFER_FUNDS"
+  ],
+  "max_parallel_research_workers": 2,
+  "single_writer_role": "evidence_publisher",
+  "spend_cap_inr": 0,
+  "paid_fallback_allowed": false,
+  "shared_state_with_other_missions": false,
+  "cross_mission_write_allowed": false,
+  "branch_isolation_required": true,
+  "active": true
+}

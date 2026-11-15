@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "decision_id": "decision-fixture-001",
+  "category_id": 1,
+  "destination_id": "apify-store",
+  "evaluated_at": "2026-11-15T03:00:00Z",
+  "gates": {
+    "buyer_demand": {
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "rationale": "Synthetic fixture only; evidence not evaluated."
+    },
+    "ip_licensing_data_rights": {
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "rationale": "Synthetic fixture only; evidence not evaluated."
+    },
+    "zero_cost_economics": {
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "rationale": "Synthetic fixture only; evidence not evaluated."
+    },
+    "india_seller_eligibility_settlement": {
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "rationale": "Synthetic fixture only; evidence not evaluated."
+    },
+    "autonomous_fulfilment_workload": {
+      "status": "UNKNOWN",
+      "evidence_ids": [],
+      "rationale": "Synthetic fixture only; evidence not evaluated."
+    }
+  },
+  "overall_status": "HOLD",
+  "release_authorized": false,
+  "owner_approval_id": null,
+  "decision_rationale": "Synthetic schema fixture. No commercial release."
+}
