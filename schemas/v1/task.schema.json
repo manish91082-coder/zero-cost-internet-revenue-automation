@@ -166,6 +166,19 @@
           ]
         }
       ]
+    },
+    "assigned_role": {
+      "enum": [
+        "mission_controller",
+        "discovery_worker",
+        "official_source_worker_a",
+        "official_source_worker_b",
+        "eligibility_payout_agent",
+        "ip_licensing_agent",
+        "economics_workload_agent",
+        "adversarial_auditor",
+        "evidence_publisher"
+      ]
     }
   },
   "required": [
@@ -191,5 +204,31 @@
     "evidence_ids",
     "lease_id",
     "checkpoint"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "allowed_actions": {
+            "contains": {
+              "const": "WRITE_REPO_VALIDATED"
+            }
+          }
+        },
+        "required": [
+          "allowed_actions"
+        ]
+      },
+      "then": {
+        "properties": {
+          "assigned_role": {
+            "const": "evidence_publisher"
+          }
+        },
+        "required": [
+          "assigned_role"
+        ]
+      }
+    }
   ]
 }

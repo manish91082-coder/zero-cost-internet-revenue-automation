@@ -164,3 +164,11 @@ def test_mission_registry_cannot_enable_trial_credit_dependency():
     value = copy.deepcopy(fixture_for("mission_registry"))
     value["trial_credit_dependency_allowed"] = True
     assert_rejected("mission_registry", value)
+
+def test_repository_write_task_requires_evidence_publisher_role():
+    value = copy.deepcopy(fixture_for("task"))
+    value["allowed_actions"] = ["WRITE_REPO_VALIDATED"]
+    value["assigned_role"] = "official_source_worker_a"
+    assert_rejected("task", value)
+    value["assigned_role"] = "evidence_publisher"
+    schema_for("task").validate(value)
