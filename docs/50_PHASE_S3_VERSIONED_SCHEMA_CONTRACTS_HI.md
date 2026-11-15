@@ -73,3 +73,15 @@ No account was created, no Google OAuth consent was requested, no terms were acc
 - Commercial execution: HOLD; all five gates and separate exact owner approvals still apply.
 
 Next phase: **S4 deterministic Python control plane**, implemented as a pure, testable policy/state engine with task queue, idempotency, lease expiry, single-writer enforcement, checkpoint compare-and-swap, quota circuit breakers and mission isolation. No LLM is required for the control plane. Do not create a workflow or deploy cloud resources until the S4/S7 acceptance criteria and zero-billing eligibility checks are satisfied.
+
+
+## S3-B hardening correction (2026-11-15)
+
+The schema contract was tightened during S4 integration. This addendum supersedes the earlier 16-negative-case count above.
+
+- `task.schema.json` now has an optional roster-bound `assigned_role`; a task requesting `WRITE_REPO_VALIDATED` must name `evidence_publisher`.
+- `mission_registry.schema.json`, its canonical config and its fixture now explicitly lock `trial_credit_dependency_allowed=false`.
+- The mission path allowlist now includes the scoped `src/**` tree required by the deterministic control plane. `.github/workflows/**`, `secrets/**` and `private/**` remain denied.
+- The Python contract suite now contains 28 tests: 10 valid-fixture tests and 18 negative policy tests.
+- Targeted preflight against the latest fetched GitHub schemas/fixtures: **10/10 valid accepted; 18/18 adversarial mutations rejected**.
+- The pytest suite remains NOT RUN; no GitHub Actions workflow or cloud runner is configured. The targeted preflight is not a full JSON Schema meta-schema validator.

@@ -36,7 +36,7 @@
   "status": {
     "schemas_published": true,
     "valid_fixtures": 10,
-    "targeted_contract_preflight": "PASS_10_VALID_16_NEGATIVE",
+    "targeted_contract_preflight": "PASS_10_VALID_18_NEGATIVE",
     "pytest_execution": "NOT_RUN",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED"
