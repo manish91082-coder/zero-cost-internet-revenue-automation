@@ -192,6 +192,33 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "billing_requirement": {
+            "const": "UNKNOWN"
+          }
+        },
+        "required": [
+          "billing_requirement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "zero_cost_eligible": {
+            "const": false
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "DENIED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          }
+        }
+      }
     }
   ]
 }

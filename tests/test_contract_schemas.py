@@ -141,3 +141,21 @@ def test_public_fixtures_contain_no_secret_or_personal_identity_fields():
                 for value in node:
                     walk(value)
         walk(obj)
+
+def test_unknown_billing_requirement_cannot_be_approved():
+    value = copy.deepcopy(fixture_for("approval"))
+    value["zero_cost_eligible"] = True
+    value["status"] = "APPROVED"
+    value["decision_at"] = "2026-11-15T03:30:00Z"
+    assert_rejected("approval", value)
+
+def test_unverified_provider_cannot_be_approved():
+    value = copy.deepcopy(fixture_for("quota_ledger"))
+    value["verified_free"] = False
+    value["approved_for_use"] = True
+    assert_rejected("quota_ledger", value)
+
+def test_non_http_source_url_is_rejected():
+    value = copy.deepcopy(fixture_for("source_snapshot"))
+    value["source_url"] = "ftp://example.org/public-file"
+    assert_rejected("source_snapshot", value)

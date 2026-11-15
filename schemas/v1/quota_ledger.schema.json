@@ -310,6 +310,55 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "verified_free": {
+            "const": false
+          }
+        },
+        "required": [
+          "verified_free"
+        ]
+      },
+      "then": {
+        "properties": {
+          "approved_for_use": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "circuit_breaker": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "NOT_VERIFIED",
+                  "OPEN",
+                  "BLOCKED"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        },
+        "required": [
+          "circuit_breaker"
+        ]
+      },
+      "then": {
+        "properties": {
+          "approved_for_use": {
+            "const": false
+          }
+        }
+      }
     }
   ]
 }

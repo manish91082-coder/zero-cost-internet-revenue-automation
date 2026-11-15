@@ -17,7 +17,8 @@
     },
     "source_url": {
       "type": "string",
-      "format": "uri"
+      "format": "uri",
+      "pattern": "^https?://"
     },
     "source_domain": {
       "type": "string",
