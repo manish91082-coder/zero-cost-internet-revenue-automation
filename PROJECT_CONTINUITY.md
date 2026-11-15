@@ -352,3 +352,23 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - A2.4-B/C and A2.5 source reconciliation work is complete for this implementation sequence. Next: S3 versioned task/evidence/source-snapshot/gate/run-state/agent-message/approval/quota/resource-lease/mission-registry schemas plus synthetic contract fixtures and validation. Do not deploy.
 - Priority order/counts remain unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
 - Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/worker execution/cloud tests/outreach/submissions/build/publication; commercial HOLD.
+
+
+## 25. Phase S3 — versioned swarm contracts and synthetic preflight (2026-11-15)
+- Report: `docs/50_PHASE_S3_VERSIONED_SCHEMA_CONTRACTS_HI.md`.
+- Contract manifest: `config/schema_contract_manifest.v1.json`; mission isolation config: `config/mission_registry.v1.json`.
+- Schema commit: `a0e06a91ab7a338da7cd020b20503ea63d54e5f4` (10 Draft 2020-12 contracts).
+- Fixtures/tests commit: `33f8169879d180993c3b2f2ce7c7e8f7873e4971` (10 valid fixtures, pytest suite, requirements and schema README).
+- Security hardening commit: `34e4747664f9b2d4e54aade30a003ce4a42cd353` (unknown billing, unverified providers, blocked circuits and HTTP(S)-only source URL interlocks).
+- Report/manifest commit: `601bccd3aecb67208f1e7ad706995a14edac2a41`; commit URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/commit/601bccd3aecb67208f1e7ad706995a14edac2a41.
+- Fetch-back verified report blob `55f9e984793dfd400bba6bf0db3fb52c77c42814`; manifest blob `b6e52b15644e324a04a158b41c47b17bff6fab79`.
+- Ten schema files: task, evidence, source_snapshot, gate_decision, run_state, agent_message, approval, quota_ledger, resource_lease, mission_registry. All use schema version 1.0.0 and JSON Schema Draft 2020-12.
+- Test artifacts: ten synthetic valid fixtures, `tests/test_contract_schemas.py` (26 test cases), `requirements-test.txt`, and `schemas/v1/README.md`.
+- Targeted contract preflight on fetched GitHub artifacts: 10/10 valid fixtures accepted; 16/16 adversarial mutations rejected. Negative cases cover cross-mission task, external publish, UNKNOWN gate promotion, wildcard OAuth, unknown billing approval, paid fallback, billing-required provider, unverified provider, open circuit, cross-repo lease, research-worker write lease, shared mission state, agent policy mutation, access-control bypass, non-HTTP source URL and kill-switch bypass.
+- Preflight was a targeted contract checker, not the committed Python pytest execution or full JSON Schema meta-schema validation. The pytest suite is committed but NOT RUN. No GitHub Actions workflow/CI exists in the current root tree; no cloud runner or live agent execution is evidenced.
+- Current root contains `PROJECT_CONTINUITY.md`, `README.md`, `config/`, `docs/`, `schemas/`, `scripts/`, `tests/` and `requirements-test.txt`. There is no `.github/workflows/` directory.
+- No Cloudflare Worker/Cron/D1, LangGraph runtime, OAuth bridge, cloud resource, account, secret, billing activation, KYC, legal terms acceptance or external action was created. No user laptop, desktop or self-hosted runner is a runtime dependency.
+- S3 status: schema contracts COMPLETE; targeted preflight PASS; pytest/CI PENDING; cloud runtime NOT IMPLEMENTED/NOT DEPLOYED.
+- Next: S4 deterministic Python control plane with pure policy/state functions, queue/idempotency, lease expiry, single-writer enforcement, checkpoint compare-and-swap, quota circuit breakers and mission isolation. Keep model inference optional and never let an LLM override deterministic policy.
+- Priority order/counts unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
+- Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; commercial HOLD; no account/KYC/terms acceptance/deployment/external submission/outreach/product publication.
