@@ -390,3 +390,16 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - No OAuth consent, account creation, KYC, legal acceptance, billing activation, payment method, cloud deployment or external action occurred. No user laptop/desktop/self-hosted runner is a runtime dependency.
 - Next: S4-B durable state bundle/checkpoint adapter and persistence contract, then S5 LangGraph adapter. No deployment before zero-billing eligibility and explicit owner approval.
 - Ledger unchanged: authorized/incurred spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+
+
+## 27. Multi-thread and multi-project isolation protocol (2026-11-15)
+- Report: `docs/52_MULTI_THREAD_MULTI_PROJECT_ISOLATION_PROTOCOL_HI.md`.
+- Machine-readable policy: `config/mission_isolation_policy.v1.json`.
+- Commit: `35703c751419119c0fdfbf55e0aab833ae6305fd`; commit URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/commit/35703c751419119c0fdfbf55e0aab833ae6305fd.
+- Fetch-back verified blobs: isolation policy `2cea9a3f0e345f13dc484f7841d03e778aecb077`; report 52 `e79b77c8ddf4a36a7d99a135332bfe43fc0ad0b6`.
+- Decision: separate repos avoid ordinary file-level conflicts, but a shared GitHub owner or Cloudflare account may still share account-level quotas. ChatGPT threads do not share an automatic writer lock. Same repo/main writes are high risk without a durable lease and compare-and-swap.
+- ZCIRA rules: unique mission/repo/branch/namespaces; cross-mission shared state and writes false; other threads read-only unless the single publisher has a valid writer lease; every write checks the latest branch head; OAuth scopes are per app/provider and exact; owner email and credentials are not stored in the public repo.
+- Current enforcement is PARTIAL: mission registry, path allowlist, pure/in-memory lease logic and compare-and-swap core exist. Durable writer-lock state, branch protection, GitHub Actions concurrency group and owner-wide resource ledger are NOT IMPLEMENTED/NOT CONFIGURED.
+- Until S4-B/S7, only the canonical ZCIRA writer thread may update this repo. Other ChatGPT threads can research, but should hand off evidence rather than write main.
+- No other project repository was inspected, modified or assumed to be safe. No Google OAuth consent, account creation, token storage or external permission request occurred.
+- Next: S4-B durable writer lease and checkpoint state. Cross-project owner-resource ledger remains design-only and will not be created or deployed without explicit approval.
