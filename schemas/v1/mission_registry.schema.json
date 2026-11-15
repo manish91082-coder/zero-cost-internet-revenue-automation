@@ -102,6 +102,9 @@
     },
     "active": {
       "type": "boolean"
+    },
+    "trial_credit_dependency_allowed": {
+      "const": false
     }
   },
   "required": [
@@ -124,6 +127,7 @@
     "shared_state_with_other_missions",
     "cross_mission_write_allowed",
     "branch_isolation_required",
-    "active"
+    "active",
+    "trial_credit_dependency_allowed"
   ]
 }

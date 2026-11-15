@@ -50,5 +50,6 @@
   "shared_state_with_other_missions": false,
   "cross_mission_write_allowed": false,
   "branch_isolation_required": true,
-  "active": true
+  "active": true,
+  "trial_credit_dependency_allowed": false
 }

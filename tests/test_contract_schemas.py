@@ -159,3 +159,8 @@ def test_non_http_source_url_is_rejected():
     value = copy.deepcopy(fixture_for("source_snapshot"))
     value["source_url"] = "ftp://example.org/public-file"
     assert_rejected("source_snapshot", value)
+
+def test_mission_registry_cannot_enable_trial_credit_dependency():
+    value = copy.deepcopy(fixture_for("mission_registry"))
+    value["trial_credit_dependency_allowed"] = True
+    assert_rejected("mission_registry", value)
