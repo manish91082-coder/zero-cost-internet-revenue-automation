@@ -36,12 +36,13 @@
   },
   "status": {
     "schemas_published": true,
-    "valid_fixtures": 10,
+    "valid_fixtures": 11,
     "targeted_contract_preflight": "PASS_10_VALID_18_NEGATIVE",
     "pytest_execution": "NOT_RUN",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED",
-    "s4b_state_manifest_schema": "PUBLISHED_PREFLIGHT_PENDING",
-    "s4b_durable_state_adapter": "IMPLEMENTED_NOT_DEPLOYED"
+    "s4b_state_manifest_schema": "STATIC_JSON_AND_REQUIRED_FIELD_PREFLIGHT_PASS",
+    "s4b_durable_state_adapter": "CODE_PUBLISHED_TESTS_COMMITTED_NOT_EXECUTED",
+    "s4b_pytest": "PENDING_NO_CI_RUNNER_CONFIGURED"
   }
 }
