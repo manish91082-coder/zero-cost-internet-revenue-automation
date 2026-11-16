@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zcira:state-manifest:1.0.0",
+  "title": "ZCIRA Durable State Manifest Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project_id": {"const": "ZCIRA-2026-11-13"},
+    "mission_id": {"const": "ZCIRA-2026-11-13"},
+    "canonical_repo": {"const": "manish91082-coder/zero-cost-internet-revenue-automation"},
+    "branch": {"const": "main"},
+    "environment_namespace": {"const": "zcira-readonly-research"},
+    "state_namespace": {"const": "zcira-2026-11-13/main"},
+    "generation": {"type": "integer", "minimum": 0},
+    "previous_commit_sha": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        {"type": "null"}
+      ]
+    },
+    "updated_at": {"type": "string", "format": "date-time"},
+    "objects": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "task", "evidence", "source_snapshot", "gate_decision",
+              "run_state", "agent_message", "approval", "quota_ledger",
+              "resource_lease", "state_event"
+            ]
+          },
+          "object_id": {"type": "string", "minLength": 1, "maxLength": 512},
+          "path": {"type": "string", "pattern": "^state/objects/[a-f0-9]{64}\\.json$"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "schema_version": {"const": "1.0.0"}
+        },
+        "required": ["kind", "object_id", "path", "sha256", "schema_version"]
+      }
+    },
+    "active_writer_lease_id": {
+      "oneOf": [
+        {"type": "string", "pattern": "^lease-[a-z0-9][a-z0-9-]{2,80}$"},
+        {"type": "null"}
+      ]
+    },
+    "kill_switch": {"type": "boolean"},
+    "paid_provider_routes_enabled": {"const": false},
+    "spend_cap_inr": {"const": 0},
+    "state_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "required": [
+    "schema_version", "project_id", "mission_id", "canonical_repo", "branch",
+    "environment_namespace", "state_namespace", "generation", "previous_commit_sha",
+    "updated_at", "objects", "active_writer_lease_id", "kill_switch",
+    "paid_provider_routes_enabled", "spend_cap_inr", "state_digest"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {"active_writer_lease_id": {"type": "string"}},
+        "required": ["active_writer_lease_id"]
+      },
+      "then": {
+        "properties": {
+          "objects": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "kind": {"const": "resource_lease"},
+                "object_id": {"$ref": "#/$defs/leaseId"}
+              },
+              "required": ["kind", "object_id"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"kill_switch": {"const": true}},
+        "required": ["kill_switch"]
+      },
+      "then": {
+        "properties": {"active_writer_lease_id": {"type": "null"}}
+      }
+    }
+  ],
+  "$defs": {
+    "leaseId": {
+      "type": "string",
+      "pattern": "^lease-[a-z0-9][a-z0-9-]{2,80}$"
+    }
+  }
+}
