@@ -93,3 +93,11 @@ Only after S4-B tests pass should S5 LangGraph adapter work begin. S7 remains re
 ## 8. Locked invariants
 
 P1/P2/P3/P4/P5/B/M order is unchanged; Category #24 remains B. Maximum two read-only research workers; one publisher. Paid routes and trial-credit dependency remain false. UNKNOWN is never PASS. Five commercial gates remain mandatory. The original 3,482 source slots remain occurrence counts, not a unique-platform count. No project outside ZCIRA is included.
+
+
+## 9. Official API reference
+
+GitHub's official guide describes the Git Database write sequence used by this adapter: read the current commit/tree, create blobs, create a tree, create a commit with the current commit as parent, then update the branch reference:
+https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database
+
+This documents the object flow; it does not replace live integration tests, repository protection or owner approval.
