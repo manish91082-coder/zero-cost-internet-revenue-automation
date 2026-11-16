@@ -21,10 +21,19 @@ from .policy import (
 
 MANIFEST_PATH = "state/manifest.v1.json"
 OBJECT_PREFIX = "state/objects/"
-OBJECT_KINDS = {
-    "task", "evidence", "source_snapshot", "gate_decision", "run_state",
-    "agent_message", "approval", "quota_ledger", "resource_lease", "state_event",
+OBJECT_ID_FIELDS = {
+    "task": "task_id",
+    "evidence": "evidence_id",
+    "source_snapshot": "snapshot_id",
+    "gate_decision": "decision_id",
+    "run_state": "run_id",
+    "agent_message": "message_id",
+    "approval": "approval_id",
+    "quota_ledger": "provider_id",
+    "resource_lease": "lease_id",
+    "state_event": "event_id",
 }
+OBJECT_KINDS = set(OBJECT_ID_FIELDS)
 
 
 class StateNotInitialized(RuntimeError):
@@ -375,6 +384,8 @@ class StateRepository:
             material = dict(payload)
             if material.get("schema_version") != "1.0.0":
                 raise PolicyError("state object schema version is not supported")
+            if material.get(OBJECT_ID_FIELDS[kind]) != object_id:
+                raise PolicyError("state object ID does not match its manifest key")
             if kind == "resource_lease":
                 validate_lease(material, now)
             elif self.object_validator is None:
