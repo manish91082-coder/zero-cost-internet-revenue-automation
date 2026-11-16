@@ -409,7 +409,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 - Report: `docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md`.
 - Multi-thread protocol addendum: `docs/52_MULTI_THREAD_MULTI_PROJECT_ISOLATION_PROTOCOL_HI.md`.
-- Parent checkpoint before this update: commit `2e2f35531ac46a9971e12bff004e4f0fc9785a6e`; latest parent tree was fetched before writing.
+- Initial S4-B parent checkpoint: commit `2e2f35531ac46a9971e12bff004e4f0fc9785a6e`. After the first checkpoint, state-manifest validation evidence was added in report commit `87e8792089d94319d3d88c3c81dce97841d42e18`; this is the parent immediately before the present continuity refresh.
 - S4-B source files:
   - `src/zcira_control/github_state.py`: standard-library GitHub Git Data API transport, main-head precheck, bounded state-only writes, blobs/tree/commit, `force=false` ref update, non-fast-forward conflict rejection.
   - `src/zcira_control/state_repository.py`: canonical JSON/SHA-256, generation manifest, immutable content-addressed objects, writer lease acquisition, expiry recovery, exact lease-head publication, atomic release and fetch-back verification.
@@ -418,7 +418,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S4-B persistence protocol: state objects are immutable under `state/objects/<sha256>.json`; manifest records generation, previous commit SHA, object references, active writer lease, kill switch, zero-spend invariants and digest. Each transition is one Git tree/commit; branch update uses expected parent and `force=false`. A sibling/non-fast-forward commit is rejected. Publisher must write against the exact lease commit SHA; if the head changes, it stops. Bounds: 100 files/transaction, 512 KB/file, 2 MB/transaction.
 - State bootstrap currently generation 0, zero objects, no active lease. It does not represent a running queue or agent.
 - Fetch-back verified blobs:
-  - report 53 `786834be754bc8fbeb8f51833ddce19b033cc29a`
+  - report 53 `371e01fb5c48db59a6004265e9d102ae98bf5247`
   - report 52 `687f9cfea6ed60380b6a3a5ed0c5f8c30bcfb101`
   - `github_state.py` `75f7950a4546ec88d744f5aaadebfa0d8180eebd`
   - `state_repository.py` `9ed3aa1f63d91efeecca5d9289fa0a6cb1994f3a`
@@ -429,8 +429,8 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
   - contract tests `d9b742911636977a31a64ce138907876143ae537`
   - mission registry `f99feb189fb7208e1708d9893e5d1c9cc522a2c1`
   - isolation policy `41dfaa565871e76a5b58755d702ed9cd96fc8b7e`
-  - schema manifest `604e62b9ef6303a2811b5f99ace533d911488165`
-- Static preflight: schema, fixture, registry and schema manifest parse as JSON; all required fixture fields are present with no extras; state path is allowlisted; schema is registered. This was not a Draft 2020-12 validator run.
+  - schema manifest `103e5cc66ced16c16007066ccf9c8c571958578e`
+- Static preflight: schema, fixture, registry and schema manifest parse as JSON; all required fixture fields are present with no extras; state path is allowlisted; schema is registered. The new state-manifest schema also passed Draft 2020-12 meta-schema validation in an isolated Python validator; its generation-0 fixture passed; two adversarial mutations (active lease without matching object, paid route enabled) were rejected. This covers only the new state-manifest contract, not all 11 contracts.
 - Eleven new Python test methods are committed but NOT EXECUTED. No CI workflow exists. Do not claim pytest pass or advance to S5 until exact tests and Draft 2020-12 validation execute in a verified ephemeral environment.
 - Cross-thread writer lock is still cooperative, not a security boundary. Repository rulesets endpoint returned []; branch-protection endpoint returned 403 to the connected integration, so protection status is UNKNOWN. No `.github/workflows/` directory; Actions run count 0. Direct write permission is not thread-scoped. Until S7, only the canonical ZCIRA writer thread may write main; other threads remain read-only.
 - No GitHub API write was performed by the new adapter; no token was stored. No GitHub Actions workflow, Cloudflare Worker/Cron/D1, LangGraph runtime, agent execution, OAuth consent, account creation, KYC, legal acceptance, billing, deployment, outreach, submission, product build or publication occurred.
