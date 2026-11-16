@@ -409,7 +409,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 - Report: `docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md`.
 - Multi-thread protocol addendum: `docs/52_MULTI_THREAD_MULTI_PROJECT_ISOLATION_PROTOCOL_HI.md`.
-- Initial S4-B parent checkpoint: commit `2e2f35531ac46a9971e12bff004e4f0fc9785a6e`. After the first checkpoint, state-manifest validation evidence was added in report commit `87e8792089d94319d3d88c3c81dce97841d42e18`; this is the parent immediately before the present continuity refresh.
+- Initial S4-B parent checkpoint: commit `2e2f35531ac46a9971e12bff004e4f0fc9785a6e`. After the first checkpoint, state-manifest validation evidence was added in report commit `87e8792089d94319d3d88c3c81dce97841d42e18`; the report's official API reference was added in commit `23546db040de1b6eb4d8013adf9bdb91fef00ad3`, the parent immediately before the present continuity refresh.
 - S4-B source files:
   - `src/zcira_control/github_state.py`: standard-library GitHub Git Data API transport, main-head precheck, bounded state-only writes, blobs/tree/commit, `force=false` ref update, non-fast-forward conflict rejection.
   - `src/zcira_control/state_repository.py`: canonical JSON/SHA-256, generation manifest, immutable content-addressed objects, writer lease acquisition, expiry recovery, exact lease-head publication, atomic release and fetch-back verification.
@@ -418,7 +418,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S4-B persistence protocol: state objects are immutable under `state/objects/<sha256>.json`; manifest records generation, previous commit SHA, object references, active writer lease, kill switch, zero-spend invariants and digest. Each transition is one Git tree/commit; branch update uses expected parent and `force=false`. A sibling/non-fast-forward commit is rejected. Publisher must write against the exact lease commit SHA; if the head changes, it stops. Bounds: 100 files/transaction, 512 KB/file, 2 MB/transaction.
 - State bootstrap currently generation 0, zero objects, no active lease. It does not represent a running queue or agent.
 - Fetch-back verified blobs:
-  - report 53 `371e01fb5c48db59a6004265e9d102ae98bf5247`
+  - report 53 `2fab73d458b0676c8338d2c189769915f917d142`
   - report 52 `687f9cfea6ed60380b6a3a5ed0c5f8c30bcfb101`
   - `github_state.py` `75f7950a4546ec88d744f5aaadebfa0d8180eebd`
   - `state_repository.py` `9ed3aa1f63d91efeecca5d9289fa0a6cb1994f3a`
