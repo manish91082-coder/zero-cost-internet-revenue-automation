@@ -12,7 +12,8 @@
     "approval": "schemas/v1/approval.schema.json",
     "quota_ledger": "schemas/v1/quota_ledger.schema.json",
     "resource_lease": "schemas/v1/resource_lease.schema.json",
-    "mission_registry": "schemas/v1/mission_registry.schema.json"
+    "mission_registry": "schemas/v1/mission_registry.schema.json",
+    "state_manifest": "schemas/v1/state_manifest.schema.json"
   },
   "mission_registry": "config/mission_registry.v1.json",
   "test_suite": "tests/test_contract_schemas.py",
@@ -39,6 +40,8 @@
     "targeted_contract_preflight": "PASS_10_VALID_18_NEGATIVE",
     "pytest_execution": "NOT_RUN",
     "github_actions_ci": "NOT_CONFIGURED",
-    "cloud_runtime": "NOT_IMPLEMENTED"
+    "cloud_runtime": "NOT_IMPLEMENTED",
+    "s4b_state_manifest_schema": "PUBLISHED_PREFLIGHT_PENDING",
+    "s4b_durable_state_adapter": "IMPLEMENTED_NOT_DEPLOYED"
   }
 }
