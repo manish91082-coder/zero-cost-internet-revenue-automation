@@ -52,12 +52,10 @@ Mechanical exclusion requires the later S7 publisher-only credential/workflow, s
 ## 4. Validation evidence
 
 - GitHub fetch-back succeeded for every newly created or updated file; exact blob SHA values are recorded in the run checkpoint.
-- Static preflight parsed the new schema, fixture, mission registry and schema manifest as JSON.
-- Fixture fields exactly match all required state-manifest fields; no extra fixture fields.
-- The state-manifest contract is registered in the schema manifest.
-- The path allowlist contains `state/**`.
+- Static preflight parsed the new schema, fixture, mission registry and schema manifest as JSON. Fixture fields exactly match all required state-manifest fields with no extras; the state-manifest contract is registered and `state/**` is allowlisted.
+- The new state-manifest schema passed Draft 2020-12 meta-schema validation in an isolated Python validator; its empty generation-0 fixture passed; two adversarial mutations (active lease without a matching object, and paid provider routes enabled) were rejected. This validation covers the new state-manifest contract only, not all 11 contracts.
 - Eleven new Python test methods are committed across the two S4-B test modules.
-- **The eleven new pytest tests have NOT been executed.** The current repo has no Actions workflow, and the available isolated tool container could not resolve the public GitHub host for cloning. Static preflight is not represented as Python execution, Draft 2020-12 validation or CI.
+- **The eleven new pytest tests have NOT been executed.** The current repo has no Actions workflow, and the available isolated tool container could not resolve the public GitHub host for cloning. No full repository pytest run or CI run is claimed.
 - The earlier S4 core's 27/27 standard-library tests remain historical evidence from the previous checkpoint; they were not rerun against this expanded tree.
 
 ## 5. Current state bootstrap
