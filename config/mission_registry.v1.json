@@ -16,7 +16,8 @@
     "tests/**",
     "scripts/**",
     "requirements-test.txt",
-    "src/**"
+    "src/**",
+    "state/**"
   ],
   "denied_paths": [
     ".github/workflows/**",
