@@ -66,3 +66,19 @@ No email address, password, OAuth token, cookie or recovery code is stored in th
 3. **Cross-project resource ledger:** design separately and do not create another repository or cloud account until owner approval is explicitly requested and the free-tier/no-billing eligibility is verified.
 
 This approach allows other projects to continue in their own repositories. The protection boundary is the mission/repository namespace plus a single-writer protocol, not the email address or the ChatGPT chat thread.
+
+
+## S4-B implementation update (2026-11-16)
+
+The cooperative durable-state mechanism has now been added:
+
+- `src/zcira_control/github_state.py`: Git Data API adapter; expected-head check; one tree/commit for multiple files; `force=false` branch-ref update; non-fast-forward conflict handling; bounded writes limited to the manifest and content-addressed state objects.
+- `src/zcira_control/state_repository.py`: generation-based manifest, canonical JSON/SHA-256 object references, durable writer lease, expiry recovery, exact lease-head requirement and post-commit fetch-back verification.
+- `schemas/v1/state_manifest.schema.json` and a valid fixture define the state pointer.
+- `state/manifest.v1.json` is currently generation 0, has zero state objects and no active lease.
+
+**Security limitation remains explicit:** this is cooperative CAS/lease logic. It cannot stop a client with direct repository write permission from bypassing the adapter. Repository rulesets inspection returned an empty list; branch-protection inspection returned 403 to the connected integration, so its status is UNKNOWN. No GitHub Actions workflow exists and Actions runs returned zero. The connector's write permission is not thread-scoped.
+
+Eleven S4-B Python test methods are committed but not executed. The static JSON/required-field preflight passed; it is not pytest or a full Draft 2020-12 run. See `docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md`.
+
+Until S7 installs a publisher-only write path and mechanical branch/concurrency controls, only the canonical ZCIRA writer thread should write `main`. Other threads may read and prepare research handoffs only. No other project repository was inspected or modified.
