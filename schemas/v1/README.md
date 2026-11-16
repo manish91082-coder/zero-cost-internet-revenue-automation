@@ -10,3 +10,11 @@ Version 1.0.0 contracts for deterministic task control and bounded read-only res
 - Repository writes are reserved for the single `evidence_publisher` role.
 - JSON Schema does not by itself validate temporal ordering, GitHub branch-head compare-and-swap, quota consumption, signature authenticity or external OAuth consent. Those require deterministic runtime checks and later acceptance tests.
 - The schema version is immutable once used by persisted tasks. Breaking changes require a new schema version and migration plan.
+
+## S4-B durable state manifest
+
+- `state_manifest.schema.json` defines the canonical mission state pointer and its content-addressed object references.
+- State transitions are stored as immutable JSON objects under `state/objects/`; `state/manifest.v1.json` points to the latest object versions.
+- The manifest carries a canonical SHA-256 digest, generation number, previous Git commit SHA, kill-switch state and active writer lease ID.
+- GitHub Git Data API writes create one multi-file commit and update `main` with `force=false`; stale or concurrent branch heads fail closed.
+- This adapter is repo code only. It is not wired to Actions, does not hold a token in the repository, and has not been deployed or run against GitHub write APIs.
