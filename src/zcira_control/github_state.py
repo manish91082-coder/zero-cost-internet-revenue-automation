@@ -86,7 +86,7 @@ def validate_state_path(path: str) -> None:
     parsed = PurePosixPath(path)
     if parsed.is_absolute() or ".." in parsed.parts or "." in parsed.parts or str(parsed) != path:
         raise PolicyError("state path traversal or non-canonical path")
-    if path != "state/manifest.v1.json" and not re.fullmatch(r"state/objects/[a-f0-9]{64}\\.json", path):
+    if path != "state/manifest.v1.json" and not re.fullmatch(r"state/objects/[a-f0-9]{64}\.json", path):
         raise PolicyError("durable state adapter may access only the manifest and content-addressed objects")
 
 
