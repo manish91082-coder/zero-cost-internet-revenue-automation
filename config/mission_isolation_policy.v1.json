@@ -43,11 +43,13 @@
     "mission_registry_present": true,
     "canonical_branch_compare_and_swap_core_present": true,
     "in_memory_lease_core_present": true,
-    "durable_writer_lock_file": "NOT_IMPLEMENTED",
-    "github_branch_protection": "NOT_CONFIGURED",
+    "durable_writer_lock_file": "COOPERATIVE_GIT_CAS_ADAPTER_IMPLEMENTED_NOT_DEPLOYED",
+    "github_branch_protection": "NOT_VERIFIED_BRANCH_PROTECTION_API_RETURNED_403",
     "github_actions_concurrency_group": "NOT_CONFIGURED",
     "cloud_resource_ledger": "NOT_IMPLEMENTED",
-    "cross_project_lock": "NOT_IMPLEMENTED"
+    "cross_project_lock": "NOT_IMPLEMENTED",
+    "cross_thread_write_exclusion": "COOPERATIVE_ONLY_NOT_MECHANICALLY_ENFORCED",
+    "durable_state_manifest": "GENERATION_0_EMPTY_BOOTSTRAP_COMMITTED"
   },
   "approval_policy": {
     "exact_service_and_oauth_scope_required": true,
