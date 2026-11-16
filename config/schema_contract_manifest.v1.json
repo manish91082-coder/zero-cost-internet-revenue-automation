@@ -41,8 +41,9 @@
     "pytest_execution": "NOT_RUN",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED",
-    "s4b_state_manifest_schema": "STATIC_JSON_AND_REQUIRED_FIELD_PREFLIGHT_PASS",
+    "s4b_state_manifest_schema": "DRAFT_2020_12_META_SCHEMA_AND_FIXTURE_PASS",
     "s4b_durable_state_adapter": "CODE_PUBLISHED_TESTS_COMMITTED_NOT_EXECUTED",
-    "s4b_pytest": "PENDING_NO_CI_RUNNER_CONFIGURED"
+    "s4b_pytest": "PENDING_NO_CI_RUNNER_CONFIGURED",
+    "s4b_state_manifest_negative_cases": "2_OF_2_REJECTED"
   }
 }
