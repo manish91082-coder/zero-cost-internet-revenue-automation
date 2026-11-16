@@ -104,7 +104,7 @@ class GitHubStateStoreTests(unittest.TestCase):
             base,
             {
                 "state/manifest.v1.json": '{"generation":0}',
-                "state/objects/" + ("c" * 64) + ".json": '{"id":"x"}',
+                ["state/objects/" + ("c" * 64) + ".json"]: '{"id":"x"}',
             },
             "test atomic state commit",
         )
