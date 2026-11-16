@@ -21,6 +21,7 @@ SCHEMA_FILES = {
     "quota_ledger": "quota_ledger.schema.json",
     "resource_lease": "resource_lease.schema.json",
     "mission_registry": "mission_registry.schema.json",
+    "state_manifest": "state_manifest.schema.json",
 }
 FIXTURES = {
     "task": "valid_task.json",
@@ -33,6 +34,7 @@ FIXTURES = {
     "quota_ledger": "valid_quota_ledger.json",
     "resource_lease": "valid_resource_lease.json",
     "mission_registry": "valid_mission_registry.json",
+    "state_manifest": "valid_state_manifest.json",
 }
 
 def load_json(path):
@@ -172,3 +174,13 @@ def test_repository_write_task_requires_evidence_publisher_role():
     assert_rejected("task", value)
     value["assigned_role"] = "evidence_publisher"
     schema_for("task").validate(value)
+
+def test_state_manifest_active_lease_requires_matching_lease_object():
+    value = copy.deepcopy(fixture_for("state_manifest"))
+    value["active_writer_lease_id"] = "lease-abc123"
+    assert_rejected("state_manifest", value)
+
+def test_state_manifest_cannot_enable_paid_provider_routes():
+    value = copy.deepcopy(fixture_for("state_manifest"))
+    value["paid_provider_routes_enabled"] = True
+    assert_rejected("state_manifest", value)
