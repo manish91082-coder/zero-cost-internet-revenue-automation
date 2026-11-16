@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import json
+import re
 from pathlib import PurePosixPath
 from typing import Any, Mapping, Protocol
 from urllib.error import HTTPError, URLError
@@ -80,11 +81,13 @@ class UrllibGitHubTransport:
 
 
 def validate_state_path(path: str) -> None:
-    if not isinstance(path, str) or not path.startswith("state/") or not path.endswith(".json"):
-        raise PolicyError("durable state adapter may write only state/*.json paths")
+    if not isinstance(path, str):
+        raise PolicyError("state path must be a string")
     parsed = PurePosixPath(path)
     if parsed.is_absolute() or ".." in parsed.parts or "." in parsed.parts or str(parsed) != path:
         raise PolicyError("state path traversal or non-canonical path")
+    if path != "state/manifest.v1.json" and not re.fullmatch(r"state/objects/[a-f0-9]{64}\\.json", path):
+        raise PolicyError("durable state adapter may access only the manifest and content-addressed objects")
 
 
 class GitHubGitDataStore:
@@ -137,10 +140,19 @@ class GitHubGitDataStore:
             raise PolicyError("state commit message must be non-empty and bounded")
         if not isinstance(files, Mapping) or not files:
             raise PolicyError("state commit requires at least one file")
+        if len(files) > 100:
+            raise PolicyError("one state transaction is limited to 100 files")
+        total_bytes = 0
         for path, content in files.items():
             validate_state_path(path)
             if not isinstance(content, str):
                 raise PolicyError("state file contents must be UTF-8 text")
+            size = len(content.encode("utf-8"))
+            if size > 512_000:
+                raise PolicyError("individual state object exceeds 512 KB")
+            total_bytes += size
+        if total_bytes > 2_000_000:
+            raise PolicyError("state transaction exceeds the 2 MB safety bound")
 
         current_head = self.read_head()
         if current_head != expected_head_sha:
