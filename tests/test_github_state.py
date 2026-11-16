@@ -104,13 +104,13 @@ class GitHubStateStoreTests(unittest.TestCase):
             base,
             {
                 "state/manifest.v1.json": '{"generation":0}',
-                "state/objects/abc.json": '{"id":"x"}',
+                "state/objects/" + ("c" * 64) + ".json": '{"id":"x"}',
             },
             "test atomic state commit",
         )
         self.assertEqual(self.store.read_head(), result["commit_sha"])
         self.assertEqual(self.store.read_file("state/manifest.v1.json", result["commit_sha"]), '{"generation":0}')
-        self.assertEqual(self.store.read_file("state/objects/abc.json", result["commit_sha"]), '{"id":"x"}')
+        self.assertEqual(self.store.read_file("state/objects/" + ("c" * 64) + ".json", result["commit_sha"]), '{"id":"x"}')
         self.assertFalse(result["force_push"])
 
     def test_stale_head_is_rejected_before_any_blob_is_created(self):
