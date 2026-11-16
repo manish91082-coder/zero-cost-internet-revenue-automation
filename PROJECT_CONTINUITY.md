@@ -1,6 +1,6 @@
 # Project Continuity Checkpoint
 
-Last verified: 2026-11-14 (Asia/Kolkata)
+Last verified: 2026-11-16 (Asia/Kolkata)
 Project ID: ZCIRA-2026-11-13
 Canonical repository: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation
 Default branch: main
@@ -403,3 +403,38 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Until S4-B/S7, only the canonical ZCIRA writer thread may update this repo. Other ChatGPT threads can research, but should hand off evidence rather than write main.
 - No other project repository was inspected, modified or assumed to be safe. No Google OAuth consent, account creation, token storage or external permission request occurred.
 - Next: S4-B durable writer lease and checkpoint state. Cross-project owner-resource ledger remains design-only and will not be created or deployed without explicit approval.
+
+
+## 28. Phase S4-B — durable Git-backed state and cooperative writer lease (2026-11-16)
+
+- Report: `docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md`.
+- Multi-thread protocol addendum: `docs/52_MULTI_THREAD_MULTI_PROJECT_ISOLATION_PROTOCOL_HI.md`.
+- Parent checkpoint before this update: commit `2e2f35531ac46a9971e12bff004e4f0fc9785a6e`; latest parent tree was fetched before writing.
+- S4-B source files:
+  - `src/zcira_control/github_state.py`: standard-library GitHub Git Data API transport, main-head precheck, bounded state-only writes, blobs/tree/commit, `force=false` ref update, non-fast-forward conflict rejection.
+  - `src/zcira_control/state_repository.py`: canonical JSON/SHA-256, generation manifest, immutable content-addressed objects, writer lease acquisition, expiry recovery, exact lease-head publication, atomic release and fetch-back verification.
+  - `schemas/v1/state_manifest.schema.json`: version 1.0.0 manifest contract.
+- Supporting artifacts: `state/manifest.v1.json`, `state/README.md`, `tests/fixtures/s3_v1/valid_state_manifest.json`, `tests/test_github_state.py`, `tests/test_state_persistence.py`; `tests/test_contract_schemas.py` includes state manifest validation. Mission path allowlist now includes `state/**`.
+- S4-B persistence protocol: state objects are immutable under `state/objects/<sha256>.json`; manifest records generation, previous commit SHA, object references, active writer lease, kill switch, zero-spend invariants and digest. Each transition is one Git tree/commit; branch update uses expected parent and `force=false`. A sibling/non-fast-forward commit is rejected. Publisher must write against the exact lease commit SHA; if the head changes, it stops. Bounds: 100 files/transaction, 512 KB/file, 2 MB/transaction.
+- State bootstrap currently generation 0, zero objects, no active lease. It does not represent a running queue or agent.
+- Fetch-back verified blobs:
+  - report 53 `786834be754bc8fbeb8f51833ddce19b033cc29a`
+  - report 52 `687f9cfea6ed60380b6a3a5ed0c5f8c30bcfb101`
+  - `github_state.py` `75f7950a4546ec88d744f5aaadebfa0d8180eebd`
+  - `state_repository.py` `9ed3aa1f63d91efeecca5d9289fa0a6cb1994f3a`
+  - state manifest schema `488dc842cb85ee53fb218b307f8689e9ee874619`
+  - state fixture and bootstrap manifest `2e9aa8d8c5d7cf160bea679f44b34163483c22a9`
+  - GitHub CAS tests `8d99c4b00c84af4b027d73ed8362bc312c98cb87`
+  - state repository tests `a042b32e955274abfb7f791275a5908433b19a60`
+  - contract tests `d9b742911636977a31a64ce138907876143ae537`
+  - mission registry `f99feb189fb7208e1708d9893e5d1c9cc522a2c1`
+  - isolation policy `41dfaa565871e76a5b58755d702ed9cd96fc8b7e`
+  - schema manifest `604e62b9ef6303a2811b5f99ace533d911488165`
+- Static preflight: schema, fixture, registry and schema manifest parse as JSON; all required fixture fields are present with no extras; state path is allowlisted; schema is registered. This was not a Draft 2020-12 validator run.
+- Eleven new Python test methods are committed but NOT EXECUTED. No CI workflow exists. Do not claim pytest pass or advance to S5 until exact tests and Draft 2020-12 validation execute in a verified ephemeral environment.
+- Cross-thread writer lock is still cooperative, not a security boundary. Repository rulesets endpoint returned []; branch-protection endpoint returned 403 to the connected integration, so protection status is UNKNOWN. No `.github/workflows/` directory; Actions run count 0. Direct write permission is not thread-scoped. Until S7, only the canonical ZCIRA writer thread may write main; other threads remain read-only.
+- No GitHub API write was performed by the new adapter; no token was stored. No GitHub Actions workflow, Cloudflare Worker/Cron/D1, LangGraph runtime, agent execution, OAuth consent, account creation, KYC, legal acceptance, billing, deployment, outreach, submission, product build or publication occurred.
+- S4-B status: CODE PUBLISHED / STATIC PREFLIGHT PASS / PYTEST PENDING / NOT DEPLOYED. S5–S9 remain not started.
+- Next: run the committed S4-B tests and Draft 2020-12 validation in a verified ephemeral environment; resolve any defects; only then start S5. No workflow or cloud resource is to be created before its own phase gate and no-billing eligibility check.
+- Priority order/counts remain P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B. Original 3,482 slots remain occurrence slots, not unique platforms.
+- Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/agent execution/outreach/submissions/build/publication; commercial HOLD.
