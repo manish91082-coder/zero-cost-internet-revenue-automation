@@ -155,6 +155,14 @@ class LangGraphAdapterTests(unittest.TestCase):
         self.assertEqual(result["blocked_reasons"]["zcira-needs-llm"], "BLOCKED_NO_FREE_MODEL")
         self.assertEqual(result["status"], "PARTIAL")
 
+    def test_completed_llm_task_is_not_reclassified_as_blocked(self):
+        task = make_task("zcira-completed-llm", "P1", requires_llm=True)
+        task["status"] = "COMPLETED"
+        result = invoke_graph(self.graph, make_state([task]))
+        self.assertEqual(result["blocked_task_ids"], [])
+        self.assertEqual(result["pending_task_ids"], [])
+        self.assertEqual(result["status"], "COMPLETED")
+
     def test_eligible_free_llm_allows_llm_task(self):
         tasks = [make_task("zcira-needs-llm", "P1", requires_llm=True)]
         result = invoke_graph(self.graph, make_state(tasks, provider_records=[free_llm_provider()]))
