@@ -24,15 +24,26 @@
   "paid_provider_routes_enabled": false,
   "spend_cap_inr": 0,
   "cloud_runtime_deployed": false,
-  "actual_langgraph_package_integration": "PENDING_PACKAGE_NOT_INSTALLED_IN_VALIDATION_SANDBOX",
-  "mock_graph_contract_tests": "PASS_24",
-  "status": "S5_ADAPTER_AND_MOCK_TESTS_PASS_RUNTIME_INTEGRATION_PENDING",
-  "combined_test_suite": "PASS_96",
+  "actual_langgraph_package_integration": "PENDING_VERIFIED_EPHEMERAL_RUNNER; TOOL_SANDBOX_PACKAGE_DOWNLOAD_BLOCKED_BY_DNS",
+  "mock_graph_contract_tests": "PASS_24_LAST_VERIFIED",
+  "status": "S5_ADAPTER_HARDENED_REAL_RUNTIME_INTEGRATION_PENDING",
+  "combined_test_suite": "PASS_96_LAST_VERIFIED",
   "graph_input_bounds": {
     "max_tasks": 100,
     "max_provider_records": 20,
     "max_active_leases": 100,
     "max_completed_or_blocked_ids": 1000
   },
-  "checkpoint_proposal_integrity": "SHA256_AND_SINGLE_WRITER_FLAGS_ENFORCED"
+  "checkpoint_proposal_integrity": "SHA256_AND_SINGLE_WRITER_FLAGS_ENFORCED",
+  "new_regression_tests_since_last_verified_run": 3,
+  "real_langgraph_runtime_tests": "3_COMMITTED_NOT_EXECUTED",
+  "package_supply_chain": {
+    "pypi_version": "1.2.22",
+    "release_date": "2026-11-14",
+    "license": "MIT",
+    "python_minimum": "3.10",
+    "wheel_sha256_matches_pypi_metadata": true,
+    "pypi_provenance": "NOT_PRESENT_AT_VERIFICATION",
+    "transitive_dependency_hash_lock": "PENDING_S7"
+  }
 }
