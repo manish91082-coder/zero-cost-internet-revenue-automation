@@ -100,17 +100,19 @@ class GitHubStateStoreTests(unittest.TestCase):
 
     def test_two_files_are_committed_atomically_and_read_back(self):
         base = self.store.read_head()
+        object_content = '{"id":"x"}'
+        object_path = "state/objects/" + hashlib.sha256(object_content.encode()).hexdigest() + ".json"
         result = self.store.commit_files(
             base,
             {
                 "state/manifest.v1.json": '{"generation":0}',
-                "state/objects/" + ("c" * 64) + ".json": '{"id":"x"}',
+                object_path: object_content,
             },
             "test atomic state commit",
         )
         self.assertEqual(self.store.read_head(), result["commit_sha"])
         self.assertEqual(self.store.read_file("state/manifest.v1.json", result["commit_sha"]), '{"generation":0}')
-        self.assertEqual(self.store.read_file("state/objects/" + ("c" * 64) + ".json", result["commit_sha"]), '{"id":"x"}')
+        self.assertEqual(self.store.read_file(object_path, result["commit_sha"]), object_content)
         self.assertFalse(result["force_push"])
 
     def test_stale_head_is_rejected_before_any_blob_is_created(self):
@@ -118,14 +120,14 @@ class GitHubStateStoreTests(unittest.TestCase):
         self.transport._concurrent_commit()
         before = self.transport.blob_posts
         with self.assertRaises(StaleCheckpoint):
-            self.store.commit_files(old, {"state/objects/" + ("d" * 64) + ".json": "{}"}, "stale")
+            self.store.commit_files(old, {"state/objects/" + hashlib.sha256(b"{}").hexdigest() + ".json": "{}"}, "stale")
         self.assertEqual(self.transport.blob_posts, before)
 
     def test_non_fast_forward_race_is_rejected(self):
         base = self.store.read_head()
         self.transport.race_before_patch = True
         with self.assertRaises(BranchHeadConflict):
-            self.store.commit_files(base, {"state/objects/" + ("e" * 64) + ".json": "{}"}, "race")
+            self.store.commit_files(base, {"state/objects/" + hashlib.sha256(b"{}").hexdigest() + ".json": "{}"}, "race")
         self.assertNotEqual(self.store.read_head(), base)
 
     def test_only_state_json_paths_are_writable(self):
@@ -135,6 +137,18 @@ class GitHubStateStoreTests(unittest.TestCase):
             validate_state_path("state/../secrets/token.json")
         with self.assertRaises(PolicyError):
             validate_state_path("state/notes.txt")
+
+    def test_object_path_must_match_content_sha256(self):
+        base = self.store.read_head()
+        with self.assertRaises(PolicyError):
+            self.store.commit_files(base, {"state/objects/" + ("f" * 64) + ".json": "{}"}, "bad object hash")
+
+    def test_state_files_must_be_canonical_json_objects(self):
+        base = self.store.read_head()
+        with self.assertRaises(PolicyError):
+            self.store.commit_files(base, {"state/manifest.v1.json": "{ \"x\": 1 }"}, "non-canonical")
+        with self.assertRaises(PolicyError):
+            self.store.commit_files(base, {"state/manifest.v1.json": "[]"}, "not object")
 
     def test_branch_is_locked_to_main(self):
         from zcira_control.github_state import GitHubGitDataStore
