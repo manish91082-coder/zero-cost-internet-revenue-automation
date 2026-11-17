@@ -104,7 +104,7 @@ class GitHubStateStoreTests(unittest.TestCase):
             base,
             {
                 "state/manifest.v1.json": '{"generation":0}',
-                ["state/objects/" + ("c" * 64) + ".json"]: '{"id":"x"}',
+                "state/objects/" + ("c" * 64) + ".json": '{"id":"x"}',
             },
             "test atomic state commit",
         )
@@ -118,14 +118,14 @@ class GitHubStateStoreTests(unittest.TestCase):
         self.transport._concurrent_commit()
         before = self.transport.blob_posts
         with self.assertRaises(StaleCheckpoint):
-            self.store.commit_files(old, {"state/a.json": "{}"}, "stale")
+            self.store.commit_files(old, {"state/objects/" + ("d" * 64) + ".json": "{}"}, "stale")
         self.assertEqual(self.transport.blob_posts, before)
 
     def test_non_fast_forward_race_is_rejected(self):
         base = self.store.read_head()
         self.transport.race_before_patch = True
         with self.assertRaises(BranchHeadConflict):
-            self.store.commit_files(base, {"state/a.json": "{}"}, "race")
+            self.store.commit_files(base, {"state/objects/" + ("e" * 64) + ".json": "{}"}, "race")
         self.assertNotEqual(self.store.read_head(), base)
 
     def test_only_state_json_paths_are_writable(self):
