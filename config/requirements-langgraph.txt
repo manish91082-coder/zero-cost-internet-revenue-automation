@@ -1,0 +1,5 @@
+# Optional orchestration library only; no hosted LangGraph/Agent Server/CLI.
+# PyPI latest stable observed 2026-11-17: langgraph 1.2.22 (MIT, Python >=3.10).
+# PyPI wheel SHA-256 published for langgraph-1.2.22-py3-none-any.whl.
+# Full transitive dependency lock and hash enforcement are deferred to S7 CI.
+langgraph==1.2.22 --hash=sha256:0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f
