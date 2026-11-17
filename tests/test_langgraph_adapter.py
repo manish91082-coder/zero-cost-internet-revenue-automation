@@ -336,5 +336,37 @@ class LangGraphAdapterTests(unittest.TestCase):
         with self.assertRaises(LangGraphUnavailable):
             build_langgraph_graph(MISSION)
 
+
+    def test_queued_run_keeps_finished_at_null_and_preserves_started_at(self):
+        task = make_task("zcira-open-run")
+        state = make_state([task], now="2026-11-17T03:30:00Z", started_at="2026-11-17T03:00:00Z")
+        result = invoke_graph(self.graph, state)
+        payload = result["checkpoint_proposal"]["payload"]
+        self.assertEqual(payload["status"], "QUEUED")
+        self.assertEqual(payload["started_at"], "2026-11-17T03:00:00Z")
+        self.assertIsNone(payload["finished_at"])
+
+    def test_completed_run_sets_finished_at(self):
+        task = make_task("zcira-completed-run")
+        task["status"] = "COMPLETED"
+        result = invoke_graph(self.graph, make_state([task]))
+        payload = result["checkpoint_proposal"]["payload"]
+        self.assertEqual(payload["status"], "COMPLETED")
+        self.assertEqual(payload["finished_at"], NOW)
+
+    def test_resume_preserves_original_run_started_at(self):
+        task = make_task("zcira-resume-start-time")
+        run_state = make_run_state([task["task_id"]])
+        run_state["started_at"] = "2026-11-17T03:00:00Z"
+        resumed = prepare_resume_input(
+            run_state, [task], MISSION, [], [], "2026-11-17T03:30:00Z",
+            executor="test_sandbox_non_runtime",
+        )
+        self.assertEqual(resumed["started_at"], "2026-11-17T03:00:00Z")
+        result = invoke_graph(self.graph, resumed)
+        payload = result["checkpoint_proposal"]["payload"]
+        self.assertEqual(payload["started_at"], "2026-11-17T03:00:00Z")
+        self.assertIsNone(payload["finished_at"])
+
 if __name__ == "__main__":
     unittest.main()
