@@ -456,3 +456,21 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Priority totals/order unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
 - Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidence; no accounts/KYC/terms acceptance/deployment/agent execution/outreach/submissions/product build/publication; commercial HOLD.
 - Latest report: docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md; latest test commit a564d6fddd157c9cb6484a69c650f9fc63fc3c83.
+
+
+## 30. S5 LangGraph adapter progress (2026-11-17)
+
+- Official package research: LangGraph Python library pinned at 1.2.22, MIT, Python >=3.10; PyPI wheel SHA-256 recorded. PyPI did not show a provenance attestation at verification. The design uses the library only, not Agent Server, CLI, Studio, LangSmith or hosted deployment.
+- Added config/requirements-langgraph.txt and config/langgraph_adapter_policy.v1.json. The package remains optional and is not installed/activated in this run.
+- Added src/zcira_control/langgraph_adapter.py and tests/test_langgraph_adapter.py. The adapter uses lazy import and a fake StateGraph factory for deterministic tests. Actual LangGraph package compile/invoke/resume is still pending.
+- Graph topology: START -> admission -> (PAUSED -> checkpoint proposal) or (RUNNING -> plan -> checkpoint proposal). It performs no model calls, network requests, source fetches, repository writes or account actions.
+- Admission validates exact mission/repository/branch/namespace, run ID, executor, mission context, timestamp and kill/cancel state.
+- Planning enforces max two read-only research tasks, keeps the publisher separate, selects at most one publisher candidate, and marks only queued LLM-required tasks BLOCKED_NO_FREE_MODEL when no eligible free LLM exists. Completed/running tasks are not retroactively blocked.
+- Checkpoint output is a run_state proposal with SHA-256, write_authorized=false and write_performed=false. Only the S7 evidence_publisher may later commit it. No LangGraph in-memory saver is treated as durable.
+- Resume logic accepts only publisher-committed pending task IDs; active task lease blocks duplicate execution; expired lease requeues with one bounded attempt increment; max_attempts moves the task to DEAD_LETTER/blocked; task ID, lease scope, assigned role and read-only permission must match.
+- Test suite: 27 control-plane + 7 GitHub state + 6 durable-state + 32 schema-contract + 19 LangGraph adapter = **91 passed, 0 failed, 0 errors** in isolated ephemeral validation. The S5 graph wiring uses a fake StateGraph factory because LangGraph is not installed; this does not count as real LangGraph integration.
+- S5 status: PARTIAL. Real langgraph==1.2.22 compile/invoke/resume smoke test still required. No GitHub Actions workflow, cloud runtime, Cloudflare Worker/Cron/D1, LangGraph server or running agents.
+- S6 must wait for real LangGraph integration. S7 remains the only phase to create CI and mechanical publisher-only write enforcement. S8 deployment remains gated by zero-billing verification and exact owner approval.
+- Source archive, category IDs, priorities, batch mappings, shared-list cross-references, duplicate provenance, P1/P2/P3/P4/P5/B/M counts and Category #24=B unchanged.
+- Ledger: ₹0 authorized/incurred; ₹0 settled revenue evidence; no account creation, OAuth consent, KYC, terms acceptance, billing, deployment, outreach, submissions, product build, publication or spend; commercial HOLD.
+- Latest S5 code blob: d4dd4c6b4d1c5ed809466caf1a3abc6d7df913f7. Test blob: dc72b4f0d5ba21f47f0a4f05c8a4891bd5c0888d. Latest S5 test commit: 55a2294131c4507d77e6b4afb6195160a7d90e48.
