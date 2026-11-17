@@ -62,9 +62,9 @@ The adapter imports LangGraph lazily. The deterministic control plane and tests 
 ## 6. Validation
 
 - S4 baseline and S4-B suite: 72 tests passed before S5 additions.
-- S5 adapter additions: 19 tests.
-- Combined suite: **91 passed, 0 failed, 0 errors** in an isolated ephemeral validation sandbox.
-- Tests cover mission isolation, graph topology, maximum two research assignments, LLM-provider blocking, OPEN circuit behavior, kill switch, cancellation, publisher handoff without writes, run_state schema conformance, resume filtering, missing pending task rejection, kill-switch preservation, active task-lease blocking, expired-lease retry, max-attempt dead-lettering, task/lease role mismatch, and preservation of completed tasks during provider outages.
+- S5 adapter additions: 24 tests.
+- Combined suite: **96 passed, 0 failed, 0 errors** in an isolated ephemeral validation sandbox.
+- Tests cover mission isolation, graph topology, maximum two research assignments, LLM-provider blocking, OPEN circuit behavior, kill switch, cancellation, publisher handoff without writes, run_state schema conformance, resume filtering, missing pending task rejection, kill-switch preservation, active task-lease blocking, expired-lease retry, max-attempt dead-lettering, task/lease role mismatch, preservation of completed tasks during provider outages, 100-task/20-provider/100-lease input bounds, unique task IDs, boolean requires_llm flags, checkpoint digest tampering and write-authorized proposal rejection.
 - Actual langgraph==1.2.22 package import/compile/invoke was not run because the package is not installed in the validation sandbox and package download was unavailable. The optional dependency is pinned but not activated.
 - No GitHub Actions CI workflow, cloud runtime, Cloudflare service, LangGraph Agent Server or live agent exists.
 
@@ -92,3 +92,14 @@ After the package integration test, S6 can add read-only evidence workers behind
 - Updated adapter blob: d4dd4c6b4d1c5ed809466caf1a3abc6d7df913f7.
 - Updated test blob: dc72b4f0d5ba21f47f0a4f05c8a4891bd5c0888d.
 - Combined validation is now **91 passed, 0 failed, 0 errors**. The 19 S5 tests are mocked-graph contract tests; actual LangGraph package import/compile/invoke/resume remains pending.
+
+
+### S5 bounded-input and checkpoint-integrity addendum (2026-11-17)
+
+- Graph input bounds are now explicit: maximum 100 tasks per invocation, 20 provider records, 100 active lease records, and 1,000 completed/blocked IDs.
+- Every task is validated before planning; duplicate task IDs and non-boolean parameters.requires_llm are rejected.
+- invoke_graph now verifies checkpoint kind, publisher role, payload SHA-256, write_authorized=false, write_performed=false and publisher handoff state. Tampered or write-authorized proposals fail closed.
+- The completed-task provider-outage guard remains: only QUEUED tasks requiring LLM are blocked when no eligible free LLM is available.
+- Updated adapter blob: 07916bcd2aacab52bd5b1fe9854c7413d30c0971.
+- Updated test blob: 41982c6a2fa308b7b350b1e49406ff1c97601dea.
+- S5 test count: 24. Combined suite: **96 passed, 0 failed, 0 errors** in the isolated ephemeral validation sandbox.
