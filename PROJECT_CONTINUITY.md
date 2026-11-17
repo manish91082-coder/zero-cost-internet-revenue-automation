@@ -474,3 +474,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Source archive, category IDs, priorities, batch mappings, shared-list cross-references, duplicate provenance, P1/P2/P3/P4/P5/B/M counts and Category #24=B unchanged.
 - Ledger: ₹0 authorized/incurred; ₹0 settled revenue evidence; no account creation, OAuth consent, KYC, terms acceptance, billing, deployment, outreach, submissions, product build, publication or spend; commercial HOLD.
 - Latest S5 code blob: d4dd4c6b4d1c5ed809466caf1a3abc6d7df913f7. Test blob: dc72b4f0d5ba21f47f0a4f05c8a4891bd5c0888d. Latest S5 test commit: 55a2294131c4507d77e6b4afb6195160a7d90e48.
+
+
+## 31. S5 bounded-input and checkpoint-integrity closeout (2026-11-17)
+
+- Hardened LangGraph adapter input: <=100 tasks per invocation, <=20 provider records, <=100 active leases, <=1,000 completed/blocked IDs; unique task IDs; validated task envelope; parameters.requires_llm must be boolean.
+- Hardened invoke_graph: validates run_state proposal kind, evidence_publisher role, SHA-256 digest, write_authorized=false, write_performed=false, and publisher handoff PROPOSED_NOT_EXECUTED. Tampered digest or write-authorized proposal is rejected.
+- Resume path validates all task definitions, active/expired lease scope, task resource key, assigned role and read-only permission; active lease blocks duplicate execution; expired lease retries within max_attempts; exhausted attempts dead-letter.
+- Added five more adversarial tests. S5 now has 24 mocked graph contract tests. Combined test suite: 27 control-plane + 7 GitHub state + 6 durable state + 32 schema-contract + 24 S5 = **96 passed, 0 failed, 0 errors** in isolated ephemeral validation.
+- Remote code fetch-back blob: 07916bcd2aacab52bd5b1fe9854c7413d30c0971. Remote test fetch-back blob: 41982c6a2fa308b7b350b1e49406ff1c97601dea.
+- S5 remains PARTIAL: the actual langgraph==1.2.22 package has not been installed; real StateGraph compile/invoke/resume smoke test is pending. Mock factory tests are not production runtime evidence.
+- No CI workflow, no Cloudflare deployment, no live workers, no provider accounts, no OAuth consent, no KYC, no billing, no external actions. The next safe step is an actual LangGraph package smoke test in a verified no-billing public runner, then S6 read-only workers. Do not add workflows until S7.
+- Financial ledger unchanged: ₹0 spend, ₹0 settled revenue evidence; commercial HOLD.
