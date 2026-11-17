@@ -438,3 +438,21 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Next: run the committed S4-B tests and Draft 2020-12 validation in a verified ephemeral environment; resolve any defects; only then start S5. No workflow or cloud resource is to be created before its own phase gate and no-billing eligibility check.
 - Priority order/counts remain P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B. Original 3,482 slots remain occurrence slots, not unique platforms.
 - Ledger unchanged: spend authorized/incurred ₹0; settled revenue evidence ₹0; no accounts/KYC/terms acceptance/deployment/agent execution/outreach/submissions/build/publication; commercial HOLD.
+
+
+## 29. S4-B verification closeout and S5 handoff (2026-11-17)
+
+- Re-read the canonical PROJECT_CONTINUITY.md, report 45 cloud-only architecture decision, S1 roster, S4-B report, S3 contracts and the controlling Library source archive before continuing.
+- Re-verified controlling archive 02_complete-research-hi.md full SHA-256 c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e; embedded destination section SHA-256 7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24.
+- A2.4-B, A2.4-C and A2.5 remain closed at their recorded scope: 219/219 category IDs across six batches; eight shared lists/168 rows and 213 explicit cross-reference edges; 3,482 provenance-preserved source occurrences with review-only duplicate candidates. No source row was deleted or merged; unique platform count remains NOT ESTABLISHED.
+- S4-B test review found two invalid test paths (state/a.json) that failed before exercising stale-head/race logic. Corrected to content-addressed object paths and added two regression tests.
+- Hardened src/zcira_control/github_state.py: all state writes must be canonical JSON objects; object filenames must equal SHA-256 of their exact content. Fetch-back verified code blob 8130a6aa79d606635e966c282d150572365f2524; test blob 214308e38541d841f808077998f57fb4a7eaa423.
+- Full isolated ephemeral validation: 27 control-plane + 7 GitHub state + 6 persistence + 32 schema-contract tests = 72 passed, 0 failed, 0 errors. All 11 Draft 2020-12 schema meta-checks passed. This was not GitHub Actions CI and not a cloud runtime. No owner laptop/desktop was used as a runtime dependency.
+- Updated schema contract manifest: config/schema_contract_manifest.v1.json; contract tests now record 11 valid fixtures and 21 negative/adversarial test functions. CI remains NOT CONFIGURED.
+- S4-B mocked-transport acceptance: PASS. Live disposable-repository GitHub API integration remains NOT RUN. State manifest remains generation 0, zero objects, no active lease. Branch protection status UNKNOWN; no GitHub Actions workflow exists.
+- S5 is now the next engineering phase: design and implement a LangGraph adapter over the deterministic controller, with strict no-policy-mutation, checkpoint-resume, max-two read-only workers, single publisher handoff, cancellation and provider-blocked behavior. S5 must be tested before S6. Do not deploy or add .github/workflows/** in this phase.
+- S7 remains responsible for CI and mechanical publisher-only enforcement. S8 remains gated by independently verified zero-billing eligibility and exact owner approval.
+- Mission isolation remains unchanged: other threads read-only for this repository; no cross-mission state/write; no other project repo was modified. OAuth scopes remain per-provider and exact; no email/credential stored.
+- Priority totals/order unchanged: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; Category #24 remains B.
+- Ledger unchanged: ₹0 authorized/incurred; ₹0 settled revenue evidence; no accounts/KYC/terms acceptance/deployment/agent execution/outreach/submissions/product build/publication; commercial HOLD.
+- Latest report: docs/53_PHASE_S4B_DURABLE_GIT_STATE_AND_WRITER_LEASE_HI.md; latest test commit a564d6fddd157c9cb6484a69c650f9fc63fc3c83.
