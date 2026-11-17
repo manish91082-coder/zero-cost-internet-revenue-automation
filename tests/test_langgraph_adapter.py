@@ -293,6 +293,42 @@ class LangGraphAdapterTests(unittest.TestCase):
         with self.assertRaises(PolicyError):
             invoke_graph(self.graph, state)
 
+    def test_task_batch_limit_is_enforced(self):
+        tasks = [make_task(f"zcira-task-{i:03d}") for i in range(101)]
+        with self.assertRaises(PolicyError):
+            invoke_graph(self.graph, make_state(tasks))
+
+    def test_duplicate_task_ids_are_rejected(self):
+        task = make_task("zcira-duplicate-task")
+        with self.assertRaises(PolicyError):
+            invoke_graph(self.graph, make_state([task, dict(task)]))
+
+    def test_requires_llm_flag_must_be_boolean(self):
+        task = make_task("zcira-bad-llm-flag")
+        task["parameters"]["requires_llm"] = "true"
+        with self.assertRaises(PolicyError):
+            invoke_graph(self.graph, make_state([task]))
+
+    def test_invoke_rejects_tampered_checkpoint_digest(self):
+        base_graph = self.graph
+        class TamperedGraph:
+            def invoke(self, state):
+                result = base_graph.invoke(state)
+                result["checkpoint_proposal"]["payload_sha256"] = "0" * 64
+                return result
+        with self.assertRaises(StateError):
+            invoke_graph(TamperedGraph(), make_state([make_task("zcira-task-a")]))
+
+    def test_invoke_rejects_write_authorized_checkpoint(self):
+        base_graph = self.graph
+        class WriteGraph:
+            def invoke(self, state):
+                result = base_graph.invoke(state)
+                result["checkpoint_proposal"]["write_authorized"] = True
+                return result
+        with self.assertRaises(StateError):
+            invoke_graph(WriteGraph(), make_state([make_task("zcira-task-a")]))
+
     def test_missing_langgraph_dependency_is_reported_without_fallback(self):
         if importlib.util.find_spec("langgraph") is not None:
             self.skipTest("LangGraph package is installed in this environment")
