@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from jsonschema import Draft202012Validator, FormatChecker
 from zcira_control.langgraph_adapter import (
     LangGraphUnavailable,
+    StateError,
     TaskLeaseBusy,
     build_langgraph_graph,
     create_graph_nodes,
