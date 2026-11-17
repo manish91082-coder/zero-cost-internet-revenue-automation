@@ -26,6 +26,10 @@ from .quota import provider_eligibility
 
 RUN_ID_RE = re.compile(r"^zcira-run-[a-z0-9][a-z0-9-]{2,80}$")
 RUN_STATUSES = {"QUEUED", "RUNNING", "COMPLETED", "PARTIAL", "PAUSED", "FAILED"}
+MAX_TASKS_PER_GRAPH = 100
+MAX_PROVIDER_RECORDS = 20
+MAX_ACTIVE_LEASES = 100
+MAX_RUN_TASK_HISTORY = 1000
 
 
 class LangGraphUnavailable(RuntimeError):
@@ -103,6 +107,7 @@ def validate_run_envelope(state: Mapping[str, Any]) -> None:
     for key, value in expected.items():
         if state.get(key) != value:
             raise PolicyError(f"LangGraph envelope scope mismatch: {key}")
+    validate_mission_context(state.get("mission_context", {}))
     if not isinstance(state.get("run_id"), str) or not RUN_ID_RE.fullmatch(state["run_id"]):
         raise PolicyError("LangGraph run_id is invalid")
     if state.get("executor") not in {"github_actions_ephemeral", "test_sandbox_non_runtime"}:
@@ -112,10 +117,40 @@ def validate_run_envelope(state: Mapping[str, Any]) -> None:
     for key in ("tasks", "provider_records", "active_leases", "completed_task_ids", "blocked_task_ids"):
         if not isinstance(state.get(key), list):
             raise PolicyError(f"LangGraph envelope field {key} must be an array")
+    if len(state["tasks"]) > MAX_TASKS_PER_GRAPH:
+        raise PolicyError("LangGraph task batch exceeds the 100-task bound")
+    if len(state["provider_records"]) > MAX_PROVIDER_RECORDS:
+        raise PolicyError("LangGraph provider registry exceeds the 20-record bound")
+    if len(state["active_leases"]) > MAX_ACTIVE_LEASES:
+        raise PolicyError("LangGraph active lease set exceeds the 100-record bound")
+    if any(len(state[key]) > MAX_RUN_TASK_HISTORY for key in ("completed_task_ids", "blocked_task_ids")):
+        raise PolicyError("LangGraph run history exceeds the 1000-ID bound")
+    task_ids = []
+    for task in state["tasks"]:
+        if not isinstance(task, Mapping):
+            raise PolicyError("LangGraph task entries must be objects")
+        validate_task(task, state["mission_context"])
+        task_id = task.get("task_id")
+        if not isinstance(task_id, str) or not task_id:
+            raise PolicyError("LangGraph task ID is invalid")
+        task_ids.append(task_id)
+        parameters = task.get("parameters", {})
+        if not isinstance(parameters, Mapping):
+            raise PolicyError("task parameters must be an object")
+        if "requires_llm" in parameters and not isinstance(parameters["requires_llm"], bool):
+            raise PolicyError("parameters.requires_llm must be boolean")
+    if len(task_ids) != len(set(task_ids)):
+        raise PolicyError("LangGraph task IDs must be unique")
+    for key in ("provider_records", "active_leases"):
+        if any(not isinstance(item, Mapping) for item in state[key]):
+            raise PolicyError(f"LangGraph {key} entries must be objects")
+    for key in ("completed_task_ids", "blocked_task_ids"):
+        values = state[key]
+        if any(not isinstance(item, str) or not item for item in values) or len(values) != len(set(values)):
+            raise PolicyError(f"LangGraph {key} must contain unique non-empty IDs")
     for key in ("kill_switch", "cancel_requested"):
         if not isinstance(state.get(key), bool):
             raise PolicyError(f"LangGraph envelope field {key} must be boolean")
-    validate_mission_context(state.get("mission_context", {}))
 
 
 def _has_eligible_free_llm(records: list[dict[str, Any]]) -> bool:
@@ -301,8 +336,26 @@ def invoke_graph(graph: Any, initial_state: Mapping[str, Any]) -> dict[str, Any]
     """Invoke a bounded planning graph; durable checkpoint persistence is a separate publisher handoff."""
     result = graph.invoke(dict(initial_state))
     proposal = result.get("checkpoint_proposal")
-    if not isinstance(proposal, Mapping) or proposal.get("write_performed") is not False:
-        raise StateError("graph did not return a read-only checkpoint proposal")
+    if not isinstance(proposal, Mapping):
+        raise StateError("graph did not return a checkpoint proposal")
+    payload = proposal.get("payload")
+    if (
+        proposal.get("kind") != "run_state"
+        or proposal.get("writer_role_required") != SINGLE_WRITER_ROLE
+        or proposal.get("write_authorized") is not False
+        or proposal.get("write_performed") is not False
+        or result.get("write_performed") is not False
+        or not isinstance(payload, Mapping)
+        or proposal.get("payload_sha256") != sha256_text(canonical_json(payload))
+    ):
+        raise StateError("graph checkpoint proposal violates the read-only publisher contract")
+    handoff = result.get("publisher_handoff")
+    if handoff is not None and (
+        handoff.get("status") != "PROPOSED_NOT_EXECUTED"
+        or handoff.get("write_performed") is not False
+        or handoff.get("requires_s7_publisher") is not True
+    ):
+        raise StateError("publisher handoff violates the single-writer boundary")
     return result
 
 
@@ -336,15 +389,30 @@ def prepare_resume_input(
     blocked_ids = run_state.get("blocked_task_ids")
     if not all(isinstance(value, list) for value in (pending_ids, completed_ids, blocked_ids)):
         raise PolicyError("resume task ID lists are invalid")
+    if len(pending_ids) > MAX_TASKS_PER_GRAPH or len(tasks) > MAX_TASKS_PER_GRAPH:
+        raise PolicyError("resume task batch exceeds the 100-task bound")
+    if len(provider_records) > MAX_PROVIDER_RECORDS or len(active_leases) > MAX_ACTIVE_LEASES:
+        raise PolicyError("resume provider or lease registry exceeds its bound")
+    if len(completed_ids) > MAX_RUN_TASK_HISTORY or len(blocked_ids) > MAX_RUN_TASK_HISTORY:
+        raise PolicyError("resume task history exceeds the 1000-ID bound")
     if any(not isinstance(item, str) or not item for values in (pending_ids, completed_ids, blocked_ids) for item in values):
         raise PolicyError("resume task IDs must be non-empty strings")
     if len(pending_ids) != len(set(pending_ids)):
         raise PolicyError("resume pending task IDs contain duplicates")
     if set(pending_ids) & (set(completed_ids) | set(blocked_ids)):
         raise PolicyError("resume task cannot be pending and completed/blocked")
+    if any(not isinstance(task, Mapping) for task in tasks):
+        raise PolicyError("resume task definitions must be objects")
     by_id = {task.get("task_id"): dict(task) for task in tasks}
     if len(by_id) != len(tasks):
         raise PolicyError("resume task definitions contain duplicate IDs")
+    for task in by_id.values():
+        validate_task(task, mission_context)
+        parameters = task.get("parameters", {})
+        if not isinstance(parameters, Mapping):
+            raise PolicyError("resume task parameters must be an object")
+        if "requires_llm" in parameters and not isinstance(parameters["requires_llm"], bool):
+            raise PolicyError("resume parameters.requires_llm must be boolean")
     missing = set(pending_ids) - set(by_id)
     if missing:
         raise PolicyError("resume checkpoint references missing task definitions")
