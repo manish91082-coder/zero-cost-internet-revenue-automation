@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import re
 from pathlib import PurePosixPath
@@ -150,6 +151,19 @@ class GitHubGitDataStore:
             size = len(content.encode("utf-8"))
             if size > 512_000:
                 raise PolicyError("individual state object exceeds 512 KB")
+            try:
+                parsed_json = json.loads(content)
+            except json.JSONDecodeError:
+                raise PolicyError("durable state files must contain valid JSON") from None
+            if not isinstance(parsed_json, dict):
+                raise PolicyError("durable state files must contain a JSON object")
+            canonical = json.dumps(parsed_json, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            if canonical != content:
+                raise PolicyError("durable state JSON must use canonical serialization")
+            if path.startswith("state/objects/"):
+                digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
+                if path != f"state/objects/{digest}.json":
+                    raise PolicyError("state object path must match the content SHA-256")
             total_bytes += size
         if total_bytes > 2_000_000:
             raise PolicyError("state transaction exceeds the 2 MB safety bound")
