@@ -37,13 +37,16 @@
   "status": {
     "schemas_published": true,
     "valid_fixtures": 11,
-    "targeted_contract_preflight": "PASS_10_VALID_18_NEGATIVE",
-    "pytest_execution": "NOT_RUN",
+    "targeted_contract_preflight": "PASS_11_VALID_21_NEGATIVE",
+    "pytest_execution": "PASS_72_TESTS_IN_EPHEMERAL_VALIDATION_SANDBOX_NOT_CI",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED",
-    "s4b_state_manifest_schema": "DRAFT_2020_12_META_SCHEMA_AND_FIXTURE_PASS",
-    "s4b_durable_state_adapter": "CODE_PUBLISHED_TESTS_COMMITTED_NOT_EXECUTED",
-    "s4b_pytest": "PENDING_NO_CI_RUNNER_CONFIGURED",
-    "s4b_state_manifest_negative_cases": "2_OF_2_REJECTED"
+    "s4b_state_manifest_schema": "DRAFT_2020_12_META_SCHEMA_PASS_11_OF_11",
+    "s4b_durable_state_adapter": "HARDENED_CANONICAL_JSON_CONTENT_SHA256_PATHS",
+    "s4b_pytest": "PASS_13_S4B_TESTS",
+    "s4b_state_manifest_negative_cases": "2_OF_2_REJECTED",
+    "control_plane_tests": "PASS_27",
+    "schema_contract_tests": "PASS_32",
+    "schema_negative_tests": 21
   }
 }
