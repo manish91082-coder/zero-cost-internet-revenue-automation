@@ -54,6 +54,7 @@ class SwarmGraphState(TypedDict, total=False):
     mission_context: dict[str, Any]
     run_id: str
     now: str
+    started_at: str
     tasks: list[dict[str, Any]]
     provider_records: list[dict[str, Any]]
     active_leases: list[dict[str, Any]]
@@ -112,7 +113,10 @@ def validate_run_envelope(state: Mapping[str, Any]) -> None:
         raise PolicyError("LangGraph run_id is invalid")
     if state.get("executor") not in {"github_actions_ephemeral", "test_sandbox_non_runtime"}:
         raise PolicyError("LangGraph executor is not approved")
-    _parse_now(state.get("now"))
+    now_dt = _parse_now(state.get("now"))
+    started_at = state.get("started_at")
+    if started_at is not None and _parse_now(started_at) > now_dt:
+        raise PolicyError("LangGraph started_at cannot be later than now")
     validate_git_sha(state.get("base_commit_sha"), allow_none=True)
     for key in ("tasks", "provider_records", "active_leases", "completed_task_ids", "blocked_task_ids"):
         if not isinstance(state.get(key), list):
@@ -247,6 +251,14 @@ def create_graph_nodes(mission_context: Mapping[str, Any]) -> dict[str, Callable
     def checkpoint_proposal(state: SwarmGraphState) -> dict[str, Any]:
         now = state["now"]
         base_sha = state.get("base_commit_sha")
+        started_at = state.get("started_at") or now
+        now_dt = _parse_now(now)
+        if _parse_now(started_at) > now_dt:
+            raise PolicyError("checkpoint started_at cannot be later than now")
+        status = state.get("status", "PAUSED")
+        pending_ids = state.get("pending_task_ids", [])
+        is_terminal = status in {"COMPLETED", "FAILED"} or (status == "PARTIAL" and not pending_ids)
+        finished_at = now if is_terminal else None
         run_state = {
             "schema_version": "1.0.0",
             "project_id": PROJECT_ID,
@@ -259,9 +271,9 @@ def create_graph_nodes(mission_context: Mapping[str, Any]) -> dict[str, Callable
             "status": state.get("status", "PAUSED"),
             "executor": state["executor"],
             "run_mode": "READ_ONLY_RESEARCH",
-            "started_at": now,
+            "started_at": started_at,
             "last_heartbeat_at": now,
-            "finished_at": now,
+            "finished_at": finished_at,
             "current_task_id": None,
             "pending_task_ids": state.get("pending_task_ids", []),
             "completed_task_ids": state.get("completed_task_ids", []),
@@ -426,6 +438,9 @@ def prepare_resume_input(
         lease_by_id[lease["lease_id"]] = dict(lease)
 
     now_dt = _parse_now(now)
+    started_at = run_state.get("started_at", now)
+    if not isinstance(started_at, str) or _parse_now(started_at) > now_dt:
+        raise PolicyError("resume started_at is missing, invalid or later than now")
     resumed_tasks: list[dict[str, Any]] = []
     next_blocked = list(blocked_ids)
     for task_id in pending_ids:
@@ -483,6 +498,7 @@ def prepare_resume_input(
         "mission_context": dict(mission_context),
         "run_id": run_state.get("run_id"),
         "now": now,
+        "started_at": started_at,
         "tasks": resumed_tasks,
         "provider_records": provider_records,
         "active_leases": active_leases,
