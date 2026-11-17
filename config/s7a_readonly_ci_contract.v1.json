@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "phase": "S7-A",
+  "title": "Read-only GitHub-hosted validation workflow",
+  "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+  "rationale": "S5 real LangGraph integration requires a verified ephemeral runner; S6 is blocked until S5 passes. S7-A supplies only read-only CI before S6. S7-B remains publisher-only enforcement after S6.",
+  "workflow": {
+    "planned_path": ".github/workflows/zcira-readonly-validation.yml",
+    "created": false,
+    "triggers": [
+      "push:main",
+      "workflow_dispatch"
+    ],
+    "pull_request_trigger": false,
+    "pull_request_target_trigger": false,
+    "schedule_trigger": false,
+    "runner": "ubuntu-24.04 standard GitHub-hosted runner",
+    "self_hosted_runner": false,
+    "timeout_minutes": 20,
+    "concurrency": {
+      "group": "zcira-s7a-readonly-validation-${{ github.ref }}",
+      "cancel_in_progress": false,
+      "max_running": 1,
+      "max_pending": 1
+    },
+    "permissions": {
+      "contents": "read",
+      "all_unspecified_permissions": "none",
+      "repository_write": false,
+      "actions_write": false,
+      "id_token_write": false
+    },
+    "secrets_required": [],
+    "third_party_actions_required": false,
+    "artifacts_upload": false,
+    "cache_enabled": false,
+    "external_service_calls": false,
+    "repository_write": false,
+    "cloud_deployment": false
+  },
+  "dependency_bootstrap": {
+    "python": "3.12",
+    "requirements_inputs": [
+      "requirements-test.txt",
+      "config/requirements-langgraph.txt"
+    ],
+    "only_binary": true,
+    "bootstrap_mode": "pip --dry-run --report --ignore-installed; render candidate lock from selected wheel SHA256 values; do not install during lock generation",
+    "install_mode_after_lock_commit": "pip install --require-hashes --only-binary=:all: --no-cache-dir",
+    "lock_path": "config/requirements-ci-linux-py312.lock",
+    "lock_committed": false,
+    "lock_generation_script": "scripts/render_pip_lock.py",
+    "langgraph_version": "1.2.22",
+    "langgraph_wheel_sha256": "0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f",
+    "package_provenance": "NOT_PRESENT_AT_PYPI_VERIFICATION",
+    "fail_closed_if_sdist_only": true
+  },
+  "test_plan": [
+    "validate all 11 Draft 2020-12 schemas and 11 valid fixtures",
+    "run all deterministic control-plane, durable-state and S5 mock tests",
+    "run 3 new run-clock regression tests",
+    "run 3 real LangGraph 1.2.22 compile/invoke/pause/resume integration tests",
+    "publish only job log summary; do not upload artifacts or mutate repository"
+  ],
+  "security_invariants": {
+    "max_parallel_research_workers": 2,
+    "single_writer_role": "evidence_publisher",
+    "paid_provider_routes_enabled": false,
+    "trial_credit_dependency_allowed": false,
+    "spend_cap_inr": 0,
+    "secrets_available_to_job": false,
+    "public_web_content_is_untrusted_data": true,
+    "no_account_creation_or_terms_acceptance": true
+  },
+  "phase_order": {
+    "current": "S5_PARTIAL",
+    "next": "S7_A_READ_ONLY_CI_VALIDATION",
+    "then": "S9_SEVEN_DAY_READ_ONLY_PILOT"
+  },
+  "approval_and_deployment": {
+    "owner_approval_for_cloud_service_deployment_required": true,
+    "owner_approval_for_account_or_oauth_scope_required": true,
+    "no_cloudflare_deployment_in_s7a": true
+  }
+}
