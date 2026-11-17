@@ -62,9 +62,9 @@ The adapter imports LangGraph lazily. The deterministic control plane and tests 
 ## 6. Validation
 
 - S4 baseline and S4-B suite: 72 tests passed before S5 additions.
-- S5 adapter additions: 18 tests.
-- Combined suite: **90 passed, 0 failed, 0 errors** in an isolated ephemeral validation sandbox.
-- Tests cover mission isolation, graph topology, maximum two research assignments, LLM-provider blocking, OPEN circuit behavior, kill switch, cancellation, publisher handoff without writes, run_state schema conformance, resume filtering, missing pending task rejection, kill-switch preservation, active task-lease blocking, expired-lease retry, max-attempt dead-lettering, and task/lease role mismatch.
+- S5 adapter additions: 19 tests.
+- Combined suite: **91 passed, 0 failed, 0 errors** in an isolated ephemeral validation sandbox.
+- Tests cover mission isolation, graph topology, maximum two research assignments, LLM-provider blocking, OPEN circuit behavior, kill switch, cancellation, publisher handoff without writes, run_state schema conformance, resume filtering, missing pending task rejection, kill-switch preservation, active task-lease blocking, expired-lease retry, max-attempt dead-lettering, task/lease role mismatch, and preservation of completed tasks during provider outages.
 - Actual langgraph==1.2.22 package import/compile/invoke was not run because the package is not installed in the validation sandbox and package download was unavailable. The optional dependency is pinned but not activated.
 - No GitHub Actions CI workflow, cloud runtime, Cloudflare service, LangGraph Agent Server or live agent exists.
 
@@ -83,3 +83,12 @@ After the package integration test, S6 can add read-only evidence workers behind
 - UNKNOWN is never PASS; all five commercial gates remain mandatory.
 - No external action, account creation, OAuth consent, KYC, terms acceptance, billing, deployment, submission, outreach, product build or publication.
 - Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+
+
+### S5 verification addendum (2026-11-17)
+
+- Added a failover correctness guard: only QUEUED tasks that require an LLM are blocked when no eligible free LLM exists. Already COMPLETED or RUNNING tasks are not retroactively classified as blocked.
+- Added regression test test_completed_llm_task_is_not_reclassified_as_blocked.
+- Updated adapter blob: d4dd4c6b4d1c5ed809466caf1a3abc6d7df913f7.
+- Updated test blob: dc72b4f0d5ba21f47f0a4f05c8a4891bd5c0888d.
+- Combined validation is now **91 passed, 0 failed, 0 errors**. The 19 S5 tests are mocked-graph contract tests; actual LangGraph package import/compile/invoke/resume remains pending.
