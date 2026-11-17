@@ -486,3 +486,24 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S5 remains PARTIAL: the actual langgraph==1.2.22 package has not been installed; real StateGraph compile/invoke/resume smoke test is pending. Mock factory tests are not production runtime evidence.
 - No CI workflow, no Cloudflare deployment, no live workers, no provider accounts, no OAuth consent, no KYC, no billing, no external actions. The next safe step is an actual LangGraph package smoke test in a verified no-billing public runner, then S6 read-only workers. Do not add workflows until S7.
 - Financial ledger unchanged: ₹0 spend, ₹0 settled revenue evidence; commercial HOLD.
+
+
+## 32. S5 run-clock correctness and real LangGraph integration gate (2026-11-17)
+
+- New report: `docs/55_PHASE_S5_RUN_CLOCK_AND_REAL_LANGGRAPH_INTEGRATION_GATE_HI.md`.
+- Source archive reopened/materialized from Library: `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1; full SHA-256 independently reverified as `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`.
+- Re-read current continuity, S2-B cloud-only architecture report 45, S1 roster, S4-B report 53, S5 report 54 and S5 source/config/test files before modification.
+- Static S5 review found a run-clock defect: `finished_at` was populated for QUEUED/PAUSED runs with pending tasks, and resume did not preserve original `started_at`.
+- Fixed `src/zcira_control/langgraph_adapter.py`: preserve start time across resume; reject future start time; leave `finished_at=null` for QUEUED/PAUSED and PARTIAL with pending work; set finish time only for terminal COMPLETED/FAILED or PARTIAL with no pending IDs.
+- Adapter blob: `6e11eaf8619476f31475832e2fdf076f325405af`; code commit `379e1c4054641a182183f0126759c257ae8dcc5e`.
+- Added 3 run-clock regression tests in `tests/test_langgraph_adapter.py`; blob `523567749477ea34e909a600303ae1d5281bcac1`; commit `90f8f42edf746ab24bbc8b72673989abce8ea927`. These 3 tests are committed but NOT EXECUTED.
+- Added `tests/test_langgraph_runtime_integration.py`, with 3 tests for exact LangGraph 1.2.22 StateGraph compile/invoke, kill-switch pause and resume/progress preservation. Blob `58afe62f547be1f53987674518e22ee1b46ccf43`; commit `b9c0cb81a14e96e4eb77898799f187081206ff1e`. The harness syntax compilation passed in an isolated tool container. The 3 actual package integration tests are NOT EXECUTED and are skipped if LangGraph is absent.
+- Updated `config/langgraph_adapter_policy.v1.json`: last verified test baseline remains 96; 3 new regression tests and 3 real integration tests pending; exact PyPI version/hash recorded; no provenance attestation observed; transitive hash lock remains pending S7. Policy blob `25dfc529a1f85d818fbf5f3660e8ffa8d6a41884`; commit `a8eb758cc7e99d899a575125fb0df2fc43287823`.
+- Report 55 blob `517370b2c181a06ad7f77f87efcb5d05176f9e2d`; report commit `c4daf64d417780375b3b44ccadcfe58576a25240`.
+- Official PyPI metadata lists LangGraph 1.2.22, released 2026-11-14, MIT, Python >=3.10, wheel SHA-256 `0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f`; the release page reports no provenance attestation. The available isolated package-install attempt failed because DNS/package-index access was unavailable. This is an environment blocker, not a package failure.
+- Sequencing deadlock documented: S5 needs a real package smoke test on GitHub-hosted runner, but current S5 boundary prohibits workflows until S7 and S6 waits for S5. Proposed safe resolution is S7-A read-only/no-secret/no-write CI validation first, then S5 real integration, then S6; S7-B publisher-only enforcement later. This is a proposed phase split, not implemented.
+- No `.github/workflows/**`, CI, account, OAuth, cloud service, Worker/Cron/D1, model provider, agent process, billing, KYC, terms acceptance or external action was created/activated.
+- Test truth: 96 passed remains the last executed combined baseline. The 3 new regression tests and 3 real LangGraph integration tests are NOT EXECUTED. S5 remains PARTIAL.
+- State manifest remains generation 0, zero objects, no active lease. No live agents. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+- A2.4-B/C and A2.5 remain unchanged; 219 category IDs, 8 shared lists/168 entries/213 explicit edges, 3,482 provenance-preserved source occurrences; unique platform count NOT ESTABLISHED. Priority totals/order unchanged and Category #24=B.
+- Next: fetch-back verify this checkpoint, then prepare the read-only S7-A CI/dependency-lock gate without creating a workflow until the phase split is formally implemented. Run real LangGraph integration before S6. No cloud deployment until exact no-billing eligibility and owner approval.
