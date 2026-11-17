@@ -25,6 +25,7 @@
   "spend_cap_inr": 0,
   "cloud_runtime_deployed": false,
   "actual_langgraph_package_integration": "PENDING_PACKAGE_NOT_INSTALLED_IN_VALIDATION_SANDBOX",
-  "mock_graph_contract_tests": "PASS_18",
-  "status": "S5_ADAPTER_AND_MOCK_TESTS_PASS_RUNTIME_INTEGRATION_PENDING"
+  "mock_graph_contract_tests": "PASS_19",
+  "status": "S5_ADAPTER_AND_MOCK_TESTS_PASS_RUNTIME_INTEGRATION_PENDING",
+  "combined_test_suite": "PASS_91"
 }
