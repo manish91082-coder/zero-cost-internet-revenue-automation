@@ -25,7 +25,14 @@
   "spend_cap_inr": 0,
   "cloud_runtime_deployed": false,
   "actual_langgraph_package_integration": "PENDING_PACKAGE_NOT_INSTALLED_IN_VALIDATION_SANDBOX",
-  "mock_graph_contract_tests": "PASS_19",
+  "mock_graph_contract_tests": "PASS_24",
   "status": "S5_ADAPTER_AND_MOCK_TESTS_PASS_RUNTIME_INTEGRATION_PENDING",
-  "combined_test_suite": "PASS_91"
+  "combined_test_suite": "PASS_96",
+  "graph_input_bounds": {
+    "max_tasks": 100,
+    "max_provider_records": 20,
+    "max_active_leases": 100,
+    "max_completed_or_blocked_ids": 1000
+  },
+  "checkpoint_proposal_integrity": "SHA256_AND_SINGLE_WRITER_FLAGS_ENFORCED"
 }
