@@ -157,7 +157,7 @@ def create_graph_nodes(mission_context: Mapping[str, Any]) -> dict[str, Callable
         research_candidates: list[dict[str, Any]] = []
         for task in tasks:
             requires_llm = task.get("parameters", {}).get("requires_llm") is True
-            if requires_llm and not llm_available:
+            if task.get("status") == "QUEUED" and requires_llm and not llm_available:
                 task_id = task.get("task_id")
                 if task_id:
                     blocked.append(task_id)
