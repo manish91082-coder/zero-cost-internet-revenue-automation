@@ -101,3 +101,50 @@ GitHub's official guide describes the Git Database write sequence used by this a
 https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database
 
 This documents the object flow; it does not replace live integration tests, repository protection or owner approval.
+
+
+## 10. S4-B verification addendum (2026-11-17)
+
+### Test defect found and corrected
+
+The first execution of the 11 committed S4-B tests exposed two test-fixture defects, not runtime-code failures: the stale-head and non-fast-forward tests attempted to write state/a.json, which is outside the adapter's intentionally narrow path allowlist. Both tests therefore failed at path validation before reaching the concurrency assertion.
+
+The fixtures were corrected to use the allowed state/objects/<64-hex>.json path. A second hardening pass also made the GitHub state adapter reject:
+- non-JSON state files;
+- non-object JSON values;
+- non-canonical JSON serialization; and
+- content-addressed object paths whose filename does not equal the content SHA-256.
+
+Two additional regression tests cover these conditions. The atomic commit test now derives the object path from the actual content digest.
+
+### Validation result
+
+The fetched Python source and test files were mirrored into an isolated, ephemeral validation environment. The following source/test modules were checked against their GitHub blob SHA values before execution: policy, leases, checkpoints, queue, quota, GitHub state adapter, state repository, control-plane tests, persistence tests, GitHub state tests and schema-contract test module. The schema and fixture JSON content was fetched from the canonical branch and validated with the Draft 2020-12 validator.
+
+- Control-plane tests: **27 passed**.
+- GitHub state adapter tests: **7 passed**.
+- Durable state repository tests: **6 passed**.
+- Schema-contract tests: **32 passed** (11 valid fixtures plus 21 negative/adversarial tests).
+- Draft 2020-12 meta-schema checks: **11/11 schemas passed**.
+- Combined pytest result: **72 passed, 0 failed, 0 errors**.
+- State-manifest active-lease-reference and paid-route adversarial cases remain rejected.
+- The full run was executed in an isolated validation sandbox, not on the owner's laptop or desktop. It is not GitHub Actions CI and does not establish a deployed cloud runtime.
+
+### Updated code and test blobs
+
+- src/zcira_control/github_state.py: 8130a6aa79d606635e966c282d150572365f2524
+- tests/test_github_state.py: 214308e38541d841f808077998f57fb4a7eaa423
+- Hardening commit: 53d3eee6e125852bd807a58219f6f23d3c6fcdc2
+- Regression-test commit: a564d6fddd157c9cb6484a69c650f9fc63fc3c83
+
+### S4-B decision
+
+**S4-B mocked-transport and contract-test exit criteria: PASS.** The adapter enforces canonical JSON and content-addressed object names; lease acquisition, expiry, single-writer blocking, atomic release, stale checkpoint rejection, non-fast-forward race rejection and fetch-back checks pass in the fake transport test suite.
+
+A live GitHub API integration test against a disposable repository has not been run. No GitHub Actions workflow exists; branch protection remains UNKNOWN; the state manifest remains generation 0 with zero objects and no active lease. No token was created or used by this test run.
+
+S5 may now begin as repository-only engineering, while keeping its adapter unexecuted until its own tests pass. S7 CI and mechanical publisher-only write isolation remain pending. S8 deployment still requires separate exact owner approval and independently verified no-billing eligibility.
+
+### Non-deployment boundary
+
+GitHub Actions CI: NOT CONFIGURED. Cloudflare Worker/Cron/D1: NOT DEPLOYED. LangGraph adapter: NOT STARTED. Read-only agents: NOT RUNNING. No OAuth consent, account creation, KYC, legal acceptance, billing activation, deployment, outreach, submission, product build, publication or spend occurred. Spend remains ₹0; settled revenue evidence remains ₹0; commercial execution remains HOLD.
