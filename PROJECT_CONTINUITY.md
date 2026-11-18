@@ -543,3 +543,19 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S5 remains PARTIAL; S6 blocked pending real LangGraph integration. S7-B publisher-only enforcement not started. Cloudflare Worker/Cron/D1 not deployed. State manifest generation 0, zero objects, no active lease; no live agents.
 - Spend ₹0; settled revenue evidence ₹0; no account/KYC/terms/OAuth/billing/deployment/outreach/submission/build/publication; commercial HOLD.
 - Next: inspect the first S7-A GitHub run. If bootstrap-only, review candidate lock and commit only if every selected wheel host/hash/version and the original LangGraph hash pass. The following push should execute the hash-locked full test suite.
+
+
+## 35. S7-A first cloud-run bootstrap and reviewed dependency lock (2026-11-18)
+
+- First S7-A GitHub Actions run: 44228575020; job 134547720367; run URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44228575020; conclusion success.
+- Exact triggering source commit d6195cb46ea2527cb77822ecb6b4524732b18d1d fetched successfully on ubuntu-24.04 standard GitHub-hosted runner. Python 3.12.3; pip 24.0.
+- Renderer unit tests: 8/8 PASS on the actual GitHub-hosted runner.
+- Bootstrap mode explicitly did not install packages and did not run full pytest. Result remains BOOTSTRAP_ONLY_NOT_ACCEPTANCE.
+- pip dry-run report SHA-256: 8e3ae6c97d6e4424c4be50d66c016435226e5fa688d0dfe9bee1d845a4636084.
+- Candidate lock review: 47 exact package entries, 47 unique normalized names, zero duplicate conflicts; all entries passed the renderer's HTTPS files.pythonhosted.org wheel-host and SHA-256 checks. LangGraph 1.2.22 wheel SHA exactly matches the original pin 0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f.
+- Committed config/requirements-ci-linux-py312.lock with all 47 exact versions and SHA-256 hashes. Resolver provenance recorded: pip 24.0, Python 3.12.3, ubuntu-24.04 standard GitHub-hosted runner.
+- Refined .github/workflows/zcira-readonly-validation.yml with push path filters so documentation-only commits do not consume validation runs. Manual workflow_dispatch remains.
+- Updated S7-A contract to record run ID, bootstrap-only status, 8 passing renderer tests, 47 package lock, report hash and pending full validation.
+- Full package installation, pip check, full pytest, three run-clock regression tests and three actual LangGraph integration tests are NOT YET EXECUTED by the workflow. S5 remains PARTIAL; S6 remains blocked.
+- No cloud deployment, Cloudflare Worker/Cron/D1, account, OAuth, KYC, terms acceptance, billing, model call, external commercial action, build/listing or spend. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+- Next: inspect the lock-triggered S7-A full validation run. Only after the real LangGraph tests pass may S6 read-only evidence workers begin.

@@ -3,7 +3,7 @@
   "project_id": "ZCIRA-2026-11-13",
   "phase": "S7-A",
   "title": "Read-only GitHub-hosted validation workflow",
-  "status": "IMPLEMENTED_NOT_EXECUTED",
+  "status": "LOCK_BOOTSTRAP_PASS_FULL_VALIDATION_PENDING",
   "rationale": "S5 real LangGraph integration requires a verified ephemeral runner; S6 is blocked until S5 passes. S7-A supplies only read-only CI before S6. S7-B remains publisher-only enforcement after S6.",
   "workflow": {
     "planned_path": ".github/workflows/zcira-readonly-validation.yml",
@@ -47,6 +47,35 @@
     "execution_modes": {
       "no_reviewed_lock": "BOOTSTRAP_ONLY_NO_PACKAGE_INSTALL_NO_FULL_PYTEST",
       "reviewed_lock_present": "HASH_LOCKED_INSTALL_PIP_CHECK_AND_FULL_PYTEST"
+    },
+    "push_path_filters": [
+      ".github/workflows/zcira-readonly-validation.yml",
+      "src/**",
+      "tests/**",
+      "schemas/**",
+      "config/**",
+      "scripts/**",
+      "requirements-test.txt"
+    ],
+    "first_run": {
+      "run_id": 44228575020,
+      "job_id": 134547720367,
+      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44228575020",
+      "event": "push",
+      "conclusion": "success",
+      "mode": "BOOTSTRAP_ONLY_NOT_ACCEPTANCE",
+      "runner": "ubuntu-24.04 standard GitHub-hosted",
+      "python": "3.12.3",
+      "pip": "24.0",
+      "renderer_tests": "8_PASS",
+      "candidate_packages": 47,
+      "unique_packages": 47,
+      "duplicate_package_names": 0,
+      "report_sha256": "8e3ae6c97d6e4424c4be50d66c016435226e5fa688d0dfe9bee1d845a4636084",
+      "langgraph_pin": "1.2.22",
+      "langgraph_sha256_match": true,
+      "package_install_performed": false,
+      "full_pytest_performed": false
     }
   },
   "dependency_bootstrap": {
@@ -59,14 +88,16 @@
     "bootstrap_mode": "pip --dry-run --report --ignore-installed; render candidate lock from selected wheel SHA256 values; do not install during lock generation",
     "install_mode_after_lock_commit": "pip install --require-hashes --only-binary=:all: --no-cache-dir -r config/requirements-ci-linux-py312.lock",
     "lock_path": "config/requirements-ci-linux-py312.lock",
-    "lock_committed": false,
+    "lock_committed": true,
     "lock_generation_script": "scripts/render_pip_lock.py",
     "langgraph_version": "1.2.22",
     "langgraph_wheel_sha256": "0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f",
     "package_provenance": "NOT_PRESENT_AT_PYPI_VERIFICATION",
     "fail_closed_if_sdist_only": true,
     "lock_generation_script_created": true,
-    "candidate_resolution": "pip --dry-run --report --ignore-installed --only-binary=:all: from a temporary copy of the LangGraph requirements with the hash option removed; the renderer validates the selected LangGraph version and SHA-256 against the original pinned file"
+    "candidate_resolution": "pip --dry-run --report --ignore-installed --only-binary=:all: from a temporary copy of the LangGraph requirements with the hash option removed; the renderer validates the selected LangGraph version and SHA-256 against the original pinned file",
+    "lock_candidate_package_count": 47,
+    "lock_candidate_report_sha256": "8e3ae6c97d6e4424c4be50d66c016435226e5fa688d0dfe9bee1d845a4636084"
   },
   "test_plan": [
     "run 8 standard-library lock-renderer unit tests",
@@ -90,8 +121,8 @@
     "no_account_creation_or_terms_acceptance": true
   },
   "phase_order": {
-    "current": "S7A_WORKFLOW_IMPLEMENTED_NOT_EXECUTED",
-    "next": "S7A_BOOTSTRAP_RUN_AND_REVIEW",
+    "current": "S7A_LOCK_COMMITTED_FULL_VALIDATION_PENDING",
+    "next": "S7A_FULL_HASH_LOCKED_TEST_RUN",
     "then": "S5_REAL_LANGGRAPH_INTEGRATION_PASS",
     "after": [
       "S6_READ_ONLY_EVIDENCE_WORKERS",
@@ -109,9 +140,9 @@
     "renderer_created": true,
     "renderer_unit_tests": "8_PASS_IN_EPHEMERAL_ENGINEERING_SANDBOX_NOT_CLOUD",
     "workflow_created": true,
-    "workflow_executed": false,
-    "candidate_lock_generated": false,
+    "workflow_executed": true,
+    "candidate_lock_generated": true,
     "full_test_suite_executed": false,
-    "actual_langgraph_integration": "PENDING"
+    "actual_langgraph_integration": "PENDING_HASH_LOCKED_FULL_VALIDATION"
   }
 }

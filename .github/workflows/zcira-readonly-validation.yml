@@ -4,6 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".github/workflows/zcira-readonly-validation.yml"
+      - "src/**"
+      - "tests/**"
+      - "schemas/**"
+      - "config/**"
+      - "scripts/**"
+      - "requirements-test.txt"
   workflow_dispatch:
 
 permissions:
