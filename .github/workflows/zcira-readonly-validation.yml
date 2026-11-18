@@ -1,0 +1,94 @@
+name: ZCIRA S7-A read-only validation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zcira-s7a-readonly-validation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  readonly-validation:
+    name: S7-A read-only validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PIP_NO_INPUT: "1"
+    steps:
+      - name: Fetch exact public source commit without checkout action or write token
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo_dir="$RUNNER_TEMP/zcira"
+          git init "$repo_dir"
+          git -C "$repo_dir" remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git -C "$repo_dir" fetch --depth=1 origin "$GITHUB_SHA"
+          git -C "$repo_dir" checkout --detach FETCH_HEAD
+          test "$(git -C "$repo_dir" rev-parse HEAD)" = "$GITHUB_SHA"
+          echo "ZCIRA_REPO_DIR=$repo_dir" >> "$GITHUB_ENV"
+
+      - name: Verify Python and lock-renderer unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v python3.12
+          python3.12 --version
+          python3.12 -m pip --version
+          python3.12 -m unittest discover -s "$ZCIRA_REPO_DIR/tests" -p "test_render_pip_lock.py" -v
+
+      - name: Bootstrap candidate or run full hash-locked validation
+        shell: bash
+        working-directory: ${{ env.ZCIRA_REPO_DIR }}
+        run: |
+          set -euo pipefail
+          lock_file="config/requirements-ci-linux-py312.lock"
+
+          if [[ -f "$lock_file" ]]; then
+            echo "## S7-A FULL READ-ONLY VALIDATION" >> "$GITHUB_STEP_SUMMARY"
+            echo "Reviewed hash lock exists. Installing only exact, SHA-256-verified binary wheels." >> "$GITHUB_STEP_SUMMARY"
+            python3.12 -m pip install --require-hashes --only-binary=:all: --no-cache-dir --disable-pip-version-check --no-input --index-url https://pypi.org/simple -r "$lock_file"
+            python3.12 -m pip check
+            python3.12 -m pytest -q
+            echo "RESULT: FULL_VALIDATION_PASS" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## S7-A LOCK BOOTSTRAP ONLY" >> "$GITHUB_STEP_SUMMARY"
+            echo "No reviewed lock exists at this commit. No package installation and no full pytest run are performed." >> "$GITHUB_STEP_SUMMARY"
+
+            # A single --hash option activates pip's global hash-checking mode.
+            # Resolve from a temporary unhashed copy, then verify the original
+            # exact LangGraph pin and SHA-256 in the renderer below.
+            sed -E 's/[[:space:]]+--hash=sha256:[0-9a-fA-F]{64}//g' \
+              config/requirements-langgraph.txt \
+              > "$RUNNER_TEMP/requirements-langgraph-resolution.txt"
+
+            python3.12 -m pip install \
+              --dry-run \
+              --report "$RUNNER_TEMP/zcira-pip-report.json" \
+              --ignore-installed \
+              --only-binary=:all: \
+              --no-cache-dir \
+              --disable-pip-version-check \
+              --no-input \
+              --index-url https://pypi.org/simple \
+              -r requirements-test.txt \
+              -r "$RUNNER_TEMP/requirements-langgraph-resolution.txt"
+
+            python3.12 scripts/render_pip_lock.py \
+              --report "$RUNNER_TEMP/zcira-pip-report.json" \
+              --output "$RUNNER_TEMP/requirements-ci-linux-py312.lock" \
+              --expected-requirements config/requirements-langgraph.txt \
+              --target linux-x86_64-cp312
+
+            echo "Candidate lock is not committed automatically. Canonical writer must review it." >> "$GITHUB_STEP_SUMMARY"
+            cat "$RUNNER_TEMP/requirements-ci-linux-py312.lock" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "RESULT: BOOTSTRAP_ONLY_NOT_ACCEPTANCE"
+          fi

@@ -1,6 +1,6 @@
 # Project Continuity Checkpoint
 
-Last verified: 2026-11-16 (Asia/Kolkata)
+Last verified: 2026-11-18 (Asia/Kolkata)
 Project ID: ZCIRA-2026-11-13
 Canonical repository: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation
 Default branch: main
@@ -524,3 +524,22 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S5 remains PARTIAL. Historical executed baseline remains 96 passed. Three new run-clock regression tests and three real-package integration tests are committed but NOT EXECUTED. No claim of 102 passing tests.
 - A2 source registry and category priority lock unchanged; Category #24=B. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
 - Next exact action: prepare the dependency-lock renderer and S7-A workflow implementation under the read-only contract; execute the actual LangGraph integration only after the committed lock exists. S6 remains blocked until that PASS.
+
+
+## 34. S7-A read-only validation workflow implementation (2026-11-18)
+
+- Re-read canonical checkpoint, S2-B architecture report 45, S1 roster, S4-B report 53, S5 contract/report 54/55, S7-A design report 56 and the controlling Library archive before work.
+- Canonical parent main commit: e05577aa3fe2156667381010dfd000403f7bd448; parent PROJECT_CONTINUITY blob: 83af09266516c5d1ac302cf085174a21bbb79ff3.
+- Controlling Library archive 02_complete-research-hi.md, version 1: 1,402,707 bytes; independently verified full SHA-256 c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e. Canonical embedded destination-section scope SHA-256 independently recomputed as 7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24.
+- A2 source reconciliation remains unchanged: 219/219 category IDs; six-batch mapping; 8 shared lists / 168 entries / 213 explicit cross-reference edges; 3,482 provenance-preserved occurrences; unique platform count NOT ESTABLISHED. P1/P2/P3/P4/P5/B/M counts/order unchanged; Category #24=B.
+- Created scripts/render_pip_lock.py: standard-library-only renderer, no network or package installation; exact package/version normalization, PyPI wheel-host allowlist, wheel-only enforcement, SHA-256 requirement, conflict detection and exact LangGraph 1.2.22 hash comparison to original requirements.
+- Created tests/test_render_pip_lock.py: 8 tests; all 8 passed in an isolated assistant engineering sandbox. This is not GitHub Actions and not the full project test suite.
+- Important pip bootstrap correction: direct --hash on LangGraph requirements activates pip's global hash-checking mode, which would reject the unpinned test requirements. The workflow uses a temporary unhashed copy only for --dry-run --report; renderer then verifies the resolved LangGraph wheel against the original exact hash. No package is installed in bootstrap mode.
+- Created .github/workflows/zcira-readonly-validation.yml: public standard ubuntu-24.04 runner; push-main and manual dispatch only; no schedule, PR or pull_request_target; contents:read only; no secrets/OIDC/third-party actions; public exact-SHA Git fetch; no repository writes, artifacts, cache or cloud deployment; 20-minute timeout; serialized concurrency.
+- Workflow behavior is fail-closed and two-mode: without a reviewed lock, it runs only renderer tests and pip dry-run candidate generation (no package installation/full pytest); with the reviewed lock, it installs all hash-pinned binary wheels, runs pip check and the full pytest suite. Candidate lock is never committed automatically.
+- Updated config/s7a_readonly_ci_contract.v1.json to IMPLEMENTED_NOT_EXECUTED and explicitly allow only public GitHub source fetch plus PyPI index/wheel retrieval. Lock remains NOT GENERATED/NOT COMMITTED until the first runner output is reviewed.
+- New report: docs/57_PHASE_S7A_READONLY_WORKFLOW_AND_LOCK_RENDERER_IMPLEMENTATION_HI.md.
+- Workflow was created in the same atomic main-branch commit as its report/contract/checkpoint. At checkpoint creation, its GitHub-hosted run was NOT YET VERIFIED. Do not claim CI or LangGraph integration PASS until run IDs and job logs prove it.
+- S5 remains PARTIAL; S6 blocked pending real LangGraph integration. S7-B publisher-only enforcement not started. Cloudflare Worker/Cron/D1 not deployed. State manifest generation 0, zero objects, no active lease; no live agents.
+- Spend ₹0; settled revenue evidence ₹0; no account/KYC/terms/OAuth/billing/deployment/outreach/submission/build/publication; commercial HOLD.
+- Next: inspect the first S7-A GitHub run. If bootstrap-only, review candidate lock and commit only if every selected wheel host/hash/version and the original LangGraph hash pass. The following push should execute the hash-locked full test suite.

@@ -3,11 +3,11 @@
   "project_id": "ZCIRA-2026-11-13",
   "phase": "S7-A",
   "title": "Read-only GitHub-hosted validation workflow",
-  "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+  "status": "IMPLEMENTED_NOT_EXECUTED",
   "rationale": "S5 real LangGraph integration requires a verified ephemeral runner; S6 is blocked until S5 passes. S7-A supplies only read-only CI before S6. S7-B remains publisher-only enforcement after S6.",
   "workflow": {
     "planned_path": ".github/workflows/zcira-readonly-validation.yml",
-    "created": false,
+    "created": true,
     "triggers": [
       "push:main",
       "workflow_dispatch"
@@ -35,9 +35,19 @@
     "third_party_actions_required": false,
     "artifacts_upload": false,
     "cache_enabled": false,
-    "external_service_calls": false,
+    "external_service_calls": true,
     "repository_write": false,
-    "cloud_deployment": false
+    "cloud_deployment": false,
+    "path": ".github/workflows/zcira-readonly-validation.yml",
+    "external_network_allowlist": [
+      "Unauthenticated public GitHub source fetch from github.com for the exact triggering commit",
+      "PyPI package index at https://pypi.org/simple",
+      "PyPI wheel distribution host files.pythonhosted.org"
+    ],
+    "execution_modes": {
+      "no_reviewed_lock": "BOOTSTRAP_ONLY_NO_PACKAGE_INSTALL_NO_FULL_PYTEST",
+      "reviewed_lock_present": "HASH_LOCKED_INSTALL_PIP_CHECK_AND_FULL_PYTEST"
+    }
   },
   "dependency_bootstrap": {
     "python": "3.12",
@@ -47,21 +57,27 @@
     ],
     "only_binary": true,
     "bootstrap_mode": "pip --dry-run --report --ignore-installed; render candidate lock from selected wheel SHA256 values; do not install during lock generation",
-    "install_mode_after_lock_commit": "pip install --require-hashes --only-binary=:all: --no-cache-dir",
+    "install_mode_after_lock_commit": "pip install --require-hashes --only-binary=:all: --no-cache-dir -r config/requirements-ci-linux-py312.lock",
     "lock_path": "config/requirements-ci-linux-py312.lock",
     "lock_committed": false,
     "lock_generation_script": "scripts/render_pip_lock.py",
     "langgraph_version": "1.2.22",
     "langgraph_wheel_sha256": "0f8ebec55a58667e40474a0e55bdb4f06a8c7a1d98cde2b7c8d996a2ee78fe3f",
     "package_provenance": "NOT_PRESENT_AT_PYPI_VERIFICATION",
-    "fail_closed_if_sdist_only": true
+    "fail_closed_if_sdist_only": true,
+    "lock_generation_script_created": true,
+    "candidate_resolution": "pip --dry-run --report --ignore-installed --only-binary=:all: from a temporary copy of the LangGraph requirements with the hash option removed; the renderer validates the selected LangGraph version and SHA-256 against the original pinned file"
   },
   "test_plan": [
-    "validate all 11 Draft 2020-12 schemas and 11 valid fixtures",
+    "run 8 standard-library lock-renderer unit tests",
+    "when no reviewed lock exists, resolve a candidate only; do not install packages and do not run full pytest",
+    "when reviewed lock exists, install only SHA-256-locked binary wheels",
+    "run pip check",
+    "validate all 11 Draft 2020-12 schemas and 11 valid fixtures through the full pytest suite",
     "run all deterministic control-plane, durable-state and S5 mock tests",
-    "run 3 new run-clock regression tests",
+    "run 3 run-clock regression tests",
     "run 3 real LangGraph 1.2.22 compile/invoke/pause/resume integration tests",
-    "publish only job log summary; do not upload artifacts or mutate repository"
+    "publish only job log and step summary; do not upload artifacts or mutate repository"
   ],
   "security_invariants": {
     "max_parallel_research_workers": 2,
@@ -74,13 +90,28 @@
     "no_account_creation_or_terms_acceptance": true
   },
   "phase_order": {
-    "current": "S5_PARTIAL",
-    "next": "S7_A_READ_ONLY_CI_VALIDATION",
-    "then": "S9_SEVEN_DAY_READ_ONLY_PILOT"
+    "current": "S7A_WORKFLOW_IMPLEMENTED_NOT_EXECUTED",
+    "next": "S7A_BOOTSTRAP_RUN_AND_REVIEW",
+    "then": "S5_REAL_LANGGRAPH_INTEGRATION_PASS",
+    "after": [
+      "S6_READ_ONLY_EVIDENCE_WORKERS",
+      "S7B_SINGLE_WRITER_ENFORCEMENT",
+      "S8_CLOUD_FAILOVER",
+      "S9_SEVEN_DAY_READ_ONLY_PILOT"
+    ]
   },
   "approval_and_deployment": {
     "owner_approval_for_cloud_service_deployment_required": true,
     "owner_approval_for_account_or_oauth_scope_required": true,
     "no_cloudflare_deployment_in_s7a": true
+  },
+  "implementation_status": {
+    "renderer_created": true,
+    "renderer_unit_tests": "8_PASS_IN_EPHEMERAL_ENGINEERING_SANDBOX_NOT_CLOUD",
+    "workflow_created": true,
+    "workflow_executed": false,
+    "candidate_lock_generated": false,
+    "full_test_suite_executed": false,
+    "actual_langgraph_integration": "PENDING"
   }
 }
