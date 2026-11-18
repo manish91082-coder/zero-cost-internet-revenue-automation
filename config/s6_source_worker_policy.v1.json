@@ -1,11 +1,18 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "IMPLEMENTED_NOT_SCHEDULED",
+  "status": "CORE_VALIDATED_LIVE_NETWORK_DISABLED",
   "worker_task_type": "source_snapshot",
-  "allowed_roles": ["official_source_worker_a", "official_source_worker_b"],
+  "allowed_roles": [
+    "official_source_worker_a",
+    "official_source_worker_b"
+  ],
   "max_parallel_workers": 2,
-  "allowed_actions": ["READ_PUBLIC", "PARSE_PUBLIC", "HASH_PUBLIC"],
+  "allowed_actions": [
+    "READ_PUBLIC",
+    "PARSE_PUBLIC",
+    "HASH_PUBLIC"
+  ],
   "external_actions_allowed": false,
   "repository_write_allowed": false,
   "model_calls_enabled": false,
@@ -22,5 +29,21 @@
   "live_network_execution_enabled": false,
   "dns_preflight_global_only": true,
   "dns_pinning": false,
-  "live_network_block_reason": "WAIT_FOR_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT"
+  "live_network_block_reason": "WAIT_FOR_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT",
+  "github_validation": {
+    "run_id": 44230210895,
+    "job_id": 134553105118,
+    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230210895",
+    "head_sha": "a2d44a1578ca49812d6079b80ab9f103b2d93fc6",
+    "conclusion": "success",
+    "runner": "ubuntu-24.04 standard GitHub-hosted",
+    "hash_locked_packages": 47,
+    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+    "real_langgraph_integration": "3_PASS",
+    "source_worker_and_fetcher_tests": "20_PASS",
+    "full_pytest": "129_PASSED_1_EXPECTED_SKIP",
+    "expected_skip": "test_missing_langgraph_dependency_is_reported_without_fallback",
+    "live_source_requests": 0
+  },
+  "next_gate": "S6B_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT"
 }

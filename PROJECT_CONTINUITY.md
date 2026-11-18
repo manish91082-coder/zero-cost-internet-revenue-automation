@@ -583,3 +583,17 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S7-A workflow now runs the real LangGraph integration test file explicitly with skip reasons, then full pytest -rs.
 - S6 is not scheduled and no agents are running. S7-B publisher not started. Cloudflare Worker/Cron/D1 not deployed. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
 - Next: validate this increment on GitHub Actions; then build a pinned TLS transport and durable source snapshot storage before enabling any live read-only research.
+
+
+## 38. S6-A GitHub-hosted validation PASS (2026-11-18)
+
+- S6 implementation commit a2d44a1578ca49812d6079b80ab9f103b2d93fc6; GitHub Actions run 44230210895; job 134553105118; URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230210895; conclusion success.
+- 47 SHA-256 locked packages installed on ubuntu-24.04 standard GitHub-hosted runner, Python 3.12.3, pip 24.0. pip check: no broken requirements.
+- Explicit real LangGraph integration test file: 3 passed.
+- Full suite: 129 passed, 1 skipped. The single expected skip is tests/test_langgraph_adapter.py test_missing_langgraph_dependency_is_reported_without_fallback because LangGraph is installed. No test failure.
+- All 20 S6 source_fetcher/source_worker tests passed as part of the full suite. Mission path policy test also passed: exact S7-A workflow allowed; other workflows remain outside allowlist.
+- S6-A status: CORE VALIDATED. This does not mean live source agents are running.
+- Source worker still accepts only explicitly marked test transport. Live network disabled; DNS pinning false; egress controls not audited; no public source requests made. Raw source bytes remain in memory only; content_ref null pending publisher.
+- Next sequence: S6-B pinned TLS transport and egress audit; S6-C durable raw source snapshot storage; S6-D LangGraph source-worker node; then S7-B single-writer enforcement, S8 and S9.
+- S7-A workflow is hash-locked, read-only and successful. No schedule, no repository write permission, no artifacts/cache, no Cloudflare deployment, no LLM calls.
+- Spend ₹0; settled revenue evidence ₹0; no account/KYC/terms/OAuth/billing/outreach/submission/product build/listing. Commercial HOLD.

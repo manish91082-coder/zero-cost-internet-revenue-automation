@@ -26,7 +26,7 @@
   "cloud_runtime_deployed": false,
   "actual_langgraph_package_integration": "PASS_3_REAL_STATEGRAPH_TESTS_GITHUB_ACTIONS_RUN_44228822825",
   "mock_graph_contract_tests": "PASS_24_LAST_VERIFIED",
-  "status": "S5_REAL_LANGGRAPH_INTEGRATION_PASS_NOT_DEPLOYED",
+  "status": "S5_PASS_S6A_SOURCE_WORKER_CORE_VALIDATED_NOT_LIVE",
   "combined_test_suite": "PASS_109_1_EXPECTED_SKIP_GITHUB_ACTIONS_RUN_44228822825",
   "graph_input_bounds": {
     "max_tasks": 100,
@@ -61,5 +61,16 @@
     "expected_skip_test": "test_missing_langgraph_dependency_is_reported_without_fallback",
     "expected_skip_reason": "LangGraph package is installed in this environment",
     "real_langgraph_integration_tests": "3_PASS"
-  }
+  },
+  "latest_validation_run": {
+    "run_id": 44230210895,
+    "job_id": 134553105118,
+    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230210895",
+    "conclusion": "success",
+    "full_pytest": "129 passed, 1 skipped",
+    "real_langgraph_tests": "3 passed",
+    "hash_locked_packages": 47,
+    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS"
+  },
+  "source_worker_core": "20_TESTS_PASS_LIVE_NETWORK_DISABLED"
 }
