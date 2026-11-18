@@ -559,3 +559,27 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Full package installation, pip check, full pytest, three run-clock regression tests and three actual LangGraph integration tests are NOT YET EXECUTED by the workflow. S5 remains PARTIAL; S6 remains blocked.
 - No cloud deployment, Cloudflare Worker/Cron/D1, account, OAuth, KYC, terms acceptance, billing, model call, external commercial action, build/listing or spend. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
 - Next: inspect the lock-triggered S7-A full validation run. Only after the real LangGraph tests pass may S6 read-only evidence workers begin.
+
+
+## 36. S5 real LangGraph integration PASS (2026-11-18)
+
+- GitHub Actions run 44228822825, job 134548548210, URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44228822825.
+- Triggering commit 0a3611a54e48b4edf8cac42e8bf23a549bf400a3; ubuntu-24.04 standard GitHub-hosted runner; Python 3.12.3; pip 24.0.
+- All 47 hash-locked packages installed; pip check PASS, no broken requirements.
+- Full pytest result: 109 passed, 1 skipped.
+- The one expected skip is test_missing_langgraph_dependency_is_reported_without_fallback; LangGraph 1.2.22 was installed, so the missing-dependency branch correctly skipped. The three real LangGraph StateGraph compile/invoke/pause/resume tests ran and passed.
+- S5 is PASS as a library integration gate only. No LangGraph server, LLM, durable runtime or deployed agents.
+- Updated LangGraph policy and S7-A contract with run/job IDs and exact results. The next workflow run will print skip reasons and explicitly execute the three real integration tests before the full suite.
+
+## 37. S6-A read-only source worker core (2026-11-18)
+
+- Created src/zcira_control/source_fetcher.py and source_worker.py, tests/test_source_fetcher.py and tests/test_source_worker.py.
+- Added config/source_domain_policy.v1.json with 11 exact P1/P2 hostnames; no wildcards/subdomains. Added config/s6_source_worker_policy.v1.json with two worker roles, read/parse/hash only, no model, no repository write, no paid route and UNKNOWN/PENDING evidence defaults.
+- Source capture policy: HTTPS only; robots.txt required; 1 MB page / 64 KiB robots limits; 15-second timeout contract; max three same-host redirects; HTML/text/JSON only; no sensitive query keys, userinfo, IP-literal URL, cookies, proxy, auth, JavaScript or automatic retries. 429 returns Retry-After; 403 and robots disallow fail closed.
+- Source worker validates task, source snapshot and evidence schemas; exact role/action and P1/P2 priority matching; evidence proposal remains reviewer PENDING, gate UNKNOWN, model_provider null; raw bytes are in-memory only and content_ref null until S7-B publisher persists them.
+- 20/20 new S6 tests passed in an isolated assistant engineering sandbox. GitHub Actions validation is pending.
+- Live network is deliberately disabled: no network transport is shipped; only explicitly marked test transport is accepted. DNS pinning and egress controls must be implemented/audited before any live source fetch. No public source was fetched.
+- Narrow mission path-policy correction: only .github/workflows/zcira-readonly-validation.yml is allowed; other workflows remain outside the allowlist. Control-plane tests updated to enforce this.
+- S7-A workflow now runs the real LangGraph integration test file explicitly with skip reasons, then full pytest -rs.
+- S6 is not scheduled and no agents are running. S7-B publisher not started. Cloudflare Worker/Cron/D1 not deployed. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+- Next: validate this increment on GitHub Actions; then build a pinned TLS transport and durable source snapshot storage before enabling any live read-only research.

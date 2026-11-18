@@ -24,8 +24,8 @@ MISSION = {
     "branch": "main", "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
     "max_parallel_research_workers": 2, "single_writer_role": "evidence_publisher", "spend_cap_inr": 0,
     "paid_fallback_allowed": False, "trial_credit_dependency_allowed": False, "shared_state_with_other_missions": False, "cross_mission_write_allowed": False,
-    "active": True, "allowed_paths": ["PROJECT_CONTINUITY.md", "docs/**", "config/**", "schemas/**", "tests/**", "scripts/**", "src/**", "requirements-test.txt"],
-    "denied_paths": [".github/workflows/**", "secrets/**", "private/**"],
+    "active": True, "allowed_paths": ["PROJECT_CONTINUITY.md", "docs/**", "config/**", "schemas/**", "tests/**", "scripts/**", "src/**", "requirements-test.txt", ".github/workflows/zcira-readonly-validation.yml"],
+    "denied_paths": ["secrets/**", "private/**"],
     "allowed_action_classes": ["READ_PUBLIC", "PARSE_PUBLIC", "HASH_PUBLIC", "CREATE_INTERNAL_DRAFT", "WRITE_REPO_VALIDATED"],
     "denied_action_classes": ["PURCHASE", "PAID_FALLBACK", "BILLING_ENABLE", "ACCOUNT_CREATE", "KYC", "ACCEPT_TERMS", "CONTACT_EXTERNAL", "SUBMIT", "SECURITY_TEST", "PUBLISH_PRODUCT", "WALLET_SIGN", "TRANSFER_FUNDS"],
 }
@@ -78,9 +78,10 @@ class ControlPlaneTests(unittest.TestCase):
         task = make_task(category_id=24, priority="P1")
         with self.assertRaises(PolicyError): validate_task(task, MISSION)
 
-    def test_repository_path_allowlist_blocks_workflows_and_traversal(self):
+    def test_repository_path_allowlist_allows_only_s7a_workflow_and_blocks_other_workflows_and_traversal(self):
         validate_repo_path("docs/report.md", MISSION)
-        with self.assertRaises(PolicyError): validate_repo_path(".github/workflows/auto.yml", MISSION)
+        validate_repo_path(".github/workflows/zcira-readonly-validation.yml", MISSION)
+        with self.assertRaises(PolicyError): validate_repo_path(".github/workflows/zcira-publisher.yml", MISSION)
         with self.assertRaises(PolicyError): validate_repo_path("../other-repo/file", MISSION)
 
     def test_external_action_is_rejected(self):

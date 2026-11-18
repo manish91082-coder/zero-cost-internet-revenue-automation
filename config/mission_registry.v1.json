@@ -17,10 +17,10 @@
     "scripts/**",
     "requirements-test.txt",
     "src/**",
-    "state/**"
+    "state/**",
+    ".github/workflows/zcira-readonly-validation.yml"
   ],
   "denied_paths": [
-    ".github/workflows/**",
     "secrets/**",
     "private/**"
   ],

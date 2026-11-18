@@ -65,7 +65,8 @@ jobs:
             echo "Reviewed hash lock exists. Installing only exact, SHA-256-verified binary wheels." >> "$GITHUB_STEP_SUMMARY"
             python3.12 -m pip install --require-hashes --only-binary=:all: --no-cache-dir --disable-pip-version-check --no-input --index-url https://pypi.org/simple -r "$lock_file"
             python3.12 -m pip check
-            python3.12 -m pytest -q
+            python3.12 -m pytest -q -rs tests/test_langgraph_runtime_integration.py
+            python3.12 -m pytest -q -rs
             echo "RESULT: FULL_VALIDATION_PASS" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "## S7-A LOCK BOOTSTRAP ONLY" >> "$GITHUB_STEP_SUMMARY"

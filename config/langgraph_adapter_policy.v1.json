@@ -24,10 +24,10 @@
   "paid_provider_routes_enabled": false,
   "spend_cap_inr": 0,
   "cloud_runtime_deployed": false,
-  "actual_langgraph_package_integration": "PENDING_VERIFIED_EPHEMERAL_RUNNER; TOOL_SANDBOX_PACKAGE_DOWNLOAD_BLOCKED_BY_DNS",
+  "actual_langgraph_package_integration": "PASS_3_REAL_STATEGRAPH_TESTS_GITHUB_ACTIONS_RUN_44228822825",
   "mock_graph_contract_tests": "PASS_24_LAST_VERIFIED",
-  "status": "S5_ADAPTER_HARDENED_REAL_RUNTIME_INTEGRATION_PENDING",
-  "combined_test_suite": "PASS_96_LAST_VERIFIED",
+  "status": "S5_REAL_LANGGRAPH_INTEGRATION_PASS_NOT_DEPLOYED",
+  "combined_test_suite": "PASS_109_1_EXPECTED_SKIP_GITHUB_ACTIONS_RUN_44228822825",
   "graph_input_bounds": {
     "max_tasks": 100,
     "max_provider_records": 20,
@@ -36,7 +36,7 @@
   },
   "checkpoint_proposal_integrity": "SHA256_AND_SINGLE_WRITER_FLAGS_ENFORCED",
   "new_regression_tests_since_last_verified_run": 3,
-  "real_langgraph_runtime_tests": "3_COMMITTED_NOT_EXECUTED",
+  "real_langgraph_runtime_tests": "PASS_3_OF_3_INCLUDED_IN_FULL_SUITE",
   "package_supply_chain": {
     "pypi_version": "1.2.22",
     "release_date": "2026-11-14",
@@ -44,6 +44,22 @@
     "python_minimum": "3.10",
     "wheel_sha256_matches_pypi_metadata": true,
     "pypi_provenance": "NOT_PRESENT_AT_VERIFICATION",
-    "transitive_dependency_hash_lock": "PENDING_S7"
+    "transitive_dependency_hash_lock": "COMMITTED_AND_HASH_VERIFIED_IN_GITHUB_ACTIONS_RUN_44228822825"
+  },
+  "full_validation_run": {
+    "run_id": 44228822825,
+    "job_id": 134548548210,
+    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44228822825",
+    "head_sha": "0a3611a54e48b4edf8cac42e8bf23a549bf400a3",
+    "conclusion": "success",
+    "runner": "ubuntu-24.04 standard GitHub-hosted",
+    "python": "3.12.3",
+    "pip": "24.0",
+    "hash_locked_packages_installed": 47,
+    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+    "pytest": "109 passed, 1 skipped",
+    "expected_skip_test": "test_missing_langgraph_dependency_is_reported_without_fallback",
+    "expected_skip_reason": "LangGraph package is installed in this environment",
+    "real_langgraph_integration_tests": "3_PASS"
   }
 }
