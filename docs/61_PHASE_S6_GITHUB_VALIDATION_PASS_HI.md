@@ -52,3 +52,17 @@ The mission path-policy regression also passed: the exact S7-A read-only workflo
 4. Only after those gates, execute a limited public-source read-only pilot. S7-B publisher, S8 cloud failover and S9 unattended pilot remain later phases.
 
 No accounts, KYC, legal acceptance, OAuth, billing, paid APIs, Cloudflare deployment, outreach, submissions, product build or listing. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+
+
+## Post-checkpoint revalidation
+
+After the S6 policy and continuity checkpoint was committed, the updated canonical main commit was revalidated by GitHub Actions run 44230406063:
+
+- URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230406063
+- Conclusion: success
+- Exact head: f69076ffc9d9f4321760cbabe033c5063d60f029
+- 47 hash-locked packages installed; pip check passed.
+- Explicit LangGraph integration tests: 3 passed.
+- Full suite: 129 passed, 1 expected skip, with the same missing-dependency branch skip reason.
+
+This was a configuration/documentation checkpoint revalidation. It did not execute the source worker against public sites; live network remains disabled.
