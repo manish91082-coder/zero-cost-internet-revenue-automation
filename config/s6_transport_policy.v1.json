@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "IMPLEMENTED_TESTED_NOT_ENABLED",
+  "status": "S6B1_PASS_S6B2_PROVIDER_EGRESS_NOT_AVAILABLE_ON_STANDARD_RUNNER",
   "transport": "Python standard-library HTTPSConnection with literal-IP socket pinning",
   "dns_resolution": {
     "api": "socket.getaddrinfo",
@@ -54,7 +54,9 @@
     "egress_controls_audited": false,
     "live_network_enabled": false,
     "source_worker_pipeline_live_fetch_enabled": false,
-    "reason": "Transport is implemented and tested with fake DNS/socket/HTTP dependencies. The checked-in source policy keeps live fetch disabled until GitHub-hosted runner egress restrictions are separately reviewed and S6-C durable snapshots are ready."
+    "reason": "GitHub-hosted standard runners have public internet access by default and do not expose a provider-managed per-job egress firewall. Static-IP larger runners require GitHub Enterprise Cloud; private networking is restricted to larger runners and Azure VNET. These options are outside the current strict zero-cost design. A runner-local firewall/network namespace is only a candidate and has not been security-tested or audited.",
+    "provider_managed_egress_controls": "NOT_AVAILABLE_ON_STANDARD_GITHUB_HOSTED_STANDARD_RUNNERS",
+    "local_firewall_candidate": "UNVERIFIED_NOT_AUDITED"
   },
   "invariants": {
     "project_id": "ZCIRA-2026-11-13",
@@ -65,5 +67,5 @@
     "paid_provider_routes": false,
     "spend_cap_inr": 0
   },
-  "next_gate": "S6B2_RUNNER_EGRESS_CONTROL_AUDIT"
+  "next_gate": "S6C_METADATA_ONLY_IMMUTABLE_SNAPSHOT_CONTRACT"
 }

@@ -625,3 +625,16 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 - Review of the new GitHub-hosted test run identified that the Content-Length oversize fixture used the default 1 MB policy while supplying a 1,000-byte response. The fixture was corrected to a 10-byte policy so the assertion tests the intended boundary.
 - This is a test-fixture correction only; the transport implementation and all live-network flags remain unchanged. Revalidation is queued on the canonical read-only workflow.
+
+
+## 41. Phase S6-B1 validation PASS and S6-B2 egress-control decision (2026-11-19)
+
+- S6-B1 pinned-IP TLS transport and fake-network tests are committed. Corrected GitHub Actions run 44451628361 passed on head 1c66b1c74af3d67100faf28450b103748c5bb342: 47 hash-locked packages, pip check PASS, LangGraph integration 3 PASS, full pytest 150 passed / 1 expected skip / 6 subtests passed. Run URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44451628361.
+- Initial run 44451554633 failed one Content-Length test because the fixture used the 1 MB default while asserting a 1,000-byte response was oversized. The fixture was corrected to a 10-byte policy; corrected run passed. No product-code failure remained in the corrected run.
+- Official GitHub docs confirm standard hosted runners have public internet access by default; their outbound IP ranges are shared and GitHub discourages allowlisting the entire ranges. Static IP larger runners require Enterprise Cloud; private networking requires larger runners/Azure VNET. These do not meet the current strict ₹0 standard-runner design.
+- S6-B2 decision: provider-managed per-job egress firewall is NOT AVAILABLE on the selected standard runner. Runner-local firewall/network namespace remains an untested candidate and is not audited. No security-control test was executed.
+- Live network flags remain false; live public fetches 0; source workers scheduled/running 0.
+- S6-C storage default is revised to metadata-only immutable evidence envelopes: source URL, host, publisher, timestamp, status, raw-body SHA-256, bounded excerpt and provenance. Full third-party raw page bodies remain ephemeral unless licence/written permission allows retention. Future single writer sets content_ref to the immutable metadata envelope.
+- Report: docs/63_PHASE_S6B2_GITHUB_RUNNER_EGRESS_CONTROL_FEASIBILITY_HI.md. S6-B1 validation detail appended to docs/62.
+- Spend ₹0; settled revenue evidence ₹0; no accounts, KYC, terms, OAuth, billing, deployment, outreach, submission, build or listing.
+- Next: S6-C metadata-only immutable snapshot envelope, canonical serialization and publisher fetch-back contract. Do not enable live source fetching without an audited zero-cost egress path.

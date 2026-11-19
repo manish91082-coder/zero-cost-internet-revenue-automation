@@ -2,7 +2,7 @@
 
 ## Executive decision
 
-**S6-B1 TRANSPORT IMPLEMENTED / AUTOMATED TEST VALIDATION PENDING / LIVE NETWORK DISABLED.**
+**S6-B1 PINNED TLS TRANSPORT PASS / S6-B2 PROVIDER-MANAGED EGRESS CONTROL NOT ELIGIBLE ON THE SELECTED STANDARD RUNNER / LIVE NETWORK DISABLED.**
 
 This increment adds a standard-library HTTPS transport that binds the TCP connection to a resolved numeric public IP while retaining the exact allowlisted hostname for TLS SNI and certificate hostname verification. It is intentionally not enabled for live source collection.
 
@@ -69,7 +69,7 @@ Coverage includes:
 - HTTP 429 Retry-After with no retry.
 - Checked-in policy gate remains disabled.
 
-The existing source-fetcher unit tests were extended to validate the new policy flags. GitHub Actions is expected to run the full hash-locked suite after this commit; no test result is claimed before that run completes.
+The existing source-fetcher unit tests were extended to validate the new policy flags. GitHub Actions run 44451628361 completed successfully on commit 1c66b1c74af3d67100faf28450b103748c5bb342: 47 hash-locked packages installed, pip check passed, real LangGraph integration 3 passed, and full pytest 150 passed / 1 expected skip / 6 subtests passed. The preceding run 44451554633 exposed one incorrect test fixture limit (149 passed, 1 failed, 1 skipped); the fixture was corrected from the default 1 MB limit to a 10-byte limit, then the corrected commit passed.
 
 ## 5. Actual status and next gate
 
@@ -85,3 +85,17 @@ The existing source-fetcher unit tests were extended to validate the new policy 
 - Spend: ₹0; settled revenue evidence: ₹0; commercial execution HOLD.
 
 Next: S6-B2 runner egress-control feasibility audit, then S6-C durable content-addressed snapshots and fetch-back verification. Do not flip the live-network flags until the egress gate is independently evidenced and the durable snapshot path is ready.
+
+
+## 6. GitHub-hosted validation result
+
+- Corrected commit: \`1c66b1c74af3d67100faf28450b103748c5bb342\`.
+- GitHub Actions run: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44451628361.
+- Job ID: \`135316732485\`; runner: \`ubuntu-24.04\`; conclusion: success.
+- 47 SHA-256-locked packages installed; \`pip check\` passed.
+- Real LangGraph integration: 3 passed.
+- Full pytest: 150 passed, 1 expected skip, 6 subtests passed.
+- The expected skip remains the missing-LangGraph-dependency test because LangGraph is installed in the validation environment.
+- The first run failed only because the Content-Length test fixture used a 1 MB default while asserting that a 1,000-byte response was oversized. The fixture was corrected to a 10-byte test policy before the successful run.
+
+S6-B1 is PASS as code and automated test coverage. It is not permission to fetch live sources.
