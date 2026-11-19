@@ -71,3 +71,17 @@ This adjustment preserves reproducible evidence without turning the public repos
 ## 6. Next action
 
 Proceed with S6-C metadata-only immutable snapshot envelope, canonical serialization, content hash and fetch-back contract. Keep raw third-party page bytes ephemeral by default. Do not enable live source fetching until a separately audited, zero-cost egress-control path exists.
+
+
+## 7. Post-report canonical revalidation
+
+After the S6-B2 report and policy update were committed, GitHub Actions run 44451871881 revalidated the exact checkpoint:
+
+- URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44451871881
+- Head: \`137acb24160559c09e4bdae6920330ea32dad53d\`
+- Conclusion: success.
+- 47 hash-locked packages installed; \`pip check\` passed.
+- Real LangGraph integration: 3 passed.
+- Full pytest: 150 passed, 1 expected skip, 6 subtests passed.
+
+This run validates the report/config checkpoint. It did not perform a live source request, egress firewall test, or cloud deployment.
