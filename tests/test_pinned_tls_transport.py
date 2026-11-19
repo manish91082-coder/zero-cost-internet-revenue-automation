@@ -353,8 +353,15 @@ class PinnedTLSTransportTests(unittest.TestCase):
             resolver=resolver,
             connection_factory=factory,
         )
+        small_policy = SourcePolicy(
+            {HOST: RECORD},
+            max_response_bytes=10,
+            live_network_enabled=True,
+            dns_pinning=True,
+            egress_controls_audited=True,
+        )
         result = fetch_public_source(
-            URL, live_test_policy(), transport=transport, now=NOW
+            URL, small_policy, transport=transport, now=NOW
         )
         self.assertEqual(result.snapshot["fetch_status"], "BLOCKED_BY_POLICY")
         self.assertEqual(oversized.read_calls, 0)

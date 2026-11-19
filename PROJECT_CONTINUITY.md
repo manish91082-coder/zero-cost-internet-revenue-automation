@@ -619,3 +619,9 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Live public fetches: 0; source workers scheduled/running: 0; durable source snapshots: pending S6-C; runner-level egress controls: NOT AUDITED; S7-B publisher: not started; S8 Cloudflare: not deployed.
 - Spend ₹0; settled revenue evidence ₹0; commercial HOLD. No accounts, OAuth, KYC, terms acceptance, billing, deployment, outreach, submissions, product build or listing.
 - Next: verify the new GitHub Actions run, then S6-B2 runner egress-control feasibility audit before S6-C durable snapshots. Do not enable live network on the basis of DNS pinning alone.
+
+
+### S6-B1 pre-acceptance fixture correction (2026-11-19)
+
+- Review of the new GitHub-hosted test run identified that the Content-Length oversize fixture used the default 1 MB policy while supplying a 1,000-byte response. The fixture was corrected to a 10-byte policy so the assertion tests the intended boundary.
+- This is a test-fixture correction only; the transport implementation and all live-network flags remain unchanged. Revalidation is queued on the canonical read-only workflow.
