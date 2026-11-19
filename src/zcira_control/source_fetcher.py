@@ -40,13 +40,24 @@ class SourcePolicy:
     max_redirects: int = 3
     user_agent: str = "ZCIRA-ReadOnlyResearch/1.0"
     live_network_enabled: bool = False
+    dns_pinning: bool = False
+    egress_controls_audited: bool = False
     allowed_content_types: tuple[str, ...] = (
         "text/html", "text/plain", "application/json"
     )
 
     def __post_init__(self) -> None:
-        if self.live_network_enabled:
-            raise SourcePolicyError("live network is disabled until pinned TLS transport and egress controls are audited")
+        for flag_name, flag_value in (
+            ("live_network_enabled", self.live_network_enabled),
+            ("dns_pinning", self.dns_pinning),
+            ("egress_controls_audited", self.egress_controls_audited),
+        ):
+            if type(flag_value) is not bool:
+                raise SourcePolicyError(f"{flag_name} must be a boolean")
+        if self.egress_controls_audited and not self.dns_pinning:
+            raise SourcePolicyError("egress audit cannot be enabled without DNS pinning")
+        if self.live_network_enabled and not (self.dns_pinning and self.egress_controls_audited):
+            raise SourcePolicyError("live network requires DNS pinning and an independently audited egress policy")
         if not self.allowed_sources:
             raise SourcePolicyError("source allowlist must not be empty")
         if self.max_response_bytes < 1 or self.max_response_bytes > 1_000_000:
@@ -141,12 +152,21 @@ def load_source_policy(path) -> SourcePolicy:
         raise SourcePolicyError("source policy identity/version mismatch")
     required_false = (
         "allow_subdomains", "proxies_enabled", "cookies_enabled", "authentication_enabled",
-        "javascript_execution_enabled", "automatic_retries", "access_control_bypass", "dns_pinning",
+        "javascript_execution_enabled", "automatic_retries", "access_control_bypass",
     )
     if data.get("exact_host_allowlist") is not True or data.get("robots_required") is not True:
         raise SourcePolicyError("exact-host allowlist and robots checks are mandatory")
-    if data.get("dns_preflight_global_only") is not True or data.get("live_network_enabled") is not False:
-        raise SourcePolicyError("live network remains disabled until DNS pinning and egress controls are audited")
+    if data.get("dns_preflight_global_only") is not True:
+        raise SourcePolicyError("global-only DNS policy is mandatory")
+    for flag_name in ("dns_pinning", "egress_controls_audited", "live_network_enabled"):
+        if type(data.get(flag_name)) is not bool:
+            raise SourcePolicyError(f"{flag_name} must be an explicit boolean")
+    if data.get("egress_controls_audited") and not data.get("dns_pinning"):
+        raise SourcePolicyError("egress audit cannot be enabled without DNS pinning")
+    if data.get("live_network_enabled") and not (
+        data.get("dns_pinning") and data.get("egress_controls_audited")
+    ):
+        raise SourcePolicyError("live network requires DNS pinning and an independently audited egress policy")
     if any(data.get(key) is not False for key in required_false):
         raise SourcePolicyError("source policy attempts to enable a prohibited capability")
     entries = data.get("allowed_sources")
@@ -177,6 +197,8 @@ def load_source_policy(path) -> SourcePolicy:
         max_redirects=data.get("max_redirects", 3),
         user_agent=data.get("user_agent", "ZCIRA-ReadOnlyResearch/1.0"),
         live_network_enabled=data.get("live_network_enabled", False),
+        dns_pinning=data.get("dns_pinning", False),
+        egress_controls_audited=data.get("egress_controls_audited", False),
         allowed_content_types=tuple(data.get("allowed_content_types", ["text/html", "text/plain", "application/json"])),
     )
 
@@ -334,7 +356,16 @@ def fetch_public_source(
     captured_at = now or datetime.now(timezone.utc)
     if captured_at.tzinfo is None:
         raise SourcePolicyError("clock must return a timezone-aware datetime")
-    if transport is None or getattr(transport, "is_test_transport", False) is not True:
+    if transport is None:
+        raise SourcePolicyError("LIVE_NETWORK_DISABLED_PENDING_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT")
+    is_test_transport = getattr(transport, "is_test_transport", False) is True
+    is_pinned_tls_transport = getattr(transport, "is_pinned_tls_transport", False) is True
+    pinned_live_policy = (
+        policy.live_network_enabled
+        and policy.dns_pinning
+        and policy.egress_controls_audited
+    )
+    if not is_test_transport and not (is_pinned_tls_transport and pinned_live_policy):
         raise SourcePolicyError("LIVE_NETWORK_DISABLED_PENDING_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT")
     fetch = transport
     host = _validate_url(url, policy)

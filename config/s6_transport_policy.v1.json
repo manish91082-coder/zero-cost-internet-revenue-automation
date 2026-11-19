@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "status": "IMPLEMENTED_TESTED_NOT_ENABLED",
+  "transport": "Python standard-library HTTPSConnection with literal-IP socket pinning",
+  "dns_resolution": {
+    "api": "socket.getaddrinfo",
+    "families": [
+      "IPv4",
+      "IPv6"
+    ],
+    "scope": "one transport instance and one exact allowlisted host per task",
+    "mixed_public_private_answer": "reject entire answer set",
+    "non_global_address": "reject",
+    "fallback_to_other_dns_ip": false
+  },
+  "tls": {
+    "context": "ssl.create_default_context",
+    "minimum_version": "TLSv1.2",
+    "certificate_validation": "CERT_REQUIRED",
+    "hostname_verification": true,
+    "sni": "original exact allowlisted hostname",
+    "connect_target": "pinned numeric IP, never hostname DNS lookup"
+  },
+  "http": {
+    "method": "GET",
+    "proxy_support": false,
+    "cookies": false,
+    "authentication": false,
+    "javascript": false,
+    "accepted_content_encoding": [
+      "identity",
+      ""
+    ],
+    "redirects": "HTTPS same exact host on port 443 only",
+    "maximum_redirects": 3,
+    "automatic_retry": false,
+    "request_headers": [
+      "User-Agent",
+      "Accept",
+      "Accept-Encoding: identity",
+      "Connection: close"
+    ]
+  },
+  "limits": {
+    "page_bytes": 1000000,
+    "robots_bytes": 65536,
+    "timeout_seconds": 15,
+    "maximum_timeout_seconds": 30
+  },
+  "gates": {
+    "dns_pinning_implementation": true,
+    "dns_pinning_enabled": false,
+    "egress_controls_audited": false,
+    "live_network_enabled": false,
+    "source_worker_pipeline_live_fetch_enabled": false,
+    "reason": "Transport is implemented and tested with fake DNS/socket/HTTP dependencies. The checked-in source policy keeps live fetch disabled until GitHub-hosted runner egress restrictions are separately reviewed and S6-C durable snapshots are ready."
+  },
+  "invariants": {
+    "project_id": "ZCIRA-2026-11-13",
+    "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
+    "maximum_parallel_research_workers": 2,
+    "public_page_content_is_untrusted_data": true,
+    "access_control_bypass": false,
+    "paid_provider_routes": false,
+    "spend_cap_inr": 0
+  },
+  "next_gate": "S6B2_RUNNER_EGRESS_CONTROL_AUDIT"
+}

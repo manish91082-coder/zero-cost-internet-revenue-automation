@@ -604,3 +604,18 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Latest policy/continuity checkpoint f69076ffc9d9f4321760cbabe033c5063d60f029 was revalidated by GitHub Actions run 44230406063: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230406063.
 - Conclusion success; 47 hash-locked packages installed; pip check passed; explicit LangGraph integration 3 passed; full suite 129 passed / 1 expected skip.
 - This re-run confirms the committed S6 policy and continuity files did not break the read-only validation suite. It did not perform live source fetches. S6 live network remains disabled pending pinned TLS transport, egress/terms review and durable snapshot storage.
+
+
+## 40. Phase S6-B1 — pinned-IP TLS transport implementation (2026-11-19)
+
+- Canonical archive \`02_complete-research-hi.md\` Library version 1 was reopened and full SHA-256 verified: \`c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e\` (1,402,707 bytes).
+- Canonical embedded destination-section scope hash reverified from the archive's original bytes: \`7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24\`. Six batches remain 219 categories / 3,482 source occurrences; Appendix A identity/priority reconciliation remains controlling. P1/P2/P3/P4/P5/B/M and Category #24=B unchanged.
+- Re-read the latest main checkpoint, S2-B architecture (docs/45), S2-C approval/isolation report (docs/46), S1 roster (docs/42), S6-A report (docs/60) and S6 validation report (docs/61) before this increment.
+- Added \`src/zcira_control/pinned_tls_transport.py\`: exact-host DNS resolution, whole-answer public-IP validation, one-IP-per-task pin, direct numeric-IP socket connect, TLS 1.2+, CERT_REQUIRED, hostname verification/SNI using the original host, no proxy/cookie/auth/JS, same-host HTTPS redirects only, 3 redirect maximum, identity encoding only, bounded content-length/streamed reads and request deadline. No alternate-IP retry.
+- Updated \`source_fetcher.py\` so the live transport is accepted only when \`live_network_enabled\`, \`dns_pinning\` and \`egress_controls_audited\` are all true. The checked-in policy keeps all three false.
+- Added \`tests/test_pinned_tls_transport.py\` with fake resolver/socket/HTTP dependencies; extended source-policy tests. These tests do not open public network sockets.
+- Added \`config/s6_transport_policy.v1.json\`; source worker policy now records S6-B1 status and the remaining egress-audit gate.
+- GitHub Actions validation is triggered by the source/test/config changes. Test outcome must be read from the actual run before marking S6-B1 PASS.
+- Live public fetches: 0; source workers scheduled/running: 0; durable source snapshots: pending S6-C; runner-level egress controls: NOT AUDITED; S7-B publisher: not started; S8 Cloudflare: not deployed.
+- Spend ₹0; settled revenue evidence ₹0; commercial HOLD. No accounts, OAuth, KYC, terms acceptance, billing, deployment, outreach, submissions, product build or listing.
+- Next: verify the new GitHub Actions run, then S6-B2 runner egress-control feasibility audit before S6-C durable snapshots. Do not enable live network on the basis of DNS pinning alone.

@@ -125,6 +125,9 @@ class SourceFetcherTests(unittest.TestCase):
         self.assertIn("docs.apify.com", loaded.allowed_sources)
         self.assertNotIn("sub.docs.apify.com", loaded.allowed_sources)
         self.assertEqual(loaded.max_response_bytes, 1_000_000)
+        self.assertFalse(loaded.live_network_enabled)
+        self.assertFalse(loaded.dns_pinning)
+        self.assertFalse(loaded.egress_controls_audited)
 
     def test_source_policy_rejects_wildcard_domains(self):
         with self.assertRaises(SourcePolicyError):
@@ -137,6 +140,22 @@ class SourceFetcherTests(unittest.TestCase):
     def test_live_network_cannot_be_enabled_by_configuration_only(self):
         with self.assertRaises(SourcePolicyError):
             SourcePolicy({"docs.apify.com": SourceRecord("Apify Documentation")}, live_network_enabled=True)
+
+    def test_live_network_requires_both_dns_pinning_and_egress_audit(self):
+        with self.assertRaises(SourcePolicyError):
+            SourcePolicy(
+                {"docs.apify.com": SourceRecord("Apify Documentation")},
+                live_network_enabled=True,
+                dns_pinning=True,
+                egress_controls_audited=False,
+            )
+        with self.assertRaises(SourcePolicyError):
+            SourcePolicy(
+                {"docs.apify.com": SourceRecord("Apify Documentation")},
+                live_network_enabled=True,
+                dns_pinning=False,
+                egress_controls_audited=True,
+            )
 
 
 if __name__ == "__main__":

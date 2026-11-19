@@ -19,18 +19,78 @@
   "timeout_seconds": 15,
   "max_redirects": 3,
   "user_agent": "ZCIRA-ReadOnlyResearch/1.0",
-  "allowed_content_types": ["text/html", "text/plain", "application/json"],
+  "allowed_content_types": [
+    "text/html",
+    "text/plain",
+    "application/json"
+  ],
   "allowed_sources": [
-    {"domain": "docs.apify.com", "publisher": "Apify Documentation", "priority": "P1", "default_evidence_grade": "A_PRIMARY_OFFICIAL"},
-    {"domain": "apify.com", "publisher": "Apify", "priority": "P1", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "rapidapi.com", "publisher": "RapidAPI", "priority": "P1", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "apyhub.com", "publisher": "ApyHub", "priority": "P1", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "nlnet.nl", "publisher": "NLnet Foundation", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "wordfence.com", "publisher": "Wordfence", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "0din.ai", "publisher": "0DIN", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "metaculus.com", "publisher": "Metaculus", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "superteam.fun", "publisher": "Superteam", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "unifiedpatents.com", "publisher": "Unified Patents", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"},
-    {"domain": "primeintellect.ai", "publisher": "Prime Intellect", "priority": "P2", "default_evidence_grade": "B_OFFICIAL_SUPPORT"}
-  ]
+    {
+      "domain": "docs.apify.com",
+      "publisher": "Apify Documentation",
+      "priority": "P1",
+      "default_evidence_grade": "A_PRIMARY_OFFICIAL"
+    },
+    {
+      "domain": "apify.com",
+      "publisher": "Apify",
+      "priority": "P1",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "rapidapi.com",
+      "publisher": "RapidAPI",
+      "priority": "P1",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "apyhub.com",
+      "publisher": "ApyHub",
+      "priority": "P1",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "nlnet.nl",
+      "publisher": "NLnet Foundation",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "wordfence.com",
+      "publisher": "Wordfence",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "0din.ai",
+      "publisher": "0DIN",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "metaculus.com",
+      "publisher": "Metaculus",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "superteam.fun",
+      "publisher": "Superteam",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "unifiedpatents.com",
+      "publisher": "Unified Patents",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    },
+    {
+      "domain": "primeintellect.ai",
+      "publisher": "Prime Intellect",
+      "priority": "P2",
+      "default_evidence_grade": "B_OFFICIAL_SUPPORT"
+    }
+  ],
+  "egress_controls_audited": false
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "CORE_VALIDATED_LIVE_NETWORK_DISABLED",
+  "status": "S6B1_PINNED_TLS_IMPLEMENTED_TESTED_LIVE_NETWORK_DISABLED",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -29,7 +29,7 @@
   "live_network_execution_enabled": false,
   "dns_preflight_global_only": true,
   "dns_pinning": false,
-  "live_network_block_reason": "WAIT_FOR_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT",
+  "live_network_block_reason": "RUNNER_EGRESS_CONTROLS_NOT_AUDITED",
   "github_validation": {
     "run_id": 44230210895,
     "job_id": 134553105118,
@@ -45,5 +45,6 @@
     "expected_skip": "test_missing_langgraph_dependency_is_reported_without_fallback",
     "live_source_requests": 0
   },
-  "next_gate": "S6B_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT"
+  "next_gate": "S6B2_RUNNER_EGRESS_CONTROL_AUDIT",
+  "egress_controls_audited": false
 }
