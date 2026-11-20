@@ -26,7 +26,7 @@
   - Computes detached envelope SHA-256, `sha256:<digest>` content reference and future path `evidence/snapshots/sha256/<digest>.json`.
   - Includes `verify_snapshot_envelope_bytes` for future publisher fetch-back: digest, canonical bytes and schema must all match.
 - `schemas/v1/source_snapshot_envelope.schema.json`: new Draft 2020-12 metadata-only contract.
-- `tests/test_snapshot_envelope.py`: 16 focused tests, including raw-body exclusion, URL query removal, redaction, digest mismatch, host/scheme/credential rejection, provenance, deterministic canonicalization and fetch-back tamper detection.
+- `tests/test_snapshot_envelope.py`: 17 focused tests, including raw-body exclusion, URL query removal, redaction, digest mismatch, host/scheme/credential rejection, provenance, deterministic canonicalization and fetch-back tamper detection.
 - `tests/fixtures/s3_v1/valid_source_snapshot_envelope.json`: valid fixture.
 - Existing schema contract test and manifest now include the 12th contract.
 - `config/s6_snapshot_envelope_policy.v1.json`: machine-readable storage/redaction/publisher policy.
@@ -75,3 +75,23 @@ After the exact commit's GitHub Actions suite passes, S6-D should connect the me
   2. The excerpt-limit test supplied 2,500 characters even though the upstream source-snapshot schema correctly limits its excerpt to 2,000; validation therefore failed before the envelope's stricter 1,800-character cap could be exercised.
 - Corrected the helper to pop/resolve overrides before calling the builder. The excerpt test now supplies a schema-valid 2,000-character input and asserts the 1,800-character envelope cap.
 - No production source-worker, pinned TLS or deterministic control-plane code was changed by this correction. The corrected test suite is pending a new GitHub Actions run; S6-C remains PENDING until that run passes.
+
+
+## 9. Corrected acceptance run — PASS
+
+- Corrected GitHub Actions run: 44668168900.
+- URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44668168900.
+- Exact head: `2915587fed3221763fd869e83a37a5ef7d77156b`.
+- Job: `136062486170`; conclusion SUCCESS; runner `ubuntu-24.04`.
+- All 47 SHA-256-locked packages installed; `pip check` reported no broken requirements.
+- Real LangGraph integration: 3 passed.
+- Full pytest: 168 passed, 1 expected skip, 6 subtests passed. The one skip is the existing missing-LangGraph-package branch because LangGraph 1.2.22 is installed.
+- All 17 focused snapshot-envelope tests and all 12 schema fixture validations passed.
+- The prior run 44668064760 remains a recorded failed attempt caused by the test helper/fixture defects described in Section 8. The corrected commit passed the full suite.
+- This proves deterministic builder/verifier behavior under synthetic test inputs. It does not prove a real GitHub publisher fetch-back, live network, egress firewall, scheduled worker or cloud deployment.
+
+## 10. Canonical text handling clarification
+
+- Unicode NFC normalization and control-character removal/redaction apply to publisher, page-title and excerpt text.
+- Provenance identifiers and source URL paths are retained as source identifiers after URL query/fragment stripping; they are not described as natural-language excerpt fields.
+- The canonical JSON byte representation is deterministic for the builder-produced payload. The detached SHA-256 covers the exact stored bytes.

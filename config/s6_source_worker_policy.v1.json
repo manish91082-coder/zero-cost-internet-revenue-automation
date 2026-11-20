@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_IMPLEMENTED_PENDING_CI",
+  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_PUBLISHER_PENDING",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -31,20 +31,21 @@
   "dns_pinning": false,
   "live_network_block_reason": "STANDARD_GITHUB_HOSTED_RUNNER_HAS_PUBLIC_INTERNET_WITHOUT_PROVIDER_MANAGED_PER_JOB_EGRESS_FIREWALL; ENTERPRISE_LARGER_RUNNER_OR_AZURE_VNET_NOT_ELIGIBLE_UNDER_ZERO_COST",
   "github_validation": {
-    "run_id": 44451628361,
-    "job_id": 135316732485,
-    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44451628361",
-    "head_sha": "1c66b1c74af3d67100faf28450b103748c5bb342",
+    "run_id": 44668168900,
+    "job_id": 136062486170,
+    "head_sha": "2915587fed3221763fd869e83a37a5ef7d77156b",
     "conclusion": "success",
     "runner": "ubuntu-24.04 standard GitHub-hosted",
     "hash_locked_packages": 47,
     "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
     "real_langgraph_integration": "3_PASS",
-    "pinned_tls_transport_tests": "PASS",
-    "full_pytest": "150_PASSED_1_EXPECTED_SKIP_6_SUBTESTS_PASSED",
-    "live_source_requests": 0
+    "full_pytest": "168_PASSED_1_EXPECTED_SKIP_6_SUBTESTS_PASSED",
+    "focused_snapshot_envelope_tests": 17,
+    "schema_contracts_and_fixtures": 12,
+    "live_source_requests": 0,
+    "publisher_fetchback": "NOT_YET_EXECUTED"
   },
-  "next_gate": "S6D_LANGGRAPH_WORKER_NODES_AFTER_S6C_VALIDATION",
+  "next_gate": "S6D_LANGGRAPH_WORKER_NODES_WITH_METADATA_ENVELOPE",
   "egress_controls_audited": false,
   "snapshot_envelope": {
     "schema_path": "schemas/v1/source_snapshot_envelope.schema.json",

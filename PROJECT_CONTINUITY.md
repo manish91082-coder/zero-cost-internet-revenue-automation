@@ -668,3 +668,13 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - GitHub Actions run 44668064760 on commit `e20cd2a04d761264f5724f1d1f3140a8e5ab07fc`: FAILURE. Dependencies installed (47 hash-locked packages), `pip check` PASS, real LangGraph integration 3/3 PASS; full pytest 164 passed / 4 failed / 1 expected skip / 6 subtests.
 - All four failures were test-harness defects: three duplicate-keyword overrides in the test helper; one 2,500-character excerpt fixture violated the upstream source-snapshot schema's 2,000-character maximum before testing the envelope's 1,800-character cap.
 - Corrected helper override handling and made the excerpt fixture schema-valid (2,000 input, 1,800 output cap). Production modules unchanged. Corrected GitHub validation is pending; S6-C is not yet PASS.
+
+
+### S6-C corrected GitHub validation PASS (2026-11-20)
+
+- Corrected commit `2915587fed3221763fd869e83a37a5ef7d77156b` triggered GitHub Actions run 44668168900: SUCCESS. URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44668168900; job `136062486170`; runner `ubuntu-24.04`.
+- 47 SHA-256-locked packages installed; `pip check` PASS; actual LangGraph integration 3 PASS.
+- Full pytest: 168 passed, 1 expected skip, 6 subtests passed. All 17 snapshot-envelope tests and all 12 schema fixture validations passed. The single skip is the existing missing-LangGraph-package branch because LangGraph 1.2.22 is installed.
+- The preceding run 44668064760 failed 164 passed / 4 failed / 1 skip due only to duplicate-keyword test helper overrides and an excerpt fixture exceeding the upstream schema limit; both were corrected in commit 2915587.
+- S6-C deterministic metadata-only builder/schema/canonical hash/fetch-back verifier is PASS as a code-and-CI gate. It is not a live GitHub publisher or deployed persistence service. No actual source envelope was published or fetched back from GitHub.
+- Publisher integration, LangGraph worker nodes and egress controls remain separate pending gates. Live source fetch remains disabled; no network request was made.

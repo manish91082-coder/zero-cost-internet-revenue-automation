@@ -23,7 +23,7 @@ Version 1.0.0 contracts for deterministic task control and bounded read-only res
 ## S6-C metadata-only source snapshot envelope
 
 - Contract: `source_snapshot_envelope.schema.json`.
-- Canonical JSON: UTF-8, NFC-normalized persisted text, sorted keys, compact separators, no NaN.
+- Canonical JSON: UTF-8, sorted keys, compact separators and no NaN; publisher/title/excerpt text is NFC-normalized and control characters are removed.
 - Envelope SHA-256 is detached from the canonical payload; `content_ref` is `sha256:<digest>` and the future publisher path is `evidence/snapshots/sha256/<digest>.json`.
 - The raw page body is used only for digest/size verification and is not part of the returned envelope or persisted JSON.
 - Query strings and fragments are omitted from the persisted URL; a SHA-256 of the original URL preserves an audit correlation without storing query values.

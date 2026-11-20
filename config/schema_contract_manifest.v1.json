@@ -49,6 +49,6 @@
     "control_plane_tests": "PASS_27",
     "schema_contract_tests": "PASS_32",
     "schema_negative_tests": 21,
-    "source_snapshot_envelope": "S6C_IMPLEMENTED_PENDING_GITHUB_VALIDATION"
+    "source_snapshot_envelope": "PASS_RUN_44668168900_2026-11-20"
   }
 }
