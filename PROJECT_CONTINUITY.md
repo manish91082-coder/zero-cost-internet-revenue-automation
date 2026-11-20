@@ -645,3 +645,19 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - GitHub Actions run 44451871881 validated the exact S6-B2 report/config checkpoint at head 137acb24160559c09e4bdae6920330ea32dad53d: success; 47 hash-locked packages; pip check PASS; LangGraph integration 3 PASS; full pytest 150 passed / 1 expected skip / 6 subtests passed.
 - Run URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44451871881.
 - No live network request, egress firewall test, or deployment was performed.
+
+
+## 42. Phase S6-C — metadata-only immutable source snapshot envelope (2026-11-20)
+
+- Reopened canonical PROJECT_CONTINUITY.md, S2-B architecture report 45, S1 roster report 42, S6 reports 60–63, current source-worker code/policies and the controlling Library archive before work.
+- Canonical parent main commit: 2880b4fc60b1aeaa872584a54bb495f090816ea2; parent continuity blob: 8d8128a92a15e62e6f09ac0c60d7430b3e369c07.
+- Controlling archive `02_complete-research-hi.md`, Library version 1, 1,402,707 bytes; full SHA-256 independently reverified from original bytes: `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e`. Embedded destination-section hash: `7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24`.
+- A2 remains unchanged: 219 categories, 3,482 source occurrences across six batches, 8 shared lists / 168 entries / 213 explicit cross-reference edges; duplicate candidates remain provenance-preserved and unique platform count is not established. P1/P2/P3/P4/P5/B/M and Category #24=B unchanged.
+- Implemented `src/zcira_control/snapshot_envelope.py`: strict source/envelope schema validation; raw-byte digest and size verification; metadata-only output; query/fragment omission with original URL hash; Unicode NFC and control-character normalization; bounded excerpt/title redaction; provenance preservation; deterministic canonical JSON; detached SHA-256 content reference/path; publisher fetch-back verifier.
+- Added `schemas/v1/source_snapshot_envelope.schema.json`, valid fixture, 16 focused tests, S6-C policy config, schema-contract manifest entry and README documentation.
+- Existing contract test now validates 12 schemas/fixtures. The new workflow run is pending; do not claim test PASS until its result/logs are inspected.
+- No raw page body is written; no `evidence/snapshots/` object is published. Python byte objects are not securely wiped; the control is non-persistence, not forensic memory erasure.
+- Live network remains disabled: DNS pinning false, egress audit false, live fetch false. No DNS/TLS/HTTP request. No model call. Worker repository writes false. No publisher integration/deployment.
+- At commit time: S6-C implementation PENDING CI; S6-D LangGraph worker-node integration next; S7-B publisher-only enforcement not started; S8 Cloudflare not deployed; S9 unattended pilot not started.
+- Spend ₹0; settled revenue evidence ₹0; no accounts/OAuth/KYC/terms/billing/deployment/outreach/submission/security testing/build/listing; commercial HOLD.
+- Next: inspect the exact S6-C GitHub Actions run. If full validation passes, implement S6-D resumable source-worker nodes. Keep live network disabled and do not publish snapshots until S7-B and an independently audited zero-cost egress route are available.

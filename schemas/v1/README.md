@@ -18,3 +18,15 @@ Version 1.0.0 contracts for deterministic task control and bounded read-only res
 - The manifest carries a canonical SHA-256 digest, generation number, previous Git commit SHA, kill-switch state and active writer lease ID.
 - GitHub Git Data API writes create one multi-file commit and update `main` with `force=false`; stale or concurrent branch heads fail closed.
 - This adapter is repo code only. It is not wired to Actions, does not hold a token in the repository, and has not been deployed or run against GitHub write APIs.
+
+
+## S6-C metadata-only source snapshot envelope
+
+- Contract: `source_snapshot_envelope.schema.json`.
+- Canonical JSON: UTF-8, NFC-normalized persisted text, sorted keys, compact separators, no NaN.
+- Envelope SHA-256 is detached from the canonical payload; `content_ref` is `sha256:<digest>` and the future publisher path is `evidence/snapshots/sha256/<digest>.json`.
+- The raw page body is used only for digest/size verification and is not part of the returned envelope or persisted JSON.
+- Query strings and fragments are omitted from the persisted URL; a SHA-256 of the original URL preserves an audit correlation without storing query values.
+- Bounded excerpts and titles use the versioned redaction policy. Source text remains `UNTRUSTED_DATA_ONLY`; reviewer verdict is PENDING and commercial gate is UNKNOWN.
+- The fetch-back verifier checks the SHA-256, exact canonical byte representation and schema after a future publisher retrieves the stored blob.
+- This is a contract and deterministic code path, not a live crawler or publisher deployment. Live source networking remains disabled.

@@ -13,7 +13,8 @@
     "quota_ledger": "schemas/v1/quota_ledger.schema.json",
     "resource_lease": "schemas/v1/resource_lease.schema.json",
     "mission_registry": "schemas/v1/mission_registry.schema.json",
-    "state_manifest": "schemas/v1/state_manifest.schema.json"
+    "state_manifest": "schemas/v1/state_manifest.schema.json",
+    "source_snapshot_envelope": "schemas/v1/source_snapshot_envelope.schema.json"
   },
   "mission_registry": "config/mission_registry.v1.json",
   "test_suite": "tests/test_contract_schemas.py",
@@ -36,8 +37,8 @@
   },
   "status": {
     "schemas_published": true,
-    "valid_fixtures": 11,
-    "targeted_contract_preflight": "PASS_11_VALID_21_NEGATIVE",
+    "valid_fixtures": 12,
+    "targeted_contract_preflight": "S3_BASELINE_11_CONTRACTS_PLUS_S6C_ENVELOPE_CONTRACT",
     "pytest_execution": "PASS_72_TESTS_IN_EPHEMERAL_VALIDATION_SANDBOX_NOT_CI",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED",
@@ -47,6 +48,7 @@
     "s4b_state_manifest_negative_cases": "2_OF_2_REJECTED",
     "control_plane_tests": "PASS_27",
     "schema_contract_tests": "PASS_32",
-    "schema_negative_tests": 21
+    "schema_negative_tests": 21,
+    "source_snapshot_envelope": "S6C_IMPLEMENTED_PENDING_GITHUB_VALIDATION"
   }
 }

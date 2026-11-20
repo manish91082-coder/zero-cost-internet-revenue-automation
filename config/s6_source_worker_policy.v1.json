@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6B1_PASS_S6B2_PROVIDER_EGRESS_NOT_AVAILABLE_ON_STANDARD_RUNNER",
+  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_IMPLEMENTED_PENDING_CI",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -44,6 +44,15 @@
     "full_pytest": "150_PASSED_1_EXPECTED_SKIP_6_SUBTESTS_PASSED",
     "live_source_requests": 0
   },
-  "next_gate": "S6C_METADATA_ONLY_IMMUTABLE_SNAPSHOT_CONTRACT",
-  "egress_controls_audited": false
+  "next_gate": "S6D_LANGGRAPH_WORKER_NODES_AFTER_S6C_VALIDATION",
+  "egress_controls_audited": false,
+  "snapshot_envelope": {
+    "schema_path": "schemas/v1/source_snapshot_envelope.schema.json",
+    "builder_path": "src/zcira_control/snapshot_envelope.py",
+    "persistence_mode": "METADATA_ONLY",
+    "raw_body_persisted": false,
+    "query_and_fragment_persisted": false,
+    "publisher_integration": "PENDING",
+    "live_network_execution_enabled": false
+  }
 }
