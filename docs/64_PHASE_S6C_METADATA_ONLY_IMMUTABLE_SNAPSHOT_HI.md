@@ -63,3 +63,15 @@ Spend authorized/incurred ₹0; settled revenue evidenced ₹0. No account, OAut
 ## 7. Next gate
 
 After the exact commit's GitHub Actions suite passes, S6-D should connect the metadata envelope builder to resumable LangGraph source-worker nodes while preserving the current disabled live-network policy. S7-B publisher-only enforcement remains separate and must precede any future snapshot publication.
+
+
+## 8. First acceptance run and test-fixture correction
+
+- Initial S6-C GitHub Actions run: 44668064760, URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44668064760, head `e20cd2a04d761264f5724f1d1f3140a8e5ab07fc`, conclusion FAILURE.
+- Dependency installation succeeded: all 47 hash-locked packages installed, `pip check` passed; real LangGraph integration 3/3 passed.
+- Full pytest: 164 passed, 4 failed, 1 expected skip, 6 subtests passed.
+- All four failures were traced to the new test harness, not a failed transport or state-control test:
+  1. Three tests passed override keywords `provenance` or `http_status` through a helper that also supplied hard-coded defaults, producing duplicate-keyword TypeError.
+  2. The excerpt-limit test supplied 2,500 characters even though the upstream source-snapshot schema correctly limits its excerpt to 2,000; validation therefore failed before the envelope's stricter 1,800-character cap could be exercised.
+- Corrected the helper to pop/resolve overrides before calling the builder. The excerpt test now supplies a schema-valid 2,000-character input and asserts the 1,800-character envelope cap.
+- No production source-worker, pinned TLS or deterministic control-plane code was changed by this correction. The corrected test suite is pending a new GitHub Actions run; S6-C remains PENDING until that run passes.

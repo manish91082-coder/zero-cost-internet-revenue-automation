@@ -661,3 +661,10 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - At commit time: S6-C implementation PENDING CI; S6-D LangGraph worker-node integration next; S7-B publisher-only enforcement not started; S8 Cloudflare not deployed; S9 unattended pilot not started.
 - Spend ₹0; settled revenue evidence ₹0; no accounts/OAuth/KYC/terms/billing/deployment/outreach/submission/security testing/build/listing; commercial HOLD.
 - Next: inspect the exact S6-C GitHub Actions run. If full validation passes, implement S6-D resumable source-worker nodes. Keep live network disabled and do not publish snapshots until S7-B and an independently audited zero-cost egress route are available.
+
+
+### S6-C first acceptance run (2026-11-20)
+
+- GitHub Actions run 44668064760 on commit `e20cd2a04d761264f5724f1d1f3140a8e5ab07fc`: FAILURE. Dependencies installed (47 hash-locked packages), `pip check` PASS, real LangGraph integration 3/3 PASS; full pytest 164 passed / 4 failed / 1 expected skip / 6 subtests.
+- All four failures were test-harness defects: three duplicate-keyword overrides in the test helper; one 2,500-character excerpt fixture violated the upstream source-snapshot schema's 2,000-character maximum before testing the envelope's 1,800-character cap.
+- Corrected helper override handling and made the excerpt fixture schema-valid (2,000 input, 1,800 output cap). Production modules unchanged. Corrected GitHub validation is pending; S6-C is not yet PASS.

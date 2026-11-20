@@ -42,20 +42,22 @@ def make_snapshot(raw=RAW):
 
 
 def build(snapshot=None, raw=RAW, **kwargs):
+    provenance = kwargs.pop("provenance", {
+        "category_id": 1,
+        "destination_id": "apify-docs-actors",
+        "source_row_ref": "category-1:destination-1",
+        "source_line": 42,
+        "archive_sha256": "c" * 64,
+    })
+    http_status = kwargs.pop("http_status", 200)
     return build_metadata_snapshot_envelope(
         make_snapshot() if snapshot is None else snapshot,
         raw,
         allowed_hosts={"docs.apify.com"},
         snapshot_schema=SNAPSHOT_SCHEMA,
         envelope_schema=ENVELOPE_SCHEMA,
-        provenance={
-            "category_id": 1,
-            "destination_id": "apify-docs-actors",
-            "source_row_ref": "category-1:destination-1",
-            "source_line": 42,
-            "archive_sha256": "c" * 64,
-        },
-        http_status=200,
+        provenance=provenance,
+        http_status=http_status,
         **kwargs,
     )
 
@@ -100,7 +102,7 @@ class SnapshotEnvelopeTests(unittest.TestCase):
 
     def test_excerpt_is_hard_bounded(self):
         snapshot = make_snapshot()
-        snapshot["excerpt"] = "x" * 2500
+        snapshot["excerpt"] = "x" * 2000
         result = build(snapshot, max_excerpt_chars=1800)
         self.assertEqual(len(result.payload["excerpt"]), 1800)
 
