@@ -95,3 +95,13 @@ After the exact commit's GitHub Actions suite passes, S6-D should connect the me
 - Unicode NFC normalization and control-character removal/redaction apply to publisher, page-title and excerpt text.
 - Provenance identifiers and source URL paths are retained as source identifiers after URL query/fragment stripping; they are not described as natural-language excerpt fields.
 - The canonical JSON byte representation is deterministic for the builder-produced payload. The detached SHA-256 covers the exact stored bytes.
+
+
+## 11. Final policy/report checkpoint revalidation — PASS
+
+- Final S6-C policy/report/continuity checkpoint: commit `7ee5090c3163ed1d1237f10facef1a15b725d2ab`.
+- GitHub Actions run: 44668356601; URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44668356601.
+- Job: `136063088515`; conclusion SUCCESS; runner `ubuntu-24.04`.
+- 47 hash-locked packages installed; `pip check` PASS; real LangGraph integration 3 passed.
+- Full pytest: 168 passed, 1 expected skip, 6 subtests passed.
+- This is the latest full validation of the committed S6-C policy, schema manifest, report and continuity checkpoint. It still does not run source workers or publish a snapshot.

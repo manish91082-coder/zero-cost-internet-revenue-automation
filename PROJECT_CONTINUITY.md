@@ -678,3 +678,11 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - The preceding run 44668064760 failed 164 passed / 4 failed / 1 skip due only to duplicate-keyword test helper overrides and an excerpt fixture exceeding the upstream schema limit; both were corrected in commit 2915587.
 - S6-C deterministic metadata-only builder/schema/canonical hash/fetch-back verifier is PASS as a code-and-CI gate. It is not a live GitHub publisher or deployed persistence service. No actual source envelope was published or fetched back from GitHub.
 - Publisher integration, LangGraph worker nodes and egress controls remain separate pending gates. Live source fetch remains disabled; no network request was made.
+
+
+### S6-C final checkpoint revalidation (2026-11-20)
+
+- Final policy/report/continuity checkpoint `7ee5090c3163ed1d1237f10facef1a15b725d2ab` was validated by GitHub Actions run 44668356601: SUCCESS; job `136063088515`; URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44668356601.
+- 47 SHA-256-locked packages installed; `pip check` PASS; LangGraph integration 3 PASS; full pytest 168 passed / 1 expected skip / 6 subtests.
+- The expected skip is the missing-LangGraph-package branch because LangGraph is installed. No live source request, publisher fetch-back, egress-control test or cloud deployment occurred.
+- S6-C remains PASS as deterministic envelope/schema/test implementation. S6-D LangGraph worker nodes and S7-B publisher integration remain pending.
