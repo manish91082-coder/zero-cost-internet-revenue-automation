@@ -1,7 +1,7 @@
 # Phase S6-D — LangGraph source-worker node integration
 
 **Project:** ZCIRA-2026-11-13  
-**Status:** IMPLEMENTED / GITHUB CI ACCEPTANCE PENDING  
+**Status:** PASS / GITHUB CI VALIDATED / LIVE NETWORK DISABLED  
 **Scope:** Synthetic-transport-only, metadata-only, read-only LangGraph source-worker integration. No live source requests or repository publication.
 
 ## 1. Preflight and controlling sources
@@ -77,11 +77,23 @@ The existing contract suite adds one new valid-fixture parameter case and two ne
 
 ## 4. Acceptance status
 
-The implementation and tests are committed. GitHub Actions acceptance for the latest S6-D code/config checkpoint has not yet been independently observed in this run. Therefore:
-- S6-D code: IMPLEMENTED
-- S6-D CI: PENDING / NOT CLAIMED PASS
-- S6-D live source execution: DISABLED
-- S6-D durable worker checkpoint: PENDING S7-B
+### Final successful GitHub Actions validations
+
+- Initial S6-D run `44860170190` failed: 175 passed / 5 failed / 1 skipped. Root causes were the node's overly strict `RUNNING` state check after planning had transitioned the batch to `QUEUED`, plus an incorrectly escaped newline in the robots-disallow test fixture.
+- Intermediate run `44860292830` failed: 179 passed / 1 failed / 1 skipped. The remaining failure was the robots fixture newline encoding.
+- Corrected S6-D code commit `ad3acd70da1f49c9df4a6c5fce2eea9ddaa7a10c` passed GitHub Actions run `44860296234`: SUCCESS. URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44860296234.
+- Final configuration checkpoint `db9c4ec3a88c9eda84e61e0bfd5db4cb03d7421d` passed run `44860401524`: SUCCESS; job `136712313470`; URL: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44860401524.
+- Runner: `ubuntu-24.04`; Python 3.12.3; 47 SHA-256-locked packages; `pip check` PASS; actual LangGraph integration 3 PASS.
+- Full pytest: **180 passed, 1 expected skip, 6 subtests passed**. All nine focused S6-D tests and 13 schema fixture cases were included.
+- The expected skip is the pre-existing branch testing the missing-LangGraph-package condition; LangGraph 1.2.22 was installed from the hash-locked requirements.
+- The latest metadata-only config/roster reference update is commit `bf8f590ee27f4746d69a54a2e15a58263fe3f926`; it does not change executable code or test behavior.
+
+### Final gate classification
+
+- S6-D code and synthetic-transport CI: PASS.
+- S6-D live source execution: DISABLED.
+- S6-D durable worker checkpoint: PENDING S7-B.
+- S6-B2 provider-managed egress controls: HOLD.
 
 Do not infer test success from the existence of the workflow or commit.
 
