@@ -14,7 +14,8 @@
     "resource_lease": "schemas/v1/resource_lease.schema.json",
     "mission_registry": "schemas/v1/mission_registry.schema.json",
     "state_manifest": "schemas/v1/state_manifest.schema.json",
-    "source_snapshot_envelope": "schemas/v1/source_snapshot_envelope.schema.json"
+    "source_snapshot_envelope": "schemas/v1/source_snapshot_envelope.schema.json",
+    "source_worker_proposal": "schemas/v1/source_worker_proposal.schema.json"
   },
   "mission_registry": "config/mission_registry.v1.json",
   "test_suite": "tests/test_contract_schemas.py",
@@ -37,8 +38,8 @@
   },
   "status": {
     "schemas_published": true,
-    "valid_fixtures": 12,
-    "targeted_contract_preflight": "S3_BASELINE_11_CONTRACTS_PLUS_S6C_ENVELOPE_CONTRACT",
+    "valid_fixtures": 13,
+    "targeted_contract_preflight": "S3_BASELINE_11_PLUS_S6C_ENVELOPE_AND_S6D_SOURCE_WORKER_PROPOSAL",
     "pytest_execution": "PASS_72_TESTS_IN_EPHEMERAL_VALIDATION_SANDBOX_NOT_CI",
     "github_actions_ci": "NOT_CONFIGURED",
     "cloud_runtime": "NOT_IMPLEMENTED",
