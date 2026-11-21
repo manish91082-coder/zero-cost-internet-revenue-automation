@@ -737,3 +737,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 2. Obtain a successful full hash-locked CI run tied to the final code SHA.
 3. Then implement S7-B single-writer publisher with idempotency, schema validation, atomic commit, expected-head compare-and-swap and exact blob fetch-back.
 4. Keep live source fetching disabled until a separately audited ₹0 egress design exists. S8 remains behind exact no-cost eligibility and owner approval.
+
+
+### S6-D final GitHub Actions acceptance PASS (2026-11-21)
+
+- Initial S6-D CI run `44860170190` failed with 175 passed / 5 failed / 1 skipped. Root causes: source-worker node incorrectly required state `RUNNING` although the planner emits `QUEUED`; robots fixture encoded literal backslash-n instead of newline.
+- Intermediate run `44860292830` failed with 179 passed / 1 failed / 1 skipped. Only the robots fixture newline remained.
+- Corrected code head `ad3acd70da1f49c9df4a6c5fce2eea9ddaa7a10c` passed run `44860296234`: SUCCESS.
+- Final configuration checkpoint head `db9c4ec3a88c9eda84e61e0bfd5db4cb03d7421d` passed run `44860401524`: SUCCESS; job `136712313470`; URL https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44860401524.
+- Runner `ubuntu-24.04`; 47 SHA-256-locked packages; `pip check` PASS; actual LangGraph integration 3 PASS; full pytest **180 passed, 1 expected skip, 6 subtests passed**. Nine focused S6-D cases and 13 schema fixture cases are included.
+- The one skip is the pre-existing test branch for a missing LangGraph dependency; LangGraph 1.2.22 was installed from the exact hash-locked requirements.
+- Policy, schema manifest and roster references were atomically updated in commit `bf8f590ee27f4746d69a54a2e15a58263fe3f926`; this is metadata-only and does not change executable code. S6-D report updated in commit `78b751f700dc303b3574451ac1dea08ce3b1f576`.
+- S6-D is PASS only for deterministic graph integration with synthetic test transports. Live source execution remains disabled, S6-B2 egress audit remains HOLD, and worker proposals are not durable until S7-B publisher integration.
