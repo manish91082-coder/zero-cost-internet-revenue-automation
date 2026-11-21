@@ -136,7 +136,7 @@ class LangGraphSourceWorkerTests(unittest.TestCase):
     def test_robots_disallow_produces_blocked_metadata_without_evidence(self):
         task = make_source_task()
         executor = make_executor(transport_factory=lambda task: FakeTransport([
-            TransportResponseForTests(200, {}, b"User-agent: *\\nDisallow: /\\n", "https://docs.apify.com/robots.txt"),
+            TransportResponseForTests(200, {}, b"User-agent: *\nDisallow: /\n", "https://docs.apify.com/robots.txt"),
         ]))
         proposal = executor(task)
         self.assertEqual(proposal["result_status"], "BLOCKED")
