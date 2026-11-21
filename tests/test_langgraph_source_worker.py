@@ -199,6 +199,7 @@ class LangGraphSourceWorkerTests(unittest.TestCase):
                     json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
                 ).hexdigest()
                 proposals = result["source_worker_proposals"]
+                result["source_worker_batch_proposal"]["proposals"] = proposals
                 result["source_worker_batch_proposal"]["proposals_sha256"] = hashlib.sha256(
                     json.dumps(proposals, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
                 ).hexdigest()
