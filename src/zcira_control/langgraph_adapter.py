@@ -216,14 +216,27 @@ def _validate_source_worker_proposal(proposal: Mapping[str, Any], task: Mapping[
     digest = proposal.get("source_snapshot_envelope_sha256")
     if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):
         raise StateError("source worker envelope digest is invalid")
+    retention = envelope.get("retention")
+    raw_digest = envelope.get("raw_body_sha256")
+    raw_size = envelope.get("raw_body_size_bytes")
+    if not isinstance(retention, Mapping):
+        raise StateError("source worker snapshot retention metadata is missing")
     if (
         proposal.get("source_snapshot_content_ref") != f"sha256:{digest}"
         or proposal.get("source_snapshot_storage_path") != f"evidence/snapshots/sha256/{digest}.json"
         or envelope.get("snapshot_id") != proposal.get("snapshot_id")
         or envelope.get("trust_boundary") != "UNTRUSTED_DATA_ONLY"
+        or envelope.get("access_mode") != "PUBLIC_READ_ONLY"
+        or envelope.get("access_control_bypass") is not False
         or envelope.get("reviewer_verdict") != "PENDING"
         or envelope.get("commercial_gate_status") != "UNKNOWN"
-        or envelope.get("retention", {}).get("raw_body_persisted") is not False
+        or retention.get("raw_body_persisted") is not False
+        or retention.get("full_page_mirroring") is not False
+        or not isinstance(raw_digest, str)
+        or not re.fullmatch(r"[a-f0-9]{64}", raw_digest)
+        or isinstance(raw_size, bool)
+        or not isinstance(raw_size, int)
+        or not 0 <= raw_size <= 1_000_000
     ):
         raise StateError("source worker snapshot envelope violates its metadata-only contract")
     evidence = proposal.get("evidence_proposal")
