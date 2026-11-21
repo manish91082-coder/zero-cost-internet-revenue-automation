@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_S6D_IMPLEMENTED_PENDING_CI_S7B_PUBLISHER_PENDING",
+  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_S6D_PASS_S7B_PUBLISHER_PENDING",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -45,7 +45,7 @@
     "live_source_requests": 0,
     "publisher_fetchback": "NOT_YET_EXECUTED"
   },
-  "next_gate": "S6D_GITHUB_CI_ACCEPTANCE_THEN_S7B_PUBLISHER",
+  "next_gate": "S7B_SINGLE_WRITER_PUBLISHER_AND_GITHUB_BLOB_FETCHBACK",
   "egress_controls_audited": false,
   "snapshot_envelope": {
     "schema_path": "schemas/v1/source_snapshot_envelope.schema.json",
@@ -53,7 +53,7 @@
     "persistence_mode": "METADATA_ONLY",
     "raw_body_persisted": false,
     "query_and_fragment_persisted": false,
-    "publisher_integration": "PENDING",
+    "publisher_integration": "PENDING_S7B",
     "live_network_execution_enabled": false
   },
   "source_worker_node_path": "src/zcira_control/langgraph_adapter.py:create_graph_nodes.source_workers",
@@ -64,10 +64,19 @@
   "worker_proposals_persisted": false,
   "worker_checkpoint_mode": "EPHEMERAL_BATCH_PROPOSAL_ONLY_S7B_PUBLISHER_REQUIRED",
   "s6d_validation": {
-    "status": "PENDING_GITHUB_ACTIONS_ACCEPTANCE",
-    "latest_code_commit": "8596d34fe5d51b7fdb919016160f57438a2450bd",
+    "status": "PASS_SYNTHETIC_TRANSPORT_ONLY",
+    "run_id": 44860296234,
+    "job_id": 136711970539,
+    "head_sha": "ad3acd70da1f49c9df4a6c5fce2eea9ddaa7a10c",
+    "conclusion": "success",
+    "runner": "ubuntu-24.04 standard GitHub-hosted",
+    "hash_locked_packages": 47,
+    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+    "real_langgraph_integration": "3_PASS",
+    "focused_source_worker_tests": 9,
+    "full_pytest": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
     "live_source_requests": 0,
     "model_calls": 0,
-    "repository_writes_by_worker": 0
+    "worker_repository_writes": 0
   }
 }
