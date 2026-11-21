@@ -65,9 +65,9 @@
   "worker_checkpoint_mode": "EPHEMERAL_BATCH_PROPOSAL_ONLY_S7B_PUBLISHER_REQUIRED",
   "s6d_validation": {
     "status": "PASS_SYNTHETIC_TRANSPORT_ONLY",
-    "run_id": 44860296234,
-    "job_id": 136711970539,
-    "head_sha": "ad3acd70da1f49c9df4a6c5fce2eea9ddaa7a10c",
+    "run_id": 44860401524,
+    "job_id": 136712313470,
+    "head_sha": "db9c4ec3a88c9eda84e61e0bfd5db4cb03d7421d",
     "conclusion": "success",
     "runner": "ubuntu-24.04 standard GitHub-hosted",
     "hash_locked_packages": 47,

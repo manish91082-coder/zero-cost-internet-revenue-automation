@@ -238,7 +238,7 @@
       "S6A read-only source-worker core",
       "S6B1 pinned TLS transport unit tests",
       "S6C metadata-only snapshot envelope and verifier",
-      "S6D LangGraph source-worker node with synthetic transport (GitHub Actions run 44860296234)"
+      "S6D LangGraph source-worker node with synthetic transport (GitHub Actions run 44860401524)"
     ],
     "pending_components": [
       "S6B2 independently audited zero-cost live egress controls",
