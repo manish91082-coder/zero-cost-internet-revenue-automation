@@ -686,3 +686,54 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - 47 SHA-256-locked packages installed; `pip check` PASS; LangGraph integration 3 PASS; full pytest 168 passed / 1 expected skip / 6 subtests.
 - The expected skip is the missing-LangGraph-package branch because LangGraph is installed. No live source request, publisher fetch-back, egress-control test or cloud deployment occurred.
 - S6-C remains PASS as deterministic envelope/schema/test implementation. S6-D LangGraph worker nodes and S7-B publisher integration remain pending.
+
+
+## 43. Phase S6-D — LangGraph source-worker node integration (2026-11-21)
+
+### Preflight
+- Re-read current continuity, S2-B cloud-only architecture, S1 roster JSON/report, S6-B2 egress report, S6-C report, S6 source policy and the controlling Library archive `02_complete-research-hi.md` version 1.
+- Archive re-materialized and SHA-256 verified: 1,402,707 bytes; `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`.
+- Canonical destination-section hash remains `7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24`.
+- 219 category IDs, 3,482 source occurrence slots, 8 shared lists, 168 shared-list entries, 213 explicit cross-reference edges, P1/P2/P3/P4/P5/B/M order and Category #24=B unchanged. Occurrence slots are not unique platform count.
+
+### S6-D implementation committed
+- New `src/zcira_control/langgraph_source_worker.py`: injected executor, explicit synthetic transport factory, versioned schema validation, metadata-only envelope construction, redacted evidence excerpt, proposal SHA-256; refuses live-network policy.
+- `src/zcira_control/langgraph_adapter.py`: optional `source_workers` LangGraph node; explicit `source_worker_execution_enabled` flag defaults false; max two source tasks; bounded errors; read-only batch proposal for S7-B; worker tasks are not marked completed.
+- New contract `schemas/v1/source_worker_proposal.schema.json`, fixture `tests/fixtures/s3_v1/valid_source_worker_proposal.json`; manifest now lists 13 contracts/fixtures.
+- `tests/test_langgraph_source_worker.py`: nine focused synthetic-transport cases.
+- `tests/test_contract_schemas.py`: one new schema fixture case and two negative cases.
+- `config/s6_source_worker_policy.v1.json` now records S6-D implemented pending CI, synthetic transport only, live network false, no worker persistence.
+- `config/research_swarm_roster.v1.json` now distinguishes implemented components from a deployed runtime. `runtime_implemented=false`, `agents_executed=false`, `scheduled_swarm_runs=false` remain true.
+
+### Commit trail
+- Source-worker executor: `3897abe7d84a5df74fd63051ba58ea365b87f515`.
+- Initial LangGraph node integration: `84ba982a734cab18ebf9d1e9c260ba7e3ef4c7ca`.
+- Proposal schema/fixture: `f486f775e3b5795125582be7fbabdd1f71fffd1c`, `b054a3d286bec541a11ad4f788e4a748274a0a7a`.
+- Manifest and schema tests: `a8cd3c1fc5dd43e28bbf57a27b7515546b2dd157`, `855e6a9552e4dfc2899356499623ee3766afed97`.
+- Focused S6-D tests: `ff502f1bfcef48d33801af4df06d2811551ed1af`.
+- Validator hardening and tamper-test correction: `3b7b63947e260bad7096f4b4dfdfd191685591f4`, `8596d34fe5d51b7fdb919016160f57438a2450bd`.
+- Policy/manifest/roster updates: `779f30f46edc245e9f63c6cf4cb52616a569d391`, `0fe242a04c7aa3df81c38fe96c49782bb5f56969`, `568531f4ea2e7bdc80f9ce9486821208eda98699`.
+- S6-D report: `5dfbac1037f37804a3a7c8833e462aaef70e7fa0`.
+
+### Acceptance and limitations
+- Latest S6-D code/config checkpoint GitHub Actions acceptance has not been independently observed in this run. Do not claim the nine focused tests or full suite passed yet.
+- Source-worker execution is disabled by default and accepts only injected transports marked `is_test_transport=true`.
+- No live DNS/TLS/HTTP or public-source requests; no model calls.
+- S6-B2 remains HOLD: `live_network_execution_enabled=false`, `dns_pinning=false`, `egress_controls_audited=false`.
+- LangGraph graph has no durable checkpointer. Source-worker batch is an in-memory publisher proposal only. Durable worker outputs, atomic publisher commit and Git fetch-back remain S7-B work.
+- No worker repository write, cloud deployment, account/KYC/terms/billing, external action, commercial build/list or spend.
+
+### Current state
+- S6-C: PASS.
+- S6-D: CODE IMPLEMENTED / CI ACCEPTANCE PENDING.
+- S7-B: NOT STARTED.
+- S8 Cloudflare heartbeat/dispatch: NOT DEPLOYED.
+- S9 unattended pilot: NOT STARTED.
+- Spend ₹0; settled revenue evidence ₹0; commercial execution HOLD.
+- Five commercial gates remain mandatory; UNKNOWN is never PASS.
+
+### Next action
+1. Observe the latest GitHub Actions run for the S6-D code/config head and fix any failures.
+2. Obtain a successful full hash-locked CI run tied to the final code SHA.
+3. Then implement S7-B single-writer publisher with idempotency, schema validation, atomic commit, expected-head compare-and-swap and exact blob fetch-back.
+4. Keep live source fetching disabled until a separately audited ₹0 egress design exists. S8 remains behind exact no-cost eligibility and owner approval.
