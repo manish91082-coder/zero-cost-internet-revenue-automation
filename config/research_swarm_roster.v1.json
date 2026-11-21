@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
   "swarm_id": "zcira-research-swarm-v1",
-  "status": "DESIGN_CONTRACT_ONLY_NOT_EXECUTABLE",
+  "status": "COMPONENTS_IMPLEMENTED_RUNTIME_NOT_DEPLOYED",
   "autonomy_mode": "bounded_read_only_research",
   "orchestration": {
     "supervisor": "mission_controller",
@@ -230,7 +230,19 @@
     "runtime_implemented": false,
     "agents_executed": false,
     "scheduled_swarm_runs": false,
-    "acceptance_tests_executed": false,
-    "reason": "Design contract only. Runtime implementation waits for registry reconciliation, task/evidence schemas, and a verified no-cost test plan."
+    "acceptance_tests_executed": true,
+    "reason": "Reusable deterministic and LangGraph components are implemented; no deployed cloud runtime, live source workers, scheduled swarm runs, or publisher persistence exists. S6D acceptance is pending.",
+    "validated_components": [
+      "S4 deterministic control-plane core",
+      "S5 real LangGraph graph integration",
+      "S6A read-only source-worker core",
+      "S6B1 pinned TLS transport unit tests",
+      "S6C metadata-only snapshot envelope and verifier"
+    ],
+    "pending_components": [
+      "S6D LangGraph source-worker node GitHub Actions acceptance",
+      "S6B2 audited live egress controls",
+      "S7B durable single-writer publisher integration"
+    ]
   }
 }
