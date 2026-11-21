@@ -419,7 +419,11 @@ def create_graph_nodes(
             raise PolicyError("source_worker_executor must be callable")
 
         def source_workers(state: SwarmGraphState) -> dict[str, Any]:
-            if state.get("status") != "RUNNING":
+            if (
+                state.get("status") in {"PAUSED", "FAILED", "COMPLETED"}
+                or state.get("kill_switch") is True
+                or state.get("cancel_requested") is True
+            ):
                 return {"source_worker_proposals": [], "source_worker_errors": [], "source_worker_status": "NOT_RUN"}
             if state.get("source_worker_execution_enabled", False) is not True:
                 return {"source_worker_proposals": [], "source_worker_errors": [], "source_worker_status": "DISABLED_BY_DEFAULT"}
