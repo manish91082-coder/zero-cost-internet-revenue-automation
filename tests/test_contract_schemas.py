@@ -15,6 +15,7 @@ SCHEMA_FILES = {
     "evidence": "evidence.schema.json",
     "source_snapshot": "source_snapshot.schema.json",
     "source_snapshot_envelope": "source_snapshot_envelope.schema.json",
+    "source_worker_proposal": "source_worker_proposal.schema.json",
     "gate_decision": "gate_decision.schema.json",
     "run_state": "run_state.schema.json",
     "agent_message": "agent_message.schema.json",
@@ -29,6 +30,7 @@ FIXTURES = {
     "evidence": "valid_evidence.json",
     "source_snapshot": "valid_source_snapshot.json",
     "source_snapshot_envelope": "valid_source_snapshot_envelope.json",
+    "source_worker_proposal": "valid_source_worker_proposal.json",
     "gate_decision": "valid_gate_decision.json",
     "run_state": "valid_run_state.json",
     "agent_message": "valid_agent_message.json",
@@ -186,3 +188,18 @@ def test_state_manifest_cannot_enable_paid_provider_routes():
     value = copy.deepcopy(fixture_for("state_manifest"))
     value["paid_provider_routes_enabled"] = True
     assert_rejected("state_manifest", value)
+
+
+def test_source_worker_proposal_cannot_persist_raw_body_or_publish():
+    value = copy.deepcopy(fixture_for("source_worker_proposal"))
+    value["raw_body_persisted"] = True
+    assert_rejected("source_worker_proposal", value)
+    value = copy.deepcopy(fixture_for("source_worker_proposal"))
+    value["write_performed"] = True
+    assert_rejected("source_worker_proposal", value)
+
+
+def test_non_completed_source_worker_proposal_cannot_claim_evidence():
+    value = copy.deepcopy(fixture_for("source_worker_proposal"))
+    value["result_status"] = "BLOCKED"
+    assert_rejected("source_worker_proposal", value)
