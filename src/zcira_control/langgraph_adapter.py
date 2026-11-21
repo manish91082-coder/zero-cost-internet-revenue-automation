@@ -74,6 +74,11 @@ class SwarmGraphState(TypedDict, total=False):
     publisher_candidate: dict[str, Any] | None
     publisher_handoff: dict[str, Any] | None
     checkpoint_proposal: dict[str, Any]
+    source_worker_execution_enabled: bool
+    source_worker_proposals: list[dict[str, Any]]
+    source_worker_status: str
+    source_worker_errors: list[dict[str, Any]]
+    source_worker_batch_proposal: dict[str, Any]
     write_performed: bool
 
 
@@ -155,6 +160,8 @@ def validate_run_envelope(state: Mapping[str, Any]) -> None:
     for key in ("kill_switch", "cancel_requested"):
         if not isinstance(state.get(key), bool):
             raise PolicyError(f"LangGraph envelope field {key} must be boolean")
+    if "source_worker_execution_enabled" in state and not isinstance(state["source_worker_execution_enabled"], bool):
+        raise PolicyError("source_worker_execution_enabled must be boolean")
 
 
 def _has_eligible_free_llm(records: list[dict[str, Any]]) -> bool:
@@ -164,7 +171,79 @@ def _has_eligible_free_llm(records: list[dict[str, Any]]) -> bool:
     )
 
 
-def create_graph_nodes(mission_context: Mapping[str, Any]) -> dict[str, Callable[[SwarmGraphState], dict[str, Any]]]:
+def _contains_forbidden_source_payload_key(value: Any) -> bool:
+    forbidden = {
+        "raw_content", "raw_body", "raw_body_bytes", "body_bytes", "page_bytes",
+        "cookies", "authorization", "access_token", "refresh_token", "private_key",
+        "secret", "password",
+    }
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            if str(key).casefold() in forbidden or _contains_forbidden_source_payload_key(child):
+                return True
+    elif isinstance(value, list):
+        return any(_contains_forbidden_source_payload_key(child) for child in value)
+    return False
+
+
+def _validate_source_worker_proposal(proposal: Mapping[str, Any], task: Mapping[str, Any]) -> None:
+    if not isinstance(proposal, Mapping):
+        raise StateError("source worker proposal must be an object")
+    if _contains_forbidden_source_payload_key(proposal):
+        raise StateError("source worker proposal contains raw content or sensitive fields")
+    expected = {
+        "schema_version": "1.0.0",
+        "project_id": PROJECT_ID,
+        "task_id": task.get("task_id"),
+        "idempotency_key": task.get("idempotency_key"),
+        "assigned_role": task.get("assigned_role"),
+        "raw_body_persisted": False,
+        "write_performed": False,
+        "requires_s7_publisher": True,
+        "reviewer_verdict": "PENDING",
+        "commercial_gate_status": "UNKNOWN",
+    }
+    for key, value in expected.items():
+        if proposal.get(key) != value:
+            raise StateError(f"source worker proposal invariant failed: {key}")
+    if proposal.get("result_status") not in {"COMPLETED", "PARTIAL", "BLOCKED"}:
+        raise StateError("source worker result status is invalid")
+    if proposal.get("assigned_role") not in {"official_source_worker_a", "official_source_worker_b"}:
+        raise StateError("source worker proposal role is invalid")
+    envelope = proposal.get("source_snapshot_envelope")
+    if not isinstance(envelope, Mapping):
+        raise StateError("source worker proposal lacks a snapshot envelope")
+    digest = proposal.get("source_snapshot_envelope_sha256")
+    if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+        raise StateError("source worker envelope digest is invalid")
+    if (
+        proposal.get("source_snapshot_content_ref") != f"sha256:{digest}"
+        or proposal.get("source_snapshot_storage_path") != f"evidence/snapshots/sha256/{digest}.json"
+        or envelope.get("snapshot_id") != proposal.get("snapshot_id")
+        or envelope.get("trust_boundary") != "UNTRUSTED_DATA_ONLY"
+        or envelope.get("reviewer_verdict") != "PENDING"
+        or envelope.get("commercial_gate_status") != "UNKNOWN"
+        or envelope.get("retention", {}).get("raw_body_persisted") is not False
+    ):
+        raise StateError("source worker snapshot envelope violates its metadata-only contract")
+    evidence = proposal.get("evidence_proposal")
+    if proposal.get("result_status") == "COMPLETED":
+        if not isinstance(evidence, Mapping):
+            raise StateError("completed source proposal must include evidence")
+        if evidence.get("reviewer_verdict") != "PENDING" or evidence.get("gate_status") != "UNKNOWN" or evidence.get("model_provider") is not None:
+            raise StateError("source evidence proposal changed the review or model boundary")
+    elif evidence is not None:
+        raise StateError("non-completed source proposal cannot include evidence")
+    unsigned = dict(proposal)
+    recorded_digest = unsigned.pop("proposal_sha256", None)
+    if recorded_digest != sha256_text(canonical_json(unsigned)):
+        raise StateError("source worker proposal digest mismatch")
+
+
+def create_graph_nodes(
+    mission_context: Mapping[str, Any],
+    source_worker_executor: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
+) -> dict[str, Callable[[SwarmGraphState], dict[str, Any]]]:
     """Create deterministic nodes. No model, network, filesystem or repository write is called."""
     validate_mission_context(mission_context)
 
@@ -296,16 +375,70 @@ def create_graph_nodes(mission_context: Mapping[str, Any]) -> dict[str, Callable
             "write_authorized": False,
             "write_performed": False,
         }
+        source_proposals = state.get("source_worker_proposals", [])
+        if not isinstance(source_proposals, list) or len(source_proposals) > MAX_PARALLEL_RESEARCH_WORKERS:
+            raise StateError("source worker proposal batch exceeds the two-worker bound")
+        source_batch = {
+            "kind": "source_worker_batch",
+            "schema_version": "1.0.0",
+            "project_id": PROJECT_ID,
+            "run_id": state["run_id"],
+            "base_commit_sha": base_sha,
+            "proposals": source_proposals,
+            "proposals_sha256": sha256_text(canonical_json(source_proposals)),
+            "writer_role_required": SINGLE_WRITER_ROLE,
+            "write_authorized": False,
+            "write_performed": False,
+        }
         return {
             "checkpoint_proposal": proposal,
+            "source_worker_batch_proposal": source_batch,
             "write_performed": False,
         }
 
-    return {
+    nodes = {
         "admission": admission,
         "plan": plan,
         "checkpoint_proposal": checkpoint_proposal,
     }
+    if source_worker_executor is not None:
+        if not callable(source_worker_executor):
+            raise PolicyError("source_worker_executor must be callable")
+
+        def source_workers(state: SwarmGraphState) -> dict[str, Any]:
+            if state.get("status") != "RUNNING":
+                return {"source_worker_proposals": [], "source_worker_errors": [], "source_worker_status": "NOT_RUN"}
+            if state.get("source_worker_execution_enabled", False) is not True:
+                return {"source_worker_proposals": [], "source_worker_errors": [], "source_worker_status": "DISABLED_BY_DEFAULT"}
+            candidates = [
+                task for task in state.get("research_plan", [])
+                if task.get("task_type") == "source_snapshot"
+            ]
+            if len(candidates) > MAX_PARALLEL_RESEARCH_WORKERS:
+                raise StateError("source worker node received more than two selected tasks")
+            if not candidates:
+                return {"source_worker_proposals": [], "source_worker_errors": [], "source_worker_status": "NO_SOURCE_TASKS"}
+            proposals: list[dict[str, Any]] = []
+            errors: list[dict[str, str]] = []
+            for task in candidates:
+                try:
+                    if task.get("assigned_role") not in {"official_source_worker_a", "official_source_worker_b"}:
+                        raise StateError("source task role is not allowlisted")
+                    candidate = source_worker_executor(task)
+                    _validate_source_worker_proposal(candidate, task)
+                    proposals.append(dict(candidate))
+                except Exception as exc:
+                    errors.append({"task_id": str(task.get("task_id", "")), "error_code": type(exc).__name__})
+            if errors and proposals:
+                status = "PARTIAL"
+            elif errors:
+                status = "FAILED"
+            else:
+                status = "PROPOSALS_READY_NOT_PUBLISHED"
+            return {"source_worker_proposals": proposals, "source_worker_errors": errors, "source_worker_status": status}
+
+        nodes["source_workers"] = source_workers
+    return nodes
 
 
 def _route_after_admission(state: SwarmGraphState) -> str:
@@ -315,6 +448,7 @@ def _route_after_admission(state: SwarmGraphState) -> str:
 def build_langgraph_graph(
     mission_context: Mapping[str, Any],
     graph_factory: Any | None = None,
+    source_worker_executor: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
 ) -> Any:
     """Build the optional LangGraph graph. The graph has no built-in in-memory checkpointer."""
     if graph_factory is None:
@@ -329,7 +463,7 @@ def build_langgraph_graph(
         START = graph_factory.START
         StateGraph = graph_factory.StateGraph
 
-    nodes = create_graph_nodes(mission_context)
+    nodes = create_graph_nodes(mission_context, source_worker_executor)
     builder = StateGraph(SwarmGraphState)
     for name, node in nodes.items():
         builder.add_node(name, node)
@@ -339,7 +473,11 @@ def build_langgraph_graph(
         _route_after_admission,
         {"plan": "plan", "checkpoint": "checkpoint_proposal"},
     )
-    builder.add_edge("plan", "checkpoint_proposal")
+    if source_worker_executor is None:
+        builder.add_edge("plan", "checkpoint_proposal")
+    else:
+        builder.add_edge("plan", "source_workers")
+        builder.add_edge("source_workers", "checkpoint_proposal")
     builder.add_edge("checkpoint_proposal", END)
     return builder.compile()
 
@@ -361,6 +499,33 @@ def invoke_graph(graph: Any, initial_state: Mapping[str, Any]) -> dict[str, Any]
         or proposal.get("payload_sha256") != sha256_text(canonical_json(payload))
     ):
         raise StateError("graph checkpoint proposal violates the read-only publisher contract")
+    source_batch = result.get("source_worker_batch_proposal")
+    if not isinstance(source_batch, Mapping):
+        raise StateError("graph did not return a source-worker batch proposal")
+    source_proposals = source_batch.get("proposals")
+    if (
+        source_batch.get("kind") != "source_worker_batch"
+        or source_batch.get("schema_version") != "1.0.0"
+        or source_batch.get("project_id") != PROJECT_ID
+        or source_batch.get("run_id") != result.get("run_id")
+        or source_batch.get("writer_role_required") != SINGLE_WRITER_ROLE
+        or source_batch.get("write_authorized") is not False
+        or source_batch.get("write_performed") is not False
+        or not isinstance(source_proposals, list)
+        or len(source_proposals) > MAX_PARALLEL_RESEARCH_WORKERS
+        or source_batch.get("proposals_sha256") != sha256_text(canonical_json(source_proposals))
+    ):
+        raise StateError("source-worker batch proposal violates the read-only publisher contract")
+    tasks_by_id = {task.get("task_id"): task for task in initial_state.get("tasks", [])}
+    if len({proposal.get("task_id") for proposal in source_proposals if isinstance(proposal, Mapping)}) != len(source_proposals):
+        raise StateError("source-worker batch contains duplicate task proposals")
+    for source_proposal in source_proposals:
+        if not isinstance(source_proposal, Mapping):
+            raise StateError("source-worker batch contains a non-object proposal")
+        source_task = tasks_by_id.get(source_proposal.get("task_id"))
+        if source_task is None:
+            raise StateError("source-worker proposal references an unknown task")
+        _validate_source_worker_proposal(source_proposal, source_task)
     handoff = result.get("publisher_handoff")
     if handoff is not None and (
         handoff.get("status") != "PROPOSED_NOT_EXECUTED"
