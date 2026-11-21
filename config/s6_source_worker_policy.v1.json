@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_PUBLISHER_PENDING",
+  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_S6D_IMPLEMENTED_PENDING_CI_S7B_PUBLISHER_PENDING",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -45,7 +45,7 @@
     "live_source_requests": 0,
     "publisher_fetchback": "NOT_YET_EXECUTED"
   },
-  "next_gate": "S6D_LANGGRAPH_WORKER_NODES_WITH_METADATA_ENVELOPE",
+  "next_gate": "S6D_GITHUB_CI_ACCEPTANCE_THEN_S7B_PUBLISHER",
   "egress_controls_audited": false,
   "snapshot_envelope": {
     "schema_path": "schemas/v1/source_snapshot_envelope.schema.json",
@@ -55,5 +55,19 @@
     "query_and_fragment_persisted": false,
     "publisher_integration": "PENDING",
     "live_network_execution_enabled": false
+  },
+  "source_worker_node_path": "src/zcira_control/langgraph_adapter.py:create_graph_nodes.source_workers",
+  "source_worker_executor_path": "src/zcira_control/langgraph_source_worker.py:build_source_worker_executor",
+  "source_worker_proposal_schema": "schemas/v1/source_worker_proposal.schema.json",
+  "source_worker_execution_enabled_default": false,
+  "synthetic_test_transport_required": true,
+  "worker_proposals_persisted": false,
+  "worker_checkpoint_mode": "EPHEMERAL_BATCH_PROPOSAL_ONLY_S7B_PUBLISHER_REQUIRED",
+  "s6d_validation": {
+    "status": "PENDING_GITHUB_ACTIONS_ACCEPTANCE",
+    "latest_code_commit": "8596d34fe5d51b7fdb919016160f57438a2450bd",
+    "live_source_requests": 0,
+    "model_calls": 0,
+    "repository_writes_by_worker": 0
   }
 }
