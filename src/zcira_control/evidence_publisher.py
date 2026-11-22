@@ -7,7 +7,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -268,11 +268,25 @@ class EvidencePublisher:
         if not isinstance(parameters, Mapping) or not isinstance(parameters.get("source_url"), str):
             raise PublisherError("source task has no source URL parameter")
         try:
-            task_host = (urlsplit(parameters["source_url"]).hostname or "").lower()
+            task_url = urlsplit(parameters["source_url"])
+            task_host = (task_url.hostname or "").lower()
+            task_port = task_url.port
         except ValueError:
             raise PublisherError("source task URL is invalid") from None
-        if task_host != domain:
-            raise PublisherError("source task URL host differs from the published snapshot host")
+        if (
+            task_url.scheme != "https"
+            or task_host != domain
+            or task_url.username is not None
+            or task_url.password is not None
+            or task_port not in (None, 443)
+        ):
+            raise PublisherError("source task URL is not the allowlisted HTTPS host")
+        expected_safe_url = urlunsplit(("https", domain, task_url.path or "/", "", ""))
+        if (
+            envelope.get("source_url") != expected_safe_url
+            or envelope.get("source_url_sha256") != sha256_text(parameters["source_url"])
+        ):
+            raise PublisherError("snapshot URL canonicalization/hash does not match the original task URL")
 
         provenance = envelope.get("provenance", {})
         if not isinstance(provenance, Mapping):
