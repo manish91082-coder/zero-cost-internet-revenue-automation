@@ -91,9 +91,9 @@ def validate_state_path(path: str) -> None:
     if path == "state/manifest.v1.json":
         return
     allowed = (
-        r"state/objects/[a-f0-9]{64}\\.json",
-        r"evidence/snapshots/sha256/[a-f0-9]{64}\\.json",
-        r"evidence/proposals/sha256/[a-f0-9]{64}\\.json",
+        r"state/objects/[a-f0-9]{64}\.json",
+        r"evidence/snapshots/sha256/[a-f0-9]{64}\.json",
+        r"evidence/proposals/sha256/[a-f0-9]{64}\.json",
     )
     if not any(re.fullmatch(pattern, path) for pattern in allowed):
         raise PolicyError("durable adapter path is outside the state/evidence content-addressed allowlist")
