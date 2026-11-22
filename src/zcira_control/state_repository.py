@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Mapping, Protocol
 
 from .checkpoints import StaleCheckpoint
+from .github_state import validate_state_path
 from .leases import validate_lease
 from .policy import (
     CANONICAL_BRANCH,
@@ -322,6 +323,7 @@ class StateRepository:
         objects: list[tuple[str, str, Mapping[str, Any]]],
         now: datetime,
         message: str,
+        extra_files: Mapping[str, str] | None = None,
     ) -> str:
         validate_git_sha(lease_commit_sha)
         head, manifest = self.load()
@@ -348,8 +350,8 @@ class StateRepository:
             active_writer_lease_id=None,
             now=now,
             message=message,
+            extra_files=extra_files,
         )
-
     def release_writer_lease(
         self,
         lease_id: str,
@@ -367,6 +369,7 @@ class StateRepository:
         active_writer_lease_id: str | None,
         now: datetime,
         message: str,
+        extra_files: Mapping[str, str] | None = None,
     ) -> str:
         current_head = self.store.read_head()
         if current_head != expected_head:
@@ -403,6 +406,33 @@ class StateRepository:
                 "sha256": digest,
                 "schema_version": "1.0.0",
             }
+
+        extra_total = 0
+        for path, raw in (extra_files or {}).items():
+            validate_state_path(path)
+            if not path.startswith(("evidence/snapshots/sha256/", "evidence/proposals/sha256/")):
+                raise PolicyError("publisher extra files are restricted to evidence snapshot/proposal paths")
+            if path in files or path == MANIFEST_PATH:
+                raise PolicyError("publisher extra file collides with a state object or manifest")
+            if not isinstance(raw, str):
+                raise PolicyError("publisher extra file must be UTF-8 JSON text")
+            size = len(raw.encode("utf-8"))
+            if size > 65_536:
+                raise PolicyError("one evidence metadata object exceeds 64 KiB")
+            try:
+                parsed = json.loads(raw)
+            except json.JSONDecodeError:
+                raise PolicyError("publisher extra file is not valid JSON") from None
+            if not isinstance(parsed, Mapping) or canonical_json(parsed) != raw:
+                raise PolicyError("publisher extra file must be a canonical JSON object")
+            digest = sha256_text(raw)
+            expected_path = path.rsplit("/", 1)[0] + "/" + digest + ".json"
+            if path != expected_path:
+                raise PolicyError("publisher extra path must match the content SHA-256")
+            extra_total += size
+            if extra_total > 262_144:
+                raise PolicyError("publisher evidence batch exceeds 256 KiB")
+            files[path] = raw
 
         next_manifest = {
             "schema_version": "1.0.0",
