@@ -219,7 +219,7 @@ class EvidencePublisher:
             raise PublisherError("proposal task ID does not match the source task")
         if source_task.get("idempotency_key") != proposal.get("idempotency_key"):
             raise PublisherError("proposal idempotency key does not match the source task")
-        if source_task.get("status") not in {"QUEUED", "LEASED", "RUNNING"}:
+        if source_task.get("status") not in {"QUEUED", "LEASED", "RUNNING", "COMPLETED"}:
             raise PublisherError("source task is not in a publishable execution state")
         if (
             source_task.get("external_actions_allowed") is not False
@@ -496,14 +496,20 @@ class EvidencePublisher:
                         or evidence_id not in existing_task.get("evidence_ids", [])
                     ):
                         raise IdempotencyConflict("completed task points to different immutable evidence")
-                    self._assert_same_or_absent("source_snapshot", snapshot_id, item["snapshot_object"], head, manifest)
-                    self._assert_same_or_absent("evidence", evidence_id, item["evidence"], head, manifest)
+                    if not self._assert_same_or_absent("source_snapshot", snapshot_id, item["snapshot_object"], head, manifest):
+                        raise IdempotencyConflict("completed task is missing its immutable source-snapshot state object")
+                    if not self._assert_same_or_absent("evidence", evidence_id, item["evidence"], head, manifest):
+                        raise IdempotencyConflict("completed task is missing its immutable evidence state object")
                     stored_snapshot = self.state_repository.store.read_file(item["snapshot_path"], ref=head)
                     stored_proposal = self.state_repository.store.read_file(item["proposal_path"], ref=head)
                     if stored_snapshot != item["snapshot_raw"] or stored_proposal != item["proposal_raw"]:
                         raise IdempotencyConflict("completed task's immutable evidence files do not match the retry")
                     duplicate_items.append(item)
                     continue
+            if existing_task is None and item["source_task"].get("status") == "COMPLETED":
+                raise PublisherError("a completed source task must already exist in the canonical state manifest")
+            if existing_task is not None and item["source_task"].get("status") == "COMPLETED" and existing_task.get("status") != "COMPLETED":
+                raise PublisherError("caller task state conflicts with the canonical task state")
             new_items.append(item)
 
         if not new_items:
