@@ -86,6 +86,46 @@ class StateRepositoryTests(unittest.TestCase):
         released = self.repo.load_object("resource_lease", lease["lease_id"], head, manifest)
         self.assertEqual(released["status"], "RELEASED")
 
+    def test_commit_and_release_publishes_evidence_file_atomically_with_manifest(self):
+        lease, lock_head = self.repo.acquire_writer_lease("publisher-evidence", NOW, ttl_seconds=300)
+        envelope = {"kind": "metadata-only", "snapshot_id": "snapshot-test"}
+        raw = canonical_json(envelope)
+        digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+        path = f"evidence/snapshots/sha256/{digest}.json"
+        event = {"schema_version": "1.0.0", "event_id": "evt-evidence", "event": "evidence-published"}
+        final_head = self.repo.commit_and_release(
+            lease["lease_id"],
+            lock_head,
+            [("state_event", "evt-evidence", event)],
+            NOW + timedelta(seconds=1),
+            "atomic evidence publication test",
+            extra_files={path: raw},
+        )
+        head, manifest = self.repo.load()
+        self.assertEqual(head, final_head)
+        self.assertIsNone(manifest["active_writer_lease_id"])
+        self.assertEqual(self.store.read_file(path, ref=final_head), raw)
+        stored_event = self.repo.load_object("state_event", "evt-evidence", head, manifest)
+        self.assertEqual(stored_event, event)
+
+    def test_extra_files_reject_wrong_hash_and_non_evidence_paths(self):
+        lease, lock_head = self.repo.acquire_writer_lease("publisher-invalid", NOW, ttl_seconds=300)
+        raw = canonical_json({"kind": "metadata-only"})
+        bad_hash_path = "evidence/snapshots/sha256/" + ("f" * 64) + ".json"
+        with self.assertRaises(PolicyError):
+            self.repo.commit_and_release(
+                lease["lease_id"], lock_head, [], NOW + timedelta(seconds=1),
+                "reject wrong evidence digest", extra_files={bad_hash_path: raw},
+            )
+        head, manifest = self.repo.load()
+        self.assertEqual(head, lock_head)
+        self.assertEqual(manifest["active_writer_lease_id"], lease["lease_id"])
+        with self.assertRaises(PolicyError):
+            self.repo.commit_and_release(
+                lease["lease_id"], lock_head, [], NOW + timedelta(seconds=1),
+                "reject non-evidence path", extra_files={"config/secret.json": raw},
+            )
+
     def test_expired_lease_is_marked_and_replaced_by_new_lease(self):
         old, _ = self.repo.acquire_writer_lease("publisher-old", NOW, ttl_seconds=30)
         new, new_head = self.repo.acquire_writer_lease("publisher-new", NOW + timedelta(seconds=31), ttl_seconds=300)
