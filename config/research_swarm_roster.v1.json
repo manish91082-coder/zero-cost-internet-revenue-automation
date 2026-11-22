@@ -231,7 +231,7 @@
     "agents_executed": false,
     "scheduled_swarm_runs": false,
     "acceptance_tests_executed": true,
-    "reason": "S4-S6 deterministic components have validated code paths, but no live source fetch, durable source-worker publication, deployed cloud runtime, agent process or scheduled swarm run exists.",
+    "reason": "S4-S6 deterministic components have validated code paths; S7-B metadata-only publisher core is now committed with synthetic acceptance tests pending GitHub Actions observation. No live source fetch, actual evidence publication, deployed cloud runtime, agent process or scheduled swarm run exists.",
     "validated_components": [
       "S4 deterministic control-plane core",
       "S5 real LangGraph graph integration",
@@ -242,9 +242,13 @@
     ],
     "pending_components": [
       "S6B2 independently audited zero-cost live egress controls",
-      "S7B durable single-writer publisher and Git blob fetch-back",
+      "S7B GitHub Actions acceptance for atomic metadata publisher, branch protection and actual Git fetch-back",
+      "S7B publisher-only write workflow and credential isolation (not enabled)",
       "S8 cloud heartbeat/dispatch and failover",
       "S9 seven-day unattended read-only pilot"
-    ]
+    ],
+    "publisher_core_status": "IMPLEMENTED_CI_PENDING_NOT_DEPLOYED",
+    "publisher_workflow_enabled": false,
+    "repository_write_credentials_enabled": false
   }
 }
