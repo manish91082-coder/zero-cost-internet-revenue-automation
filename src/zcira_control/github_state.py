@@ -82,14 +82,21 @@ class UrllibGitHubTransport:
 
 
 def validate_state_path(path: str) -> None:
+    """Allow only the manifest and exact content-addressed state/evidence JSON paths."""
     if not isinstance(path, str):
-        raise PolicyError("state path must be a string")
+        raise PolicyError("durable path must be a string")
     parsed = PurePosixPath(path)
     if parsed.is_absolute() or ".." in parsed.parts or "." in parsed.parts or str(parsed) != path:
-        raise PolicyError("state path traversal or non-canonical path")
-    if path != "state/manifest.v1.json" and not re.fullmatch(r"state/objects/[a-f0-9]{64}\.json", path):
-        raise PolicyError("durable state adapter may access only the manifest and content-addressed objects")
-
+        raise PolicyError("durable path traversal or non-canonical path")
+    if path == "state/manifest.v1.json":
+        return
+    allowed = (
+        r"state/objects/[a-f0-9]{64}\\.json",
+        r"evidence/snapshots/sha256/[a-f0-9]{64}\\.json",
+        r"evidence/proposals/sha256/[a-f0-9]{64}\\.json",
+    )
+    if not any(re.fullmatch(pattern, path) for pattern in allowed):
+        raise PolicyError("durable adapter path is outside the state/evidence content-addressed allowlist")
 
 class GitHubGitDataStore:
     """Atomic multi-file state commits using Git Data API and a non-force ref update.
@@ -160,10 +167,11 @@ class GitHubGitDataStore:
             canonical = json.dumps(parsed_json, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             if canonical != content:
                 raise PolicyError("durable state JSON must use canonical serialization")
-            if path.startswith("state/objects/"):
+            if path.startswith(("state/objects/", "evidence/snapshots/sha256/", "evidence/proposals/sha256/")):
                 digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
-                if path != f"state/objects/{digest}.json":
-                    raise PolicyError("state object path must match the content SHA-256")
+                expected_path = path.rsplit("/", 1)[0] + "/" + digest + ".json"
+                if path != expected_path:
+                    raise PolicyError("content-addressed path must match the exact content SHA-256")
             total_bytes += size
         if total_bytes > 2_000_000:
             raise PolicyError("state transaction exceeds the 2 MB safety bound")
