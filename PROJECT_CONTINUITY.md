@@ -749,3 +749,78 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - The one skip is the pre-existing test branch for a missing LangGraph dependency; LangGraph 1.2.22 was installed from the exact hash-locked requirements.
 - Policy, schema manifest and roster references were atomically updated in commit `bf8f590ee27f4746d69a54a2e15a58263fe3f926`; this is metadata-only and does not change executable code. S6-D report updated in commit `78b751f700dc303b3574451ac1dea08ce3b1f576`.
 - S6-D is PASS only for deterministic graph integration with synthetic test transports. Live source execution remains disabled, S6-B2 egress audit remains HOLD, and worker proposals are not durable until S7-B publisher integration.
+
+
+## 44. Phase S7-B — Metadata-only single-writer evidence publisher core (2026-11-22)
+
+### Preflight and controlling-source verification
+- Re-read current PROJECT_CONTINUITY.md, S2-B cloud-only failover decision, S1 roster JSON/report, S7-A read-only CI design, S6-B2 runner egress audit, S4-B durable-state report, S6-D integration report and latest S6 policy.
+- Re-materialized the controlling Library archive 02_complete-research-hi.md (file_id file_00000000c8088211912536fa0fe8badd, version 1): 1,402,707 bytes; SHA-256 c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5.
+- Canonical destination-section hash remains 7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24.
+- 219 categories; 3,314 category-specific destination occurrences; 8 shared lists / 168 shared-list entries; 213 explicit category-to-shared-list edges; 3,482 total source occurrence slots. These remain occurrence counts, not unique platform identities.
+- P1/P2/P3/P4/P5/B/M order and Category #24=B remain unchanged.
+
+### S7-B core implementation
+- New src/zcira_control/evidence_publisher.py provides schema-gated publication for one or two completed source-worker proposals per transaction.
+- Publisher independently checks the exact source host, publisher, locked P1/P2 priority, task URL/hash, category/destination provenance, source-row/line/archive hash, metadata-only retention, evidence grade, proposal SHA-256 and envelope SHA-256.
+- Raw-body, credentials, secrets and sensitive-key fields are rejected. Query/fragment data is not persisted. The publisher never performs network or model calls.
+- Snapshot envelope path: evidence/snapshots/sha256/<content-sha256>.json.
+- Worker proposal path: evidence/proposals/sha256/<content-sha256>.json.
+- Source capture task is marked COMPLETED only after durable publication. This is a technical capture-task status, not a commercial approval.
+- A separate adversarial_auditor task is created QUEUED with no external action capabilities. Run state becomes PARTIAL, finished_at remains null, original started_at is preserved, reviewer verdict remains PENDING and commercial gate remains UNKNOWN.
+- Exact duplicate retry releases the new lease without duplicating immutable evidence. Conflicting task IDs/idempotency keys or content collisions are rejected.
+- src/zcira_control/github_state.py now accepts only exact state/evidence content-addressed JSON paths and verifies each filename digest against canonical content.
+- src/zcira_control/state_repository.py commit_and_release accepts bounded evidence extra_files and commits evidence blobs, state objects, task/run updates, manifest and writer-lease release atomically with the expected parent SHA and non-force update. Every changed file is fetched back at the exact commit ref.
+- Per evidence file limit 64 KiB; total evidence extra-file batch limit 256 KiB; max two worker proposals per publication transaction.
+- config/s7b_publisher_policy.v1.json records all fail-closed flags. Publisher workflow remains disabled; no contents:write credential was added; branch protection remains unverified.
+- mission_registry allowed_paths now contains only the two exact content-addressed evidence path patterns. Read-only CI path filters include those paths.
+- config/research_swarm_roster.v1.json now reports publisher core IMPLEMENTED_CI_PENDING_NOT_DEPLOYED. runtime_implemented=false, agents_executed=false and scheduled_swarm_runs=false remain unchanged.
+
+### S7-B test additions
+- tests/test_github_state.py: 2 new evidence-path allowlist and content-digest tests.
+- tests/test_state_persistence.py: 2 new atomic evidence-file and rejection tests.
+- tests/test_evidence_publisher.py: 7 new synthetic publisher tests for atomic transaction/fetch-back, review-task creation, run-clock preservation, idempotent duplicate retry, conflicting idempotency, commercial gate promotion rejection, raw-body rejection, source allowlist and stale writer head.
+- Total 11 new tests. Prior verified S6-D baseline was 180 passed / 1 expected skip / 6 subtests in Actions run 44860401524. Expected full-suite total after these additions is 191 passed if all new tests pass; this is not yet an observed result.
+
+### Commit trail and fetch-back
+- github_state evidence-path allowlist: commits e7008101caf702617b6ecd4e9fa08fd46d778e91, 5c0a905136345661231749475a6db1a3a7e414c4, 797fa76ef19f74bf94d6a52d8719f2c41c93a82d; final blob 959c6d4c942991cd80c15787eb11161dc998fdcc.
+- StateRepository atomic extra_files support: commit aa71768bbf4bd5710f15f154598965efde78a5be; blob d409425a7e4692805b0ec1630bc0c2d91fa462d5.
+- GitHub state path tests: commit ff0916fed7525e418e8e66d16e1ef2b4d709a951; blob 7eb2a1ea1a45a0a5530f8853834bc50d89b7c895.
+- Durable state persistence tests: commit 410a9352f303aafcff452b910c553508607f95ff; blob 483aa7a10643b1bd9cddb65b7349201e54f0b7b2.
+- Evidence publisher module: commits 2820140d04af097d7e323b576e0c2bfdf29d3564, 707101c0323cde44a87621c6d1fe39d58f92aad7, 14193228417f4af9ad7e3148610602be9ed3f2aa; final blob 706fbff8142f114b882f384d792460bc4c09ff2d.
+- Publisher tests: commit ff864f7468437301eeef1023952c05c2d7318c66; blob 7594d291e08c996323599d3af173c4428b3c7c3f.
+- Mission path policy: commit 29ad7a05bf1c80ea2c2f59b3b7cc72fd9ae344df; blob 524d70da24ca13b56caf41264593cd8a381ffea3.
+- Read-only CI evidence path filters: commit 6144d83658b62fc505b7f8f53ab34fd6c3f66a19; blob 7a33c69d6b582da9dcf3888aed8628d2c7d2b12f.
+- Publisher policy: commit 2e49d17f7dc723bf34010f866a106650d414f120; blob 4aaaea5615233a4c3f677da48a8eb10562f77a93.
+- S6 source policy checkpoint: commit 4075bd7ec6055f78678154d06bf9833c5dfa436c; blob 962c51df84cf75de973d0a9239d0d37ab1a9de5a.
+- Swarm roster checkpoint: commit 916ac33e9ca19ac383996c750faa96ca67f31792; blob c3d2f6db366344780866800a64158b736701dc25.
+- S7-B report: docs/66_PHASE_S7B_SINGLE_WRITER_METADATA_EVIDENCE_PUBLISHER_CORE_HI.md; commit 79dd01a6d9fb7460feb8a25c2d4e65de85e4f95a; blob 66fccc53a11046e644f8ad366284d22ab79d6a99.
+- Each changed source/config/test/report/roster artifact was fetched back from canonical main and its returned blob SHA recorded above.
+
+### Acceptance status and limitations
+- Latest known verified code baseline remains S6-D Actions run 44860401524: 180 passed / 1 expected skip / 6 subtests.
+- S7-B adds 11 tests and its source/config/test changes are included in the push-triggered S7-A workflow path filters.
+- The connected GitHub read surface returned no legacy combined status context for the latest S7-B head. Its fetch_commit_workflow_runs wrapper is PR-trigger-only and returned no push run. The exact push-triggered Actions run ID/job result has therefore not been independently observed in this execution.
+- S7-B full CI acceptance is PENDING OBSERVATION. Do not claim 191 tests passed.
+- No actual GitHub evidence publication was performed. Fetch-back is implemented in the publisher/state adapter and covered by synthetic-store tests, but no live write credential or publisher workflow exists.
+- GitHub branch protection/ruleset remains UNKNOWN. The writer lease is cooperative until S7-B mechanical permission isolation is implemented.
+- S6-B2 remains HOLD: dns_pinning=false, egress_controls_audited=false, live_network_enabled=false. No live source request was made.
+- LangGraph has no durable checkpointer; Cloudflare Worker/Cron/D1 are not deployed; no scheduled swarm/agent process is running.
+
+### Current status
+- A2.4-B, A2.4-C, A2.5: COMPLETE.
+- S3: versioned schemas published.
+- S4/S4-B: deterministic controller and durable Git state core implemented.
+- S5: real LangGraph synthetic integration PASS.
+- S6-A/S6-B1/S6-C/S6-D: deterministic code/test gates PASS at their recorded checkpoints; live egress remains blocked.
+- S7-B: PUBLISHER CORE IMPLEMENTED / FULL CI ACCEPTANCE PENDING / NOT DEPLOYED.
+- S8: NOT DEPLOYED.
+- S9: NOT STARTED.
+- Spend ₹0; settled revenue evidence ₹0; accounts/KYC/terms/billing/deployment/external submissions 0; commercial execution HOLD.
+
+### Next actions
+1. Observe the exact push-triggered S7-A Actions run for the latest S7-B code/config head and fetch job steps/logs. If the 11 new tests fail, fix the underlying defect and rerun the full hash-locked suite.
+2. Audit the real GitHubGitDataStore Git Data API path against a disposable repository only if a separately approved safe test target exists; do not use production evidence writes for a first live integration test.
+3. Independently verify branch protection/ruleset and the exact publisher-only credential scope. Keep the publisher workflow and contents:write permission disabled until the exact owner approval gate is satisfied.
+4. Only after S7-B acceptance, continue S6-B2 egress feasibility research and S6 durable checkpointer design; live source fetch remains disabled.
+5. S8 Cloudflare eligibility/deployment and S9 pilot remain separate owner-approval and no-billing gates.
