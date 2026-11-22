@@ -18,6 +18,8 @@
     "requirements-test.txt",
     "src/**",
     "state/**",
+    "evidence/snapshots/sha256/*.json",
+    "evidence/proposals/sha256/*.json",
     ".github/workflows/zcira-readonly-validation.yml"
   ],
   "denied_paths": [
