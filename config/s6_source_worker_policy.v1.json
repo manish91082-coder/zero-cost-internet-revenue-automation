@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6A_CORE_VALIDATED_S6B1_PASS_S6B2_EGRESS_HOLD_S6C_PASS_S6D_PASS_S7B_PUBLISHER_PENDING",
+  "status": "S6D_PASS_S7B_PUBLISHER_CORE_IMPLEMENTED_CI_PENDING",
   "worker_task_type": "source_snapshot",
   "allowed_roles": [
     "official_source_worker_a",
@@ -45,7 +45,7 @@
     "live_source_requests": 0,
     "publisher_fetchback": "NOT_YET_EXECUTED"
   },
-  "next_gate": "S7B_SINGLE_WRITER_PUBLISHER_AND_GITHUB_BLOB_FETCHBACK",
+  "next_gate": "S7B_GITHUB_ACTIONS_ACCEPTANCE_AND_BRANCH_PROTECTION_VERIFICATION",
   "egress_controls_audited": false,
   "snapshot_envelope": {
     "schema_path": "schemas/v1/source_snapshot_envelope.schema.json",
@@ -78,5 +78,16 @@
     "live_source_requests": 0,
     "model_calls": 0,
     "worker_repository_writes": 0
+  },
+  "publisher_core": {
+    "module": "src/zcira_control/evidence_publisher.py",
+    "policy": "config/s7b_publisher_policy.v1.json",
+    "tests": "tests/test_evidence_publisher.py",
+    "atomic_state_transition_support": true,
+    "evidence_paths_content_addressed": true,
+    "source_worker_write_permission": false,
+    "live_network_execution_enabled": false,
+    "publisher_workflow_enabled": false,
+    "publisher_ci_status": "PENDING_OBSERVATION"
   }
 }
