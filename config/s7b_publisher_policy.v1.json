@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "status": "S7B_CORE_IMPLEMENTED_CI_PENDING",
+  "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
+  "canonical_branch": "main",
+  "publisher_role": "evidence_publisher",
+  "max_proposals_per_transaction": 2,
+  "requires_active_repository_writer_lease": true,
+  "compare_and_swap": {
+    "expected_parent_sha_required": true,
+    "force_push": false,
+    "stale_head_behavior": "REJECT_AND_REFETCH",
+    "concurrent_non_fast_forward_behavior": "REJECT"
+  },
+  "atomic_commit": {
+    "snapshot_metadata": true,
+    "worker_proposal": true,
+    "source_snapshot_state_object": true,
+    "evidence_state_object": true,
+    "source_task_state": true,
+    "review_task_state": true,
+    "run_state": true,
+    "writer_lease_release": true,
+    "manifest": true
+  },
+  "immutable_paths": [
+    "evidence/snapshots/sha256/<content-sha256>.json",
+    "evidence/proposals/sha256/<content-sha256>.json",
+    "state/objects/<content-sha256>.json",
+    "state/manifest.v1.json"
+  ],
+  "metadata_only": {
+    "raw_body_persisted": false,
+    "full_page_mirroring": false,
+    "max_snapshot_envelope_bytes": 16384,
+    "max_publisher_file_bytes": 65536,
+    "max_extra_files_per_transaction_bytes": 262144,
+    "excerpt_max_chars": 2000,
+    "query_and_fragment_persisted": false,
+    "sensitive_key_rejection": true
+  },
+  "review_flow": {
+    "source_capture_task_after_publish": "COMPLETED",
+    "independent_review_task_after_publish": "QUEUED",
+    "run_status_after_publish": "PARTIAL",
+    "reviewer_verdict": "PENDING",
+    "commercial_gate_status": "UNKNOWN",
+    "gate_promotion_by_publisher": false
+  },
+  "idempotency": {
+    "task_id_and_idempotency_key_required": true,
+    "immutable_snapshot_and_evidence_collision_rejected": true,
+    "exact_duplicate_retry": "RELEASE_LEASE_WITHOUT_DUPLICATING_EVIDENCE",
+    "conflicting_retry": "REJECT"
+  },
+  "security": {
+    "exact_source_host_allowlist_required": true,
+    "source_priority_must_match_policy": true,
+    "source_provenance_must_match_task": true,
+    "worker_write_performed_must_be_false": true,
+    "worker_raw_body_persisted_must_be_false": true,
+    "external_actions_allowed": false,
+    "model_calls_enabled": false,
+    "paid_provider_routes_enabled": false,
+    "spend_cap_inr": 0,
+    "live_source_execution_enabled": false,
+    "publisher_workflow_enabled": false,
+    "github_contents_write_permission_enabled": false,
+    "branch_protection_verified": false,
+    "cloud_deployment": false
+  },
+  "acceptance": {
+    "unit_tests_added": 11,
+    "expected_full_suite_total": 191,
+    "previous_verified_baseline": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
+    "current_ci_status": "PENDING_OBSERVATION",
+    "fetchback_verification_required": true
+  },
+  "approval_gates": {
+    "repository_only_engineering": "ALLOWED",
+    "publisher_workflow_activation": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "cloud_deployment": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "billing_or_payment_method": "PROHIBITED_WITHOUT_SEPARATE_EXPLICIT_APPROVAL"
+  }
+}
