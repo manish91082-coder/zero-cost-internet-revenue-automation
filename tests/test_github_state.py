@@ -138,6 +138,25 @@ class GitHubStateStoreTests(unittest.TestCase):
         with self.assertRaises(PolicyError):
             validate_state_path("state/notes.txt")
 
+    def test_exact_evidence_paths_are_allowed_but_arbitrary_evidence_paths_are_denied(self):
+        validate_state_path("evidence/snapshots/sha256/" + "a" * 64 + ".json")
+        validate_state_path("evidence/proposals/sha256/" + "b" * 64 + ".json")
+        with self.assertRaises(PolicyError):
+            validate_state_path("evidence/snapshots/raw-page.html")
+        with self.assertRaises(PolicyError):
+            validate_state_path("evidence/proposals/sha256/not-a-digest.json")
+
+    def test_evidence_content_address_must_match_exact_sha256_and_fetches_back(self):
+        base = self.store.read_head()
+        content = '{"kind":"metadata-only-snapshot"}'
+        digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        path = f"evidence/snapshots/sha256/{digest}.json"
+        result = self.store.commit_files(base, {path: content}, "test evidence snapshot commit")
+        self.assertEqual(self.store.read_file(path, result["commit_sha"]), content)
+        bad_path = "evidence/proposals/sha256/" + ("f" * 64) + ".json"
+        with self.assertRaises(PolicyError):
+            self.store.commit_files(self.store.read_head(), {bad_path: content}, "reject mismatched evidence digest")
+
     def test_object_path_must_match_content_sha256(self):
         base = self.store.read_head()
         with self.assertRaises(PolicyError):
