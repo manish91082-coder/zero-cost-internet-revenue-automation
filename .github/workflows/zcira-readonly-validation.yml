@@ -12,6 +12,8 @@ on:
       - "config/**"
       - "scripts/**"
       - "requirements-test.txt"
+      - "evidence/snapshots/sha256/**"
+      - "evidence/proposals/sha256/**"
   workflow_dispatch:
 
 permissions:
