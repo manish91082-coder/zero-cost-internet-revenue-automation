@@ -427,6 +427,84 @@ class EvidencePublisher:
             raise IdempotencyConflict(f"{kind} identity already exists with different immutable content: {object_id}")
         return True
 
+    def reconcile_batch(
+        self,
+        *,
+        proposals: list[Mapping[str, Any]],
+        source_tasks: Mapping[str, Mapping[str, Any]],
+    ) -> dict[str, Any]:
+        """Read-only reconciliation after an ambiguous publisher commit response."""
+        if not isinstance(proposals, list) or not 1 <= len(proposals) <= 2:
+            raise PublisherError("reconciliation accepts one or two proposals per bounded batch")
+        if not isinstance(source_tasks, Mapping):
+            raise PublisherError("source_tasks must map exact task IDs to task objects")
+
+        head, manifest = self.state_repository.load()
+        statuses: dict[str, str] = {}
+        seen_tasks: set[str] = set()
+        for proposal in proposals:
+            if not isinstance(proposal, Mapping):
+                raise PublisherError("reconciliation proposal must be an object")
+            task_id = proposal.get("task_id")
+            if not isinstance(task_id, str) or not task_id or task_id in seen_tasks:
+                raise PublisherError("reconciliation batch has a missing or duplicate task ID")
+            seen_tasks.add(task_id)
+            source_task = source_tasks.get(task_id)
+            if source_task is None:
+                raise PublisherError("reconciliation is missing the exact source task")
+            item = self._prepare_proposal(proposal, source_task)
+            existing_task = self._existing_object("task", task_id, head, manifest)
+            if existing_task is None:
+                statuses[task_id] = "ABSENT"
+                continue
+            if existing_task.get("idempotency_key") != proposal.get("idempotency_key"):
+                raise IdempotencyConflict("task ID was reused with a different idempotency key")
+            if existing_task.get("status") != "COMPLETED":
+                statuses[task_id] = str(existing_task.get("status", "UNKNOWN"))
+                continue
+
+            snapshot_id = item["envelope"]["snapshot_id"]
+            evidence_id = item["evidence"]["evidence_id"]
+            if (
+                snapshot_id not in existing_task.get("source_snapshot_ids", [])
+                or evidence_id not in existing_task.get("evidence_ids", [])
+            ):
+                raise IdempotencyConflict("completed task references different immutable evidence")
+            if not self._assert_same_or_absent(
+                "source_snapshot", snapshot_id, item["snapshot_object"], head, manifest
+            ):
+                raise IdempotencyConflict("completed task is missing its immutable source-snapshot object")
+            if not self._assert_same_or_absent(
+                "evidence", evidence_id, item["evidence"], head, manifest
+            ):
+                raise IdempotencyConflict("completed task is missing its immutable evidence object")
+            stored_snapshot = self.state_repository.store.read_file(item["snapshot_path"], ref=head)
+            stored_proposal = self.state_repository.store.read_file(item["proposal_path"], ref=head)
+            if stored_snapshot != item["snapshot_raw"] or stored_proposal != item["proposal_raw"]:
+                raise IdempotencyConflict("completed task's immutable evidence files do not match the retry")
+            statuses[task_id] = "PUBLISHED"
+
+        published = [task_id for task_id, status in statuses.items() if status == "PUBLISHED"]
+        if len(published) == len(proposals):
+            return {
+                "status": "ALREADY_PUBLISHED",
+                "commit_sha": head,
+                "task_ids": published,
+                "task_statuses": statuses,
+                "external_action_performed": False,
+                "write_performed": False,
+            }
+        if not published:
+            return {
+                "status": "NOT_PUBLISHED",
+                "commit_sha": head,
+                "task_statuses": statuses,
+                "active_writer_lease_id": manifest.get("active_writer_lease_id"),
+                "external_action_performed": False,
+                "write_performed": False,
+            }
+        raise PublisherError("batch reconciliation found partial publication; fail closed")
+
     def publish_batch(
         self,
         *,
