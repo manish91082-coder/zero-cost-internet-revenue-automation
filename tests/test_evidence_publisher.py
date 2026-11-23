@@ -39,6 +39,7 @@ class FakeDurableStore:
         self.head = "a" * 40
         self.snapshots = {self.head: {}}
         self.commit_count = 0
+        self.raise_after_commit_once = False
 
     def read_head(self):
         return self.head
@@ -61,6 +62,9 @@ class FakeDurableStore:
         self.snapshots[new_sha] = snapshot
         self.head = new_sha
         self.commit_count += 1
+        if self.raise_after_commit_once:
+            self.raise_after_commit_once = False
+            raise TimeoutError("simulated response loss after durable commit")
         return {"base_commit_sha": expected_head_sha, "commit_sha": new_sha}
 
 
@@ -222,6 +226,59 @@ class EvidencePublisherTests(unittest.TestCase):
         self.assertEqual(snapshot_object["content_ref"], self.proposal["source_snapshot_content_ref"])
         self.assertEqual(evidence_object["gate_status"], "UNKNOWN")
         self.assertEqual(evidence_object["reviewer_verdict"], "PENDING")
+
+    def test_ambiguous_commit_response_recovers_as_already_published(self):
+        lease, lock_head = self.acquire()
+        self.store.raise_after_commit_once = True
+        with self.assertRaises(TimeoutError):
+            self.publisher.publish_batch(
+                lease_id=lease["lease_id"],
+                lease_commit_sha=lock_head,
+                proposals=[copy.deepcopy(self.proposal)],
+                source_tasks={self.source_task["task_id"]: copy.deepcopy(self.source_task)},
+                run_state=copy.deepcopy(self.run_state),
+                now=NOW + timedelta(seconds=2),
+            )
+
+        committed_head, committed_manifest = self.state.load()
+        self.assertIsNone(committed_manifest["active_writer_lease_id"])
+        committed_task = self.state.load_object(
+            "task", self.source_task["task_id"], committed_head, committed_manifest
+        )
+        self.assertEqual(committed_task["status"], "COMPLETED")
+        self.assertEqual(
+            len([item for item in committed_manifest["objects"] if item["kind"] == "source_snapshot"]),
+            1,
+        )
+        self.assertEqual(
+            len([item for item in committed_manifest["objects"] if item["kind"] == "evidence"]),
+            1,
+        )
+
+        retry_lease, retry_head = self.acquire(NOW + timedelta(minutes=2))
+        recovered = self.publisher.publish_batch(
+            lease_id=retry_lease["lease_id"],
+            lease_commit_sha=retry_head,
+            proposals=[copy.deepcopy(self.proposal)],
+            source_tasks={self.source_task["task_id"]: copy.deepcopy(self.source_task)},
+            run_state=copy.deepcopy(self.run_state),
+            now=NOW + timedelta(minutes=2, seconds=1),
+        )
+        self.assertEqual(recovered["status"], "ALREADY_PUBLISHED")
+        self.assertEqual(recovered["duplicate_task_ids"], [self.source_task["task_id"]])
+        self.assertEqual(recovered["snapshot_paths"], [])
+        self.assertEqual(recovered["proposal_paths"], [])
+        final_head, final_manifest = self.state.load()
+        self.assertIsNone(final_manifest["active_writer_lease_id"])
+        self.assertEqual(
+            len([item for item in final_manifest["objects"] if item["kind"] == "source_snapshot"]),
+            1,
+        )
+        self.assertEqual(
+            len([item for item in final_manifest["objects"] if item["kind"] == "evidence"]),
+            1,
+        )
+        self.assertNotEqual(final_head, committed_head)
 
     def test_retry_is_idempotent_and_does_not_duplicate_evidence(self):
         first = self.publish(now=NOW + timedelta(seconds=2))
