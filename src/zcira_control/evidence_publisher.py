@@ -38,6 +38,15 @@ FORBIDDEN_KEYS = {
 SAFE_SOURCE_ACTIONS = {"READ_PUBLIC", "PARSE_PUBLIC", "HASH_PUBLIC"}
 SOURCE_ROLES = {"official_source_worker_a", "official_source_worker_b"}
 
+# Evidence grades are claim-level assessments. A source's configured default is
+# the maximum authority it can support; reviewers/workers may conservatively downgrade.
+EVIDENCE_GRADE_RANK = {
+    "D_UNVERIFIED": 1,
+    "C_SECONDARY": 2,
+    "B_OFFICIAL_SUPPORT": 3,
+    "A_PRIMARY_OFFICIAL": 4,
+}
+
 
 class PublisherError(RuntimeError):
     """A worker proposal cannot safely be published to the canonical ledger."""
@@ -129,6 +138,7 @@ class EvidencePublisher:
                 or not isinstance(record, Mapping)
                 or not isinstance(record.get("publisher"), str)
                 or record.get("priority") not in {"P1", "P2"}
+                or record.get("evidence_grade") not in EVIDENCE_GRADE_RANK
             ):
                 raise PublisherError("source allowlist must contain exact P1/P2 hosts and publisher records")
 
@@ -243,8 +253,14 @@ class EvidencePublisher:
             raise PublisherError("snapshot source domain is not in the exact current allowlist")
         if envelope.get("publisher") != source_record.get("publisher"):
             raise PublisherError("snapshot publisher does not match the source allowlist")
-        if evidence.get("evidence_grade") != source_record.get("evidence_grade"):
-            raise PublisherError("evidence grade does not match the source allowlist")
+        source_ceiling = source_record.get("evidence_grade")
+        claim_grade = evidence.get("evidence_grade")
+        if (
+            source_ceiling not in EVIDENCE_GRADE_RANK
+            or claim_grade not in EVIDENCE_GRADE_RANK
+            or EVIDENCE_GRADE_RANK[claim_grade] > EVIDENCE_GRADE_RANK[source_ceiling]
+        ):
+            raise PublisherError("claim evidence grade exceeds the source authority ceiling")
         if source_task.get("priority") != source_record.get("priority"):
             raise PublisherError("source task priority does not match the source allowlist")
 
