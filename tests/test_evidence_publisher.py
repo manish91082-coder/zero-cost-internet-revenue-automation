@@ -304,10 +304,33 @@ class EvidencePublisherTests(unittest.TestCase):
                 now=NOW + timedelta(seconds=2),
             )
 
+    def test_claim_grade_cannot_exceed_source_authority_ceiling(self):
+        self.publisher = EvidencePublisher(
+            self.state,
+            SCHEMA_DIR,
+            {
+                "docs.apify.com": {
+                    "publisher": "Apify Documentation",
+                    "priority": "P1",
+                    "evidence_grade": "B_OFFICIAL_SUPPORT",
+                }
+            },
+        )
+        proposal = copy.deepcopy(self.proposal)
+        proposal["evidence_proposal"]["evidence_grade"] = "A_PRIMARY_OFFICIAL"
+        unsigned = {key: value for key, value in proposal.items() if key != "proposal_sha256"}
+        proposal["proposal_sha256"] = digest_text(canonical_json(unsigned))
+        with self.assertRaises(PublisherError):
+            self.publish(proposal=proposal)
+
     def test_from_repository_uses_current_fail_closed_source_policy(self):
         publisher = EvidencePublisher.from_repository(self.state, ROOT)
         self.assertIn("docs.apify.com", publisher.allowed_sources)
         self.assertEqual(publisher.allowed_sources["docs.apify.com"]["priority"], "P1")
+        self.assertEqual(
+            publisher.allowed_sources["docs.apify.com"]["evidence_grade"],
+            "A_PRIMARY_OFFICIAL",
+        )
 
 
 if __name__ == "__main__":
