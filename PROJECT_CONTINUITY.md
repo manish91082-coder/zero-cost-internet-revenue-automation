@@ -870,3 +870,16 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - S7-B code and S7-A CI acceptance remain PASS: latest validated config/roster head `569bf3f0936f38e12ecd9b25f989052ad5f4adb1`, run `45105701263`, 193 passed, 1 expected skip, 6 subtests. Report: `docs/68_PHASE_S7B2_GITHUB_FREE_BRANCH_PROTECTION_AND_PUBLISHER_ISOLATION_DESIGN_HI.md`.
 - Live Git Data API write NOT TESTED; publisher workflow disabled; branch protection NOT ENABLED; S6-B2 egress HOLD; S8 not deployed; S9 not started. Spend ₹0; settled revenue evidence ₹0; commercial execution HOLD.
 - Next: fake-transport Git Data API contract and fetch-back audit, then durable LangGraph checkpointer and S6-B2 egress feasibility. No production evidence writes or cloud deployment without exact owner approval.
+
+
+## 47. Phase S7-B — read-only ambiguous-commit reconciliation (2026-11-23)
+
+- Implemented `EvidencePublisher.reconcile_batch(proposals, source_tasks)` as a read-only recovery API. It returns `NOT_PUBLISHED` when no batch task is durably completed, `ALREADY_PUBLISHED` only when all task/snapshot/evidence objects and metadata files exactly match, and fails closed on partial or conflicting state. It performs no lease acquisition/release, commit or external action.
+- Added fault injection to `FakeDurableStore`: atomic commit advances canonical head and persists task/snapshot/evidence/run state/lease release, then a simulated `TimeoutError` represents a lost response.
+- Regression test proves: preflight `NOT_PUBLISHED` with no write; post-timeout manifest shows completed task and one snapshot/evidence; read-only reconciliation returns `ALREADY_PUBLISHED`; a later lease/retry also returns `ALREADY_PUBLISHED` without duplicate evidence.
+- CI: run `45106414426` on code commit `dd8a5df2a3d0fe4347fcb9bd4df917d048f3c3bf` SUCCESS; run `45106524678` on policy commit SUCCESS; latest run `45106527512` on roster/config head `24e333db73df42b026cb3037bc890bb3a5079822` SUCCESS. All latest acceptance logs: 194 passed, 1 expected skip, 6 subtests; 47 hash-locked packages; pip check PASS; real LangGraph integration 3 passed.
+- Report: `docs/69_PHASE_S7B_AMBIGUOUS_COMMIT_READONLY_RECONCILIATION_HI.md`.
+- This is fake-store fault-injection and read-only CI validation only. No live Git Data API write, production evidence publication, publisher write credential or publisher workflow exists.
+- Branch protection remains NOT ENABLED / CONFIRMED (main `protected=false`; rulesets empty). S6-B2 egress remains HOLD; live source requests 0. S8 Cloudflare deployment 0; S9 pilot not started.
+- Spend ₹0; settled revenue evidence ₹0; no account/KYC/terms/billing/external submission/outreach/product listing. Commercial execution HOLD.
+- Next: continue S7-B Git Data API CAS/fetch-back and ambiguity audit using fake transport; owner-controlled branch ruleset/credential isolation remains required before any live publisher. Continue S6-B2 egress feasibility before live source requests.
