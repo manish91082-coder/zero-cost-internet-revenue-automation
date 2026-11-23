@@ -1,6 +1,6 @@
 # Project Continuity Checkpoint
 
-Last verified: 2026-11-18 (Asia/Kolkata)
+Last verified: 2026-11-23 (Asia/Kolkata)
 Project ID: ZCIRA-2026-11-13
 Canonical repository: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation
 Default branch: main
@@ -824,3 +824,37 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 3. Independently verify branch protection/ruleset and the exact publisher-only credential scope. Keep the publisher workflow and contents:write permission disabled until the exact owner approval gate is satisfied.
 4. Only after S7-B acceptance, continue S6-B2 egress feasibility research and S6 durable checkpointer design; live source fetch remains disabled.
 5. S8 Cloudflare eligibility/deployment and S9 pilot remain separate owner-approval and no-billing gates.
+
+
+## 45. Phase S7-B — claim-grade ceiling correction and full CI acceptance (2026-11-23)
+
+### Preflight and controlling-source verification
+- Canonical repository: `manish91082-coder/zero-cost-internet-revenue-automation`; default branch `main`.
+- Re-read PROJECT_CONTINUITY.md, S2-B architecture decision, S1 roster JSON, S7-A workflow, S7-B publisher code/report/policy, S6-D report, source-domain policy, A2.4-B/C and A2.5 reports.
+- Reopened controlling Library archive `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1. Archive SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`; destination-section SHA-256 `7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24`.
+- A2.4-B: 219/219 category IDs assigned across six batches; zero missing, extra or duplicate IDs. A2.4-C: 8/8 shared lists, 168/168 rows, 213 explicit category-to-list edges. A2.5: 3,482 source occurrences reviewed with provenance; merges not authorized; unique platform count NOT ESTABLISHED. P1/P2/P3/P4/P5/B/M order and Category #24=B unchanged.
+
+### S7-B correction trail
+- Initial push run `44978005047`: 189 passed, 3 failed, 1 skipped. Three failures were caused by exact equality between source default grade and claim grade.
+- Corrected semantic model: source default grade is a maximum authority ceiling. Claim-level evidence can be conservatively downgraded. Ordering: D < C < B < A; grades above the source ceiling and unknown policy grades reject.
+- The first correction exposed an over-broad test assertion: substring `raw_body` matched valid metadata keys `raw_body_sha256` and `raw_body_size_bytes`. Test now parses JSON and rejects exact raw payload keys while checking `raw_body_persisted=false`.
+- Final code/test commit: `7388b8a69ceb75e7a5488de40b83128fb6e31e84`; source blob `9b2ef70c513beed9abefd76a336779c3b3170532`; test blob `028e88c1dd3b8b2ee80184eced03cddb4376a273`.
+
+### Full CI acceptance — observed PASS
+- Run `45105601988`, code/test head `7388b8a69ceb75e7a5488de40b83128fb6e31e84`: SUCCESS; 193 passed, 1 expected skip, 6 subtests; 47 hash-locked packages; `pip check` PASS; real LangGraph integration 3 PASS.
+- Policy metadata commit `f17638453f869bfb629aa7456380d03b5ddfa538` passed run `45105698068`: same 193/1/6 result.
+- Latest roster/config commit `569bf3f0936f38e12ecd9b25f989052ad5f4adb1` passed run `45105701263`: SUCCESS; 193 passed, 1 expected skip, 6 subtests.
+- Detailed report: `docs/67_PHASE_S7B_EVIDENCE_GRADE_CEILING_CORRECTION_HI.md`.
+
+### Governance and live-system limits
+- GitHub main branch metadata: `protected=false`, `protection.enabled=false`; repository rulesets collection empty. Branch protection is NOT ENABLED / CONFIRMED.
+- S7-B code/test PASS is synthetic-store and fake-GitHub-transport validation. No live Git Data API write or production evidence publication occurred.
+- Publisher workflow remains disabled; no contents:write token/secret or OIDC; no publisher-only credential isolation.
+- S6-B2 remains HOLD: `dns_pinning=false`, `egress_controls_audited=false`, `live_network_enabled=false`; live source requests 0.
+- LangGraph durable checkpointer not implemented; Cloudflare Worker/Cron/D1 not deployed; no scheduled agents/swarm run; S9 pilot not started.
+- Spend ₹0; settled revenue evidence ₹0; no accounts/KYC/terms/billing/external submissions; commercial execution HOLD.
+
+### Current status and next action
+- A2.4-B/C/A2.5: COMPLETE; 3,482 remains source occurrence slots, not unique platforms.
+- S3: schemas published. S4/S4-B deterministic controller and Git state core implemented. S5 real LangGraph synthetic integration PASS. S6-A/C/D synthetic/code gates PASS; live egress HOLD. S7-B publisher core and read-only CI acceptance PASS, NOT DEPLOYED. S8 NOT DEPLOYED. S9 NOT STARTED.
+- Next: audit Git Data API CAS/fetch-back and publisher write isolation without a production evidence write; continue S6-B2 zero-cost egress feasibility and durable LangGraph checkpointer design. Keep publisher workflow and live source fetching disabled until all required gates and exact owner approvals are satisfied.
