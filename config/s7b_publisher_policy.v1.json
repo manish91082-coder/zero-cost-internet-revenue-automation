@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B_READONLY_RECONCILIATION_API_CI_PENDING_NOT_DEPLOYED",
+  "status": "S7B_READONLY_RECONCILIATION_API_CI_PASS_NOT_DEPLOYED",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -76,21 +76,21 @@
     "unit_tests_added": 13,
     "expected_full_suite_total": 195,
     "previous_verified_baseline": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
-    "current_ci_status": "RECONCILIATION_API_TEST_COMMITTED_PENDING_VALIDATION",
+    "current_ci_status": "PASS",
     "fetchback_verification_required": true,
     "expected_passed": 194,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45106151902,
-      "head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
+      "run_id": 45106437064,
+      "head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
       "conclusion": "success",
       "passed": 194,
       "skipped": 1,
       "subtests_passed": 6,
-      "validated": "ambiguous commit response recovery; no duplicate source_snapshot/evidence objects"
+      "validated": "read-only NOT_PUBLISHED/ALREADY_PUBLISHED reconciliation, post-commit lost-response recovery, idempotent retry"
     },
-    "verified_run_id": 45106151902,
-    "verified_head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
+    "verified_run_id": 45106437064,
+    "verified_head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
     "verified_result": {
       "conclusion": "success",
       "passed": 194,
@@ -102,12 +102,12 @@
       "hash_locked_packages": 47
     },
     "ambiguous_commit_recovery": {
-      "status": "READONLY_RECONCILIATION_API_CI_PENDING",
+      "status": "PASS",
       "test": "test_ambiguous_commit_response_recovers_as_already_published",
-      "run_id": 45106151902,
-      "head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
-      "result": "after simulated lost response post-commit, reacquired lease reconciles immutable objects and returns ALREADY_PUBLISHED without duplicate evidence",
-      "reconcile_api": "EvidencePublisher.reconcile_batch is read-only; returns NOT_PUBLISHED, ALREADY_PUBLISHED or fails closed on partial/inconsistent state; never writes or releases leases."
+      "reconcile_api": "EvidencePublisher.reconcile_batch",
+      "run_id": 45106437064,
+      "head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
+      "result": "pre-commit returns NOT_PUBLISHED without writes; after simulated response loss post-commit returns ALREADY_PUBLISHED read-only; retry returns ALREADY_PUBLISHED without duplicate evidence"
     }
   },
   "approval_gates": {
