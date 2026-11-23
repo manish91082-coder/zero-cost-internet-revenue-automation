@@ -231,7 +231,7 @@
     "agents_executed": false,
     "scheduled_swarm_runs": false,
     "acceptance_tests_executed": true,
-    "reason": "S7-B publisher core, claim-grade ceiling and ambiguous-commit recovery regression all pass in read-only GitHub Actions validation. Latest run 45106151902: 194 passed, 1 expected skip, 6 subtests. The fault-injection test proves that if the response is lost after the atomic commit has already advanced durable state, a new lease/retry reconciles the immutable evidence and returns ALREADY_PUBLISHED without duplication. This is fake-store validation only; no live Git Data API write, production evidence publication, deployed runtime or scheduled swarm exists.",
+    "reason": "S7-B publisher core and prior ambiguous-commit recovery test passed. A new read-only EvidencePublisher.reconcile_batch API has been added so the next run can inspect canonical task/evidence state after a lost commit response without taking a lease or writing. The regression now checks NOT_PUBLISHED before commit, ALREADY_PUBLISHED after simulated response loss, and idempotent retry. Latest code/test validation is pending. No live Git Data API write or production evidence publication.",
     "validated_components": [
       "S4 deterministic control-plane core",
       "S5 real LangGraph graph integration",
@@ -241,6 +241,7 @@
       "S6D LangGraph source-worker node with synthetic transport (GitHub Actions run 44860401524)"
     ],
     "pending_components": [
+      "S7B read-only reconciliation API CI validation",
       "S6B2 independently audited zero-cost live egress controls",
       "S7B actual Git Data API end-to-end write/fetch-back/CAS integration (not tested; no production evidence writes)",
       "S7B publisher-only write workflow and credential isolation (not enabled)",
@@ -248,7 +249,7 @@
       "S8 cloud heartbeat/dispatch and failover",
       "S9 seven-day unattended read-only pilot"
     ],
-    "publisher_core_status": "IMPLEMENTED_CI_PASS_AMBIGUOUS_RECOVERY_PASS_NOT_DEPLOYED",
+    "publisher_core_status": "IMPLEMENTED_READONLY_RECONCILIATION_API_CI_PENDING_NOT_DEPLOYED",
     "publisher_workflow_enabled": false,
     "repository_write_credentials_enabled": false,
     "branch_protection_status": "NOT_ENABLED_CONFIRMED",
