@@ -228,6 +228,15 @@ class EvidencePublisherTests(unittest.TestCase):
         self.assertEqual(evidence_object["reviewer_verdict"], "PENDING")
 
     def test_ambiguous_commit_response_recovers_as_already_published(self):
+        before = self.store.commit_count
+        not_published = self.publisher.reconcile_batch(
+            proposals=[copy.deepcopy(self.proposal)],
+            source_tasks={self.source_task["task_id"]: copy.deepcopy(self.source_task)},
+        )
+        self.assertEqual(not_published["status"], "NOT_PUBLISHED")
+        self.assertFalse(not_published["write_performed"])
+        self.assertEqual(self.store.commit_count, before)
+
         lease, lock_head = self.acquire()
         self.store.raise_after_commit_once = True
         with self.assertRaises(TimeoutError):
@@ -254,6 +263,14 @@ class EvidencePublisherTests(unittest.TestCase):
             len([item for item in committed_manifest["objects"] if item["kind"] == "evidence"]),
             1,
         )
+        reconciled = self.publisher.reconcile_batch(
+            proposals=[copy.deepcopy(self.proposal)],
+            source_tasks={self.source_task["task_id"]: copy.deepcopy(self.source_task)},
+        )
+        self.assertEqual(reconciled["status"], "ALREADY_PUBLISHED")
+        self.assertEqual(reconciled["commit_sha"], committed_head)
+        self.assertFalse(reconciled["write_performed"])
+        self.assertFalse(reconciled["external_action_performed"])
 
         retry_lease, retry_head = self.acquire(NOW + timedelta(minutes=2))
         recovered = self.publisher.publish_batch(
