@@ -73,12 +73,12 @@
     "branch_protection_enabled": false
   },
   "acceptance": {
-    "unit_tests_added": 12,
-    "expected_full_suite_total": 194,
+    "unit_tests_added": 13,
+    "expected_full_suite_total": 195,
     "previous_verified_baseline": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
-    "current_ci_status": "PASS",
+    "current_ci_status": "AMBIGUOUS_COMMIT_RECOVERY_TEST_COMMITTED_PENDING_VALIDATION",
     "fetchback_verification_required": true,
-    "expected_passed": 193,
+    "expected_passed": 194,
     "expected_skipped": 1,
     "last_observed_run": {
       "run_id": 45105601988,
@@ -103,6 +103,12 @@
       "python": "3.12.3",
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
       "hash_locked_packages": 47
+    },
+    "ambiguous_commit_recovery": {
+      "status": "TEST_ADDED_CI_PENDING",
+      "test": "test_ambiguous_commit_response_recovers_as_already_published",
+      "simulated_failure": "transport raises after the atomic state commit has already advanced the canonical head",
+      "expected_recovery": "reacquire writer lease, verify immutable task/snapshot/evidence, return ALREADY_PUBLISHED without duplicate evidence"
     }
   },
   "approval_gates": {
