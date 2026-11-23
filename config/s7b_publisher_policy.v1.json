@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B_CORE_CI_PASS_NOT_DEPLOYED",
+  "status": "S7B_CORE_CI_PASS_AMBIGUOUS_RECOVERY_PASS_NOT_DEPLOYED",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -76,27 +76,24 @@
     "unit_tests_added": 13,
     "expected_full_suite_total": 195,
     "previous_verified_baseline": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
-    "current_ci_status": "AMBIGUOUS_COMMIT_RECOVERY_TEST_COMMITTED_PENDING_VALIDATION",
+    "current_ci_status": "PASS",
     "fetchback_verification_required": true,
     "expected_passed": 194,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45105601988,
-      "head_sha": "7388b8a69ceb75e7a5488de40b83128fb6e31e84",
+      "run_id": 45106151902,
+      "head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
       "conclusion": "success",
-      "passed": 193,
+      "passed": 194,
       "skipped": 1,
       "subtests_passed": 6,
-      "previous_failures_corrected": [
-        "source default grade equality changed to maximum authority ceiling",
-        "raw_body substring assertion changed to exact raw payload key inspection"
-      ]
+      "validated": "ambiguous commit response recovery; no duplicate source_snapshot/evidence objects"
     },
-    "verified_run_id": 45105601988,
-    "verified_head_sha": "7388b8a69ceb75e7a5488de40b83128fb6e31e84",
+    "verified_run_id": 45106151902,
+    "verified_head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
     "verified_result": {
       "conclusion": "success",
-      "passed": 193,
+      "passed": 194,
       "skipped": 1,
       "subtests_passed": 6,
       "runner": "ubuntu-24.04",
@@ -105,10 +102,11 @@
       "hash_locked_packages": 47
     },
     "ambiguous_commit_recovery": {
-      "status": "TEST_ADDED_CI_PENDING",
+      "status": "PASS",
       "test": "test_ambiguous_commit_response_recovers_as_already_published",
-      "simulated_failure": "transport raises after the atomic state commit has already advanced the canonical head",
-      "expected_recovery": "reacquire writer lease, verify immutable task/snapshot/evidence, return ALREADY_PUBLISHED without duplicate evidence"
+      "run_id": 45106151902,
+      "head_sha": "b728b2344f2a4043afb1fbe57e3e0a62c4aea7e9",
+      "result": "after simulated lost response post-commit, reacquired lease reconciles immutable objects and returns ALREADY_PUBLISHED without duplicate evidence"
     }
   },
   "approval_gates": {
