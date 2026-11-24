@@ -29,6 +29,8 @@ class FakeTransport:
         self.blobs = {}
         self.race_before_patch = False
         self.blob_posts = 0
+        self.read_content_override = None
+        self.read_sha_override = None
 
     def _concurrent_commit(self):
         parent = self.head
@@ -53,10 +55,15 @@ class FakeTransport:
             blob_sha = self.trees[tree_sha].get(file_path)
             if blob_sha is None:
                 raise GitHubAPIError(404, "not found")
+            encoded_content = base64.b64encode(self.blobs[blob_sha].encode()).decode()
+            if self.read_content_override is not None:
+                encoded_content = self.read_content_override
+            returned_sha = blob_sha if self.read_sha_override is None else self.read_sha_override
             return {
                 "type": "file",
                 "encoding": "base64",
-                "content": base64.b64encode(self.blobs[blob_sha].encode()).decode(),
+                "content": encoded_content,
+                "sha": returned_sha,
             }
         if method == "POST" and path == "/git/blobs":
             self.blob_posts += 1
@@ -168,6 +175,41 @@ class GitHubStateStoreTests(unittest.TestCase):
             self.store.commit_files(base, {"state/manifest.v1.json": "{ \"x\": 1 }"}, "non-canonical")
         with self.assertRaises(PolicyError):
             self.store.commit_files(base, {"state/manifest.v1.json": "[]"}, "not object")
+
+    def test_read_file_accepts_wrapped_base64_and_verifies_git_blob_sha(self):
+        base = self.store.read_head()
+        content = '{"generation":1}'
+        result = self.store.commit_files(
+            base, {"state/manifest.v1.json": content}, "prepare wrapped base64 read"
+        )
+        encoded = base64.b64encode(content.encode("utf-8")).decode("ascii")
+        self.transport.read_content_override = "\n".join(
+            encoded[index:index + 8] for index in range(0, len(encoded), 8)
+        )
+        self.assertEqual(
+            self.store.read_file("state/manifest.v1.json", result["commit_sha"]),
+            content,
+        )
+
+    def test_read_file_rejects_invalid_base64_instead_of_silently_ignoring_bytes(self):
+        base = self.store.read_head()
+        content = '{"generation":1}'
+        result = self.store.commit_files(
+            base, {"state/manifest.v1.json": content}, "prepare invalid base64 read"
+        )
+        self.transport.read_content_override = "eyJnZW5lcmF0aW9uIjoxf!%%="
+        with self.assertRaisesRegex(GitHubAPIError, "status 502"):
+            self.store.read_file("state/manifest.v1.json", result["commit_sha"])
+
+    def test_read_file_rejects_git_blob_sha_mismatch(self):
+        base = self.store.read_head()
+        content = '{"generation":1}'
+        result = self.store.commit_files(
+            base, {"state/manifest.v1.json": content}, "prepare blob sha mismatch read"
+        )
+        self.transport.read_sha_override = "0" * 40
+        with self.assertRaisesRegex(GitHubAPIError, "status 502"):
+            self.store.read_file("state/manifest.v1.json", result["commit_sha"])
 
     def test_branch_is_locked_to_main(self):
         from zcira_control.github_state import GitHubGitDataStore

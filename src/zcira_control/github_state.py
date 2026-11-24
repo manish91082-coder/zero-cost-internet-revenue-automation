@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import binascii
 import hashlib
 import json
 import re
@@ -132,10 +133,27 @@ class GitHubGitDataStore:
             raise
         if result.get("type") != "file" or result.get("encoding") != "base64":
             raise GitHubAPIError(502, "state file response is not a base64 file")
+        encoded_content = result.get("content")
+        if not isinstance(encoded_content, str):
+            raise GitHubAPIError(502, "state file response has no base64 content")
+        # GitHub may wrap base64 content across lines. Remove only ASCII
+        # whitespace, then reject every non-base64 character.
+        normalized_content = re.sub(r"[ \t\r\n]", "", encoded_content)
         try:
-            return base64.b64decode(result["content"], validate=False).decode("utf-8")
-        except (KeyError, ValueError, UnicodeDecodeError):
-            raise GitHubAPIError(502, "state file content is invalid") from None
+            raw_content = base64.b64decode(normalized_content, validate=True)
+        except (binascii.Error, ValueError):
+            raise GitHubAPIError(502, "state file base64 content is invalid") from None
+        expected_blob_sha = result.get("sha")
+        if not isinstance(expected_blob_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", expected_blob_sha):
+            raise GitHubAPIError(502, "state file response has no valid Git blob SHA")
+        git_blob_header = b"blob " + str(len(raw_content)).encode("ascii") + b"\0"
+        actual_blob_sha = hashlib.sha1(git_blob_header + raw_content).hexdigest()
+        if actual_blob_sha != expected_blob_sha:
+            raise GitHubAPIError(502, "state file Git blob SHA mismatch")
+        try:
+            return raw_content.decode("utf-8")
+        except UnicodeDecodeError:
+            raise GitHubAPIError(502, "state file content is not UTF-8") from None
 
     def commit_files(
         self,
