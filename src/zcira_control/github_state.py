@@ -212,6 +212,12 @@ class GitHubGitDataStore:
             )
             blob_sha = blob.get("sha")
             validate_git_sha(blob_sha)
+            raw_content = content.encode("utf-8")
+            expected_blob_sha = hashlib.sha1(
+                b"blob " + str(len(raw_content)).encode("ascii") + b"\0" + raw_content
+            ).hexdigest()
+            if blob_sha != expected_blob_sha:
+                raise GitHubAPIError(502, "GitHub blob creation SHA mismatch")
             blob_shas[path] = blob_sha
             tree_entries.append({"path": path, "mode": "100644", "type": "blob", "sha": blob_sha})
 
@@ -240,7 +246,23 @@ class GitHubGitDataStore:
         except GitHubAPIError as exc:
             if exc.status in {409, 422}:
                 raise BranchHeadConflict("branch changed during atomic state commit; orphan commit was not published") from None
-            raise
+            if exc.status == 0 or exc.status >= 500:
+                # A connection/server failure can occur after GitHub has moved
+                # the ref. Resolve only by reading the canonical branch head.
+                try:
+                    observed_head = self.read_head()
+                except GitHubAPIError:
+                    raise exc from None
+                if observed_head == commit_sha:
+                    pass
+                elif observed_head == expected_head_sha:
+                    raise exc from None
+                else:
+                    raise BranchHeadConflict(
+                        "ambiguous ref update observed a different branch head; reconcile before retry"
+                    ) from None
+            else:
+                raise
 
         verified_head = self.read_head()
         if verified_head != commit_sha:

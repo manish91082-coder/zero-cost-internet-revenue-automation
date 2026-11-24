@@ -31,6 +31,9 @@ class FakeTransport:
         self.blob_posts = 0
         self.read_content_override = None
         self.read_sha_override = None
+        self.blob_sha_override = None
+        self.lose_patch_response_before_update = False
+        self.lose_patch_response_after_update = False
 
     def _concurrent_commit(self):
         parent = self.head
@@ -70,7 +73,8 @@ class FakeTransport:
             content = payload["content"]
             sha = git_blob_sha(content)
             self.blobs[sha] = content
-            return {"sha": sha}
+            returned_sha = sha if self.blob_sha_override is None else self.blob_sha_override
+            return {"sha": returned_sha}
         if method == "POST" and path == "/git/trees":
             tree = dict(self.trees[payload["base_tree"]])
             for entry in payload["tree"]:
@@ -87,6 +91,9 @@ class FakeTransport:
             }
             return {"sha": sha}
         if method == "PATCH" and path == "/git/refs/heads/main":
+            if self.lose_patch_response_before_update:
+                self.lose_patch_response_before_update = False
+                raise GitHubAPIError(0, "simulated connection loss before ref update")
             if self.race_before_patch:
                 self.race_before_patch = False
                 self._concurrent_commit()
@@ -96,6 +103,9 @@ class FakeTransport:
             if payload["force"] is not False or parent_sha != self.head:
                 raise GitHubAPIError(422, "non-fast-forward")
             self.head = payload["sha"]
+            if self.lose_patch_response_after_update:
+                self.lose_patch_response_after_update = False
+                raise GitHubAPIError(0, "simulated connection loss after ref update")
             return {"object": {"sha": self.head}}
         raise AssertionError(f"unexpected fake request: {method} {path}")
 
@@ -210,6 +220,33 @@ class GitHubStateStoreTests(unittest.TestCase):
         self.transport.read_sha_override = "0" * 40
         with self.assertRaisesRegex(GitHubAPIError, "status 502"):
             self.store.read_file("state/manifest.v1.json", result["commit_sha"])
+
+    def test_blob_creation_response_sha_must_match_git_object_content(self):
+        base = self.store.read_head()
+        self.transport.blob_sha_override = "f" * 40
+        with self.assertRaisesRegex(GitHubAPIError, "status 502"):
+            self.store.commit_files(
+                base, {"state/manifest.v1.json": '{"generation":1}'}, "reject blob sha mismatch"
+            )
+
+    def test_ref_update_lost_response_after_server_commit_is_reconciled_read_only(self):
+        base = self.store.read_head()
+        self.transport.lose_patch_response_after_update = True
+        result = self.store.commit_files(
+            base, {"state/manifest.v1.json": '{"generation":1}'}, "recover applied ref update"
+        )
+        self.assertEqual(result["commit_sha"], self.store.read_head())
+        self.assertEqual(result["base_commit_sha"], base)
+        self.assertFalse(result["force_push"])
+
+    def test_ref_update_lost_response_before_server_commit_remains_uncommitted(self):
+        base = self.store.read_head()
+        self.transport.lose_patch_response_before_update = True
+        with self.assertRaisesRegex(GitHubAPIError, "status 0"):
+            self.store.commit_files(
+                base, {"state/manifest.v1.json": '{"generation":1}'}, "preserve uncommitted ref update"
+            )
+        self.assertEqual(self.store.read_head(), base)
 
     def test_branch_is_locked_to_main(self):
         from zcira_control.github_state import GitHubGitDataStore
