@@ -272,7 +272,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Reopened exact controlling Library archive `02_complete-research-hi.md`, file_id `file_00000000c8088211912536fa0fe8badd`, version 1.
 - Appendix A ↔ embedded destination headings: 219/219 IDs exact; 0 missing IDs; 0 extra IDs; 0 same-ID name mismatches. Category-specific destination rows remain 3,314/3,314.
 - Priority totals independently recomputed and exact: P1=3, P2=12, P3=24, P4=26, P5=55, B=81, M=18; total 219. Category #24 remains B.
-- Embedded-section hash scope discrepancy RESOLVED as documentation/scope mismatch. Canonical UTF-8 SHA-256 includes start heading `# भाग 7: \`plan/destinations-hi.md\`` and excludes end marker: `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`. Earlier `37607f...` remains historical with its scope undocumented; do not use it as canonical.
+- Embedded-section hash scope discrepancy RESOLVED as documentation/scope mismatch. Canonical UTF-8 SHA-256 includes start heading `# भाग 7: `plan/destinations-hi.md`` and excludes end marker: `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`. Earlier `37607f...` remains historical with its scope undocumented; do not use it as canonical.
 - Still pending: source-explicit category membership across six batches (aggregate counts alone are insufficient); explicit category-to-shared-list cross-references; provenance-preserving duplicate identity audit. 3,482 slots are not yet a unique platform count. The ~2MB occurrence ledger is not committed.
 - Phase A2 remains PARTIAL. Next: A2.4-B batch-ID evidence; A2.4-C shared-list cross-reference extraction; A2.5 duplicate candidate review; then A3 schemas.
 - Swarm S1 roster remains design-only. No runtime/agents/schedule/tests.
@@ -608,13 +608,13 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 ## 40. Phase S6-B1 — pinned-IP TLS transport implementation (2026-11-19)
 
-- Canonical archive \`02_complete-research-hi.md\` Library version 1 was reopened and full SHA-256 verified: \`c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e\` (1,402,707 bytes).
-- Canonical embedded destination-section scope hash reverified from the archive's original bytes: \`7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24\`. Six batches remain 219 categories / 3,482 source occurrences; Appendix A identity/priority reconciliation remains controlling. P1/P2/P3/P4/P5/B/M and Category #24=B unchanged.
+- Canonical archive `02_complete-research-hi.md` Library version 1 was reopened and full SHA-256 verified: `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5e` (1,402,707 bytes).
+- Canonical embedded destination-section scope hash reverified from the archive's original bytes: `7e45078990d99d14e34a26befb3de2b8260fc53f35c6000fbe20fb741a36a24`. Six batches remain 219 categories / 3,482 source occurrences; Appendix A identity/priority reconciliation remains controlling. P1/P2/P3/P4/P5/B/M and Category #24=B unchanged.
 - Re-read the latest main checkpoint, S2-B architecture (docs/45), S2-C approval/isolation report (docs/46), S1 roster (docs/42), S6-A report (docs/60) and S6 validation report (docs/61) before this increment.
-- Added \`src/zcira_control/pinned_tls_transport.py\`: exact-host DNS resolution, whole-answer public-IP validation, one-IP-per-task pin, direct numeric-IP socket connect, TLS 1.2+, CERT_REQUIRED, hostname verification/SNI using the original host, no proxy/cookie/auth/JS, same-host HTTPS redirects only, 3 redirect maximum, identity encoding only, bounded content-length/streamed reads and request deadline. No alternate-IP retry.
-- Updated \`source_fetcher.py\` so the live transport is accepted only when \`live_network_enabled\`, \`dns_pinning\` and \`egress_controls_audited\` are all true. The checked-in policy keeps all three false.
-- Added \`tests/test_pinned_tls_transport.py\` with fake resolver/socket/HTTP dependencies; extended source-policy tests. These tests do not open public network sockets.
-- Added \`config/s6_transport_policy.v1.json\`; source worker policy now records S6-B1 status and the remaining egress-audit gate.
+- Added `src/zcira_control/pinned_tls_transport.py`: exact-host DNS resolution, whole-answer public-IP validation, one-IP-per-task pin, direct numeric-IP socket connect, TLS 1.2+, CERT_REQUIRED, hostname verification/SNI using the original host, no proxy/cookie/auth/JS, same-host HTTPS redirects only, 3 redirect maximum, identity encoding only, bounded content-length/streamed reads and request deadline. No alternate-IP retry.
+- Updated `source_fetcher.py` so the live transport is accepted only when `live_network_enabled`, `dns_pinning` and `egress_controls_audited` are all true. The checked-in policy keeps all three false.
+- Added `tests/test_pinned_tls_transport.py` with fake resolver/socket/HTTP dependencies; extended source-policy tests. These tests do not open public network sockets.
+- Added `config/s6_transport_policy.v1.json`; source worker policy now records S6-B1 status and the remaining egress-audit gate.
 - GitHub Actions validation is triggered by the source/test/config changes. Test outcome must be read from the actual run before marking S6-B1 PASS.
 - Live public fetches: 0; source workers scheduled/running: 0; durable source snapshots: pending S6-C; runner-level egress controls: NOT AUDITED; S7-B publisher: not started; S8 Cloudflare: not deployed.
 - Spend ₹0; settled revenue evidence ₹0; commercial HOLD. No accounts, OAuth, KYC, terms acceptance, billing, deployment, outreach, submissions, product build or listing.
@@ -888,14 +888,23 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 ## 48. Phase S7-B3 — GitHub Git Data content integrity और ambiguous ref-update recovery (2026-11-24)
 
 - Re-read: canonical continuity, S2-B ADR, roster, S7-B policy/reports, A2.4-B/C/A2.5 reports और controlling source archive.
-- Archive SHA-256 \`c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5\`; destination-section SHA-256 \`7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24\`.
+- Archive SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`; destination-section SHA-256 `7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24`.
 - A2.4-B: 219/219 category IDs, छह batches, कोई missing/extra/duplicate ID नहीं. A2.4-C: 8/8 shared lists, 168/168 rows, 213 explicit cross-reference edges. A2.5: 3,482 source occurrences; 315 repeated-name groups, 283 same-name/same-host candidates, 32 ambiguous groups; कोई identity merge नहीं; unique-platform count NOT ESTABLISHED.
-- \`GitHubGitDataStore.read_file()\` अब ASCII-wrapped base64 normalize करके strict validation करता है, response Git blob SHA-1 पुनर्गणित करके मिलाता है और UTF-8 verify करता है. Evidence objects का SHA-256 contract अलग और अपरिवर्तित है.
+- `GitHubGitDataStore.read_file()` अब ASCII-wrapped base64 normalize करके strict validation करता है, response Git blob SHA-1 पुनर्गणित करके मिलाता है और UTF-8 verify करता है. Evidence objects का SHA-256 contract अलग और अपरिवर्तित है.
 - Blob creation response SHA को locally computed Git blob SHA से verify किया जाता है.
 - Ref-update response ambiguous (network status 0 / HTTP 5xx) होने पर blind retry नहीं: canonical main head read; proposed commit मिला तो applied + fetch-back; expected parent मिला तो original error; अन्य head मिला तो fail-closed conflict.
 - छह नए tests: wrapped/invalid base64, read blob-SHA mismatch, write blob-SHA mismatch, response loss after applied update, response loss before update.
-- Code commit \`666a556bc27ca49b6669fdf3b9da54a6a117d60a\`, Actions run \`45318339096\` SUCCESS. Final code/test commit \`305803d97ce962e48c8a85038fabeee47bef5642\`, run \`45318412657\` SUCCESS: **200 passed, 1 expected skip, 6 subtests**, 47 hash-locked packages, pip check PASS, real LangGraph integration 3 PASS.
+- Code commit `666a556bc27ca49b6669fdf3b9da54a6a117d60a`, Actions run `45318339096` SUCCESS. Final code/test commit `305803d97ce962e48c8a85038fabeee47bef5642`, run `45318412657` SUCCESS: **200 passed, 1 expected skip, 6 subtests**, 47 hash-locked packages, pip check PASS, real LangGraph integration 3 PASS.
 - All Git Data transport tests use FakeTransport. Live Git Data API write, production evidence publication और publisher workflow activation नहीं हुई।
-- Live branch metadata: \`main protected=false\`, \`protection.enabled=false\`; rulesets collection empty. Dedicated branch-protection endpoint connected integration से 403 देता है; कोई settings नहीं बदली गईं।
+- Live branch metadata: `main protected=false`, `protection.enabled=false`; rulesets collection empty. Dedicated branch-protection endpoint connected integration से 403 देता है; कोई settings नहीं बदली गईं।
 - S6-B2 egress HOLD; live source requests 0. S8 not deployed; S9 not started. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
 - Next: owner-approved publisher identity/ruleset/credential isolation के बिना live write नहीं; S6-B2 zero-cost egress feasibility और durable LangGraph checkpoint design जारी रखें; उसके बाद ही S8/S9 gates।
+
+
+## 49. Phase S7-B3 final policy/roster checkpoint validation (2026-11-24)
+
+- Publisher policy, research swarm roster और continuity checkpoint का atomic metadata commit: `a2c3c5d656975c0077d5bc4ec8409cf6f8da8bfc`.
+- Exact metadata/config checkpoint पर GitHub Actions run `45318600997`: SUCCESS; 200 passed, 1 expected skip, 6 subtests; 47 hash-locked packages; pip check PASS; LangGraph integration 3 PASS.
+- Code/test acceptance run 62 (`305803d97ce962e48c8a85038fabeee47bef5642`) और उसके बाद policy/roster validation run 63 दोनों observed PASS हैं।
+- No live Git Data API write, production evidence publication, publisher credential, branch protection change, live source request or cloud deployment.
+- Next: S7-B live write isolation remains owner-approval-gated; continue S6-B2 zero-cost egress feasibility and durable LangGraph checkpoint design. S8/S9 remain blocked until their exact eligibility, approval and acceptance gates pass.
