@@ -1,6 +1,6 @@
 # Project Continuity Checkpoint
 
-Last verified: 2026-11-23 (Asia/Kolkata)
+Last verified: 2026-11-24 (Asia/Kolkata)
 Project ID: ZCIRA-2026-11-13
 Canonical repository: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation
 Default branch: main
@@ -883,3 +883,19 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Branch protection remains NOT ENABLED / CONFIRMED (main `protected=false`; rulesets empty). S6-B2 egress remains HOLD; live source requests 0. S8 Cloudflare deployment 0; S9 pilot not started.
 - Spend ₹0; settled revenue evidence ₹0; no account/KYC/terms/billing/external submission/outreach/product listing. Commercial execution HOLD.
 - Next: continue S7-B Git Data API CAS/fetch-back and ambiguity audit using fake transport; owner-controlled branch ruleset/credential isolation remains required before any live publisher. Continue S6-B2 egress feasibility before live source requests.
+
+
+## 48. Phase S7-B3 — GitHub Git Data content integrity और ambiguous ref-update recovery (2026-11-24)
+
+- Re-read: canonical continuity, S2-B ADR, roster, S7-B policy/reports, A2.4-B/C/A2.5 reports और controlling source archive.
+- Archive SHA-256 \`c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5\`; destination-section SHA-256 \`7e45078990d99d14e34a26befb3bde2b8260fc53f35c6000fbe20fb741a36a24\`.
+- A2.4-B: 219/219 category IDs, छह batches, कोई missing/extra/duplicate ID नहीं. A2.4-C: 8/8 shared lists, 168/168 rows, 213 explicit cross-reference edges. A2.5: 3,482 source occurrences; 315 repeated-name groups, 283 same-name/same-host candidates, 32 ambiguous groups; कोई identity merge नहीं; unique-platform count NOT ESTABLISHED.
+- \`GitHubGitDataStore.read_file()\` अब ASCII-wrapped base64 normalize करके strict validation करता है, response Git blob SHA-1 पुनर्गणित करके मिलाता है और UTF-8 verify करता है. Evidence objects का SHA-256 contract अलग और अपरिवर्तित है.
+- Blob creation response SHA को locally computed Git blob SHA से verify किया जाता है.
+- Ref-update response ambiguous (network status 0 / HTTP 5xx) होने पर blind retry नहीं: canonical main head read; proposed commit मिला तो applied + fetch-back; expected parent मिला तो original error; अन्य head मिला तो fail-closed conflict.
+- छह नए tests: wrapped/invalid base64, read blob-SHA mismatch, write blob-SHA mismatch, response loss after applied update, response loss before update.
+- Code commit \`666a556bc27ca49b6669fdf3b9da54a6a117d60a\`, Actions run \`45318339096\` SUCCESS. Final code/test commit \`305803d97ce962e48c8a85038fabeee47bef5642\`, run \`45318412657\` SUCCESS: **200 passed, 1 expected skip, 6 subtests**, 47 hash-locked packages, pip check PASS, real LangGraph integration 3 PASS.
+- All Git Data transport tests use FakeTransport. Live Git Data API write, production evidence publication और publisher workflow activation नहीं हुई।
+- Live branch metadata: \`main protected=false\`, \`protection.enabled=false\`; rulesets collection empty. Dedicated branch-protection endpoint connected integration से 403 देता है; कोई settings नहीं बदली गईं।
+- S6-B2 egress HOLD; live source requests 0. S8 not deployed; S9 not started. Spend ₹0; settled revenue evidence ₹0; commercial HOLD.
+- Next: owner-approved publisher identity/ruleset/credential isolation के बिना live write नहीं; S6-B2 zero-cost egress feasibility और durable LangGraph checkpoint design जारी रखें; उसके बाद ही S8/S9 gates।

@@ -231,14 +231,15 @@
     "agents_executed": false,
     "scheduled_swarm_runs": false,
     "acceptance_tests_executed": true,
-    "reason": "S7-B publisher core, claim-grade ceiling, ambiguous-commit fault injection and read-only reconciliation API all pass GitHub-hosted validation. Latest run 45106437064 on head 4c63acf90cb3a366f11f5fee6854e3534958010e: 194 passed, 1 expected skip, 6 subtests. The read-only reconciliation API distinguishes NOT_PUBLISHED from ALREADY_PUBLISHED after a lost response and fails closed on partial/inconsistent batch state. This is fake-store/transport validation only; no live Git Data API write, production evidence publication, deployed runtime or scheduled swarm exists.",
+    "reason": "S7-B GitHub Git Data transport contract has now passed read-only GitHub-hosted validation. GitHub Contents reads use strict base64 validation and recomputed Git blob SHA-1; blob creation responses are checked against locally computed Git object SHA; ambiguous ref-update failures are resolved only by reading canonical main head (applied / unapplied / conflicting head) with no blind retry. Run 45318412657 on head 305803d97ce962e48c8a85038fabeee47bef5642: 200 passed, 1 expected skip, 6 subtests; 47 hash-locked packages; pip check PASS; real LangGraph integration 3 passed. All Git Data API tests use FakeTransport; no live Git Data API write, production evidence publication, publisher credential, protected branch, deployed runtime or scheduled swarm exists.",
     "validated_components": [
       "S4 deterministic control-plane core",
       "S5 real LangGraph graph integration",
       "S6A read-only source-worker core",
       "S6B1 pinned TLS transport unit tests",
       "S6C metadata-only snapshot envelope and verifier",
-      "S6D LangGraph source-worker node with synthetic transport (GitHub Actions run 44860401524)"
+      "S6D LangGraph source-worker node with synthetic transport (GitHub Actions run 44860401524)",
+      "S7-B GitHub Git Data fake-transport content-integrity and ambiguous ref-update recovery (run 45318412657)"
     ],
     "pending_components": [
       "S6B2 independently audited zero-cost live egress controls",
@@ -248,17 +249,29 @@
       "S8 cloud heartbeat/dispatch and failover",
       "S9 seven-day unattended read-only pilot"
     ],
-    "publisher_core_status": "IMPLEMENTED_READONLY_RECONCILIATION_CI_PASS_NOT_DEPLOYED",
+    "publisher_core_status": "IMPLEMENTED_FAKE_GIT_DATA_TRANSPORT_CONTRACT_CI_PASS_NOT_DEPLOYED",
     "publisher_workflow_enabled": false,
     "repository_write_credentials_enabled": false,
     "branch_protection_status": "NOT_ENABLED_CONFIRMED",
     "last_ci_validation": {
-      "run_id": 45106437064,
-      "head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
+      "run_id": 45318412657,
+      "head_sha": "305803d97ce962e48c8a85038fabeee47bef5642",
       "conclusion": "success",
-      "passed": 194,
+      "passed": 200,
       "skipped": 1,
-      "subtests_passed": 6
+      "subtests_passed": 6,
+      "runner": "ubuntu-24.04",
+      "python": "3.12.3",
+      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+      "hash_locked_packages": 47,
+      "langgraph_runtime_tests": 3
+    },
+    "github_git_data_transport": {
+      "status": "FAKE_TRANSPORT_CI_PASS",
+      "live_api_write_tested": false,
+      "production_evidence_publication": false,
+      "blind_retry": false,
+      "ambiguous_response_resolution": "READ_CANONICAL_MAIN_HEAD"
     }
   }
 }

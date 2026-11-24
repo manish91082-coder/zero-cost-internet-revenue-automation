@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B_READONLY_RECONCILIATION_API_CI_PASS_NOT_DEPLOYED",
+  "status": "S7B_GITHUB_CONTENTS_INTEGRITY_AND_AMBIGUOUS_REF_RECOVERY_CI_PASS_NOT_DEPLOYED",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -73,33 +73,34 @@
     "branch_protection_enabled": false
   },
   "acceptance": {
-    "unit_tests_added": 13,
-    "expected_full_suite_total": 195,
-    "previous_verified_baseline": "180_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
+    "unit_tests_added": 6,
+    "expected_full_suite_total": 200,
+    "previous_verified_baseline": "194_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
     "current_ci_status": "PASS",
     "fetchback_verification_required": true,
-    "expected_passed": 194,
+    "expected_passed": 200,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45106437064,
-      "head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
+      "run_id": 45318412657,
+      "head_sha": "305803d97ce962e48c8a85038fabeee47bef5642",
       "conclusion": "success",
-      "passed": 194,
+      "passed": 200,
       "skipped": 1,
       "subtests_passed": 6,
-      "validated": "read-only NOT_PUBLISHED/ALREADY_PUBLISHED reconciliation, post-commit lost-response recovery, idempotent retry"
+      "validated": "strict GitHub Contents base64 and Git blob SHA read verification; Git blob SHA write-response verification; ambiguous ref-update recovery for response loss before and after server-side ref movement"
     },
-    "verified_run_id": 45106437064,
-    "verified_head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
+    "verified_run_id": 45318412657,
+    "verified_head_sha": "305803d97ce962e48c8a85038fabeee47bef5642",
     "verified_result": {
       "conclusion": "success",
-      "passed": 194,
+      "passed": 200,
       "skipped": 1,
       "subtests_passed": 6,
       "runner": "ubuntu-24.04",
       "python": "3.12.3",
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
-      "hash_locked_packages": 47
+      "hash_locked_packages": 47,
+      "langgraph_runtime_tests": 3
     },
     "ambiguous_commit_recovery": {
       "status": "PASS",
@@ -108,6 +109,21 @@
       "run_id": 45106437064,
       "head_sha": "4c63acf90cb3a366f11f5fee6854e3534958010e",
       "result": "pre-commit returns NOT_PUBLISHED without writes; after simulated response loss post-commit returns ALREADY_PUBLISHED read-only; retry returns ALREADY_PUBLISHED without duplicate evidence"
+    },
+    "github_git_data_fake_transport": {
+      "status": "PASS",
+      "test_file": "tests/test_github_state.py",
+      "test_methods": 15,
+      "new_tests": [
+        "test_read_file_accepts_wrapped_base64_and_verifies_git_blob_sha",
+        "test_read_file_rejects_invalid_base64_instead_of_silently_ignoring_bytes",
+        "test_read_file_rejects_git_blob_sha_mismatch",
+        "test_blob_creation_response_sha_must_match_git_object_content",
+        "test_ref_update_lost_response_after_server_commit_is_reconciled_read_only",
+        "test_ref_update_lost_response_before_server_commit_remains_uncommitted"
+      ],
+      "live_git_data_api_write": "NOT_TESTED",
+      "production_evidence_publication": "NOT_PERFORMED"
     }
   },
   "approval_gates": {
@@ -127,5 +143,36 @@
     "conservative_downgrade_allowed": true,
     "claim_grade_above_source_ceiling_rejected": true,
     "rationale": "Official source identity does not automatically prove every claim; claim-level evidence may be downgraded."
+  },
+  "github_git_data_transport": {
+    "read_content_integrity": {
+      "strict_base64_validation": true,
+      "ascii_whitespace_normalization": [
+        "space",
+        "tab",
+        "CR",
+        "LF"
+      ],
+      "git_blob_sha1_recomputed_from_raw_bytes": true,
+      "returned_blob_sha_required": true,
+      "utf8_required": true
+    },
+    "write_content_integrity": {
+      "git_blob_sha1_recomputed_before_tree_creation": true,
+      "api_blob_sha_must_match_expected_git_blob_sha": true
+    },
+    "ambiguous_ref_update": {
+      "ambiguous_statuses": [
+        "network_status_0",
+        "http_5xx"
+      ],
+      "recovery": "READ_CANONICAL_MAIN_HEAD",
+      "observed_head_equals_proposed_commit": "TREAT_AS_APPLIED_THEN_FETCH_BACK",
+      "observed_head_equals_expected_parent": "RETHROW_ORIGINAL_ERROR_NO_RETRY",
+      "observed_head_is_other": "FAIL_CLOSED_BRANCH_HEAD_CONFLICT",
+      "blind_retry": false
+    },
+    "validation_scope": "FAKE_TRANSPORT_ONLY",
+    "live_git_data_api_write_tested": false
   }
 }
