@@ -924,3 +924,10 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Current status: S5 graph integration PASS / native durable checkpointer design locked but not implemented; S6-B2 HOLD; S7-B3 FakeTransport CI PASS / live write not tested; S8 not deployed; S9 not started. Runtime agents and scheduled swarm runs 0.
 - Spend ₹0; settled revenue evidence ₹0; no accounts/KYC/legal terms/billing/deployment/security testing/outreach/submissions/product build/listing. Commercial execution HOLD.
 - Next: implement retained-lease checkpoint persistence, schemas and native LangGraph saver; validate crash/resume on pinned package in read-only CI. Keep live writes and source fetching disabled until their independent approval/eligibility gates pass.
+
+
+## 51. Phase S5 checkpoint interface conformance ceiling (2026-11-25)
+
+- GitHub Actions run [45536463105](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536463105), exact head `6b3310435490afde778e4c03d801dbcd4b9bdbd6`, SUCCESS: decoded job log confirms 200 passed, 1 expected skip, 6 subtests; 47 hash-locked packages; pip check PASS; real LangGraph integration 3 PASS.
+- LangGraph `BaseCheckpointSaver` exposes `put`, `put_writes`, `get_tuple`, `list`, and `delete_thread`; initial ZCIRA checkpoint design covers the four core execution methods. Physical `delete_thread` is not allowed on the append-only public Git ledger; adapter must fail closed until logical tombstone semantics are designed and tested. Full BaseCheckpointSaver conformance is therefore explicitly NOT CLAIMED.
+- No code/runtime behavior changed in this correction; it narrows the conformance claim and updates the machine-readable policy/roster to the actual CI run.

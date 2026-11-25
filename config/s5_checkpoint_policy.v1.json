@@ -9,12 +9,6 @@
     "license": "MIT"
   },
   "saver_contract": "langgraph.checkpoint.base.BaseCheckpointSaver",
-  "required_sync_methods": [
-    "put",
-    "put_writes",
-    "get_tuple",
-    "list"
-  ],
   "async_graph_execution_enabled": false,
   "thread_binding": {
     "thread_id": "run_id",
@@ -90,6 +84,15 @@
     "pending-write ordering and idempotency tests",
     "wrong mission, oversized payload, pickle/object, secret/raw-body rejection tests",
     "fake Git transport atomic commit and exact fetch-back tests",
+    "delete_thread explicitly fails closed without mutating canonical Git state; full conformance remains false until logical tombstone semantics are implemented",
     "full hash-locked GitHub Actions CI pass"
-  ]
+  ],
+  "core_sync_methods": [
+    "put",
+    "put_writes",
+    "get_tuple",
+    "list"
+  ],
+  "delete_thread_mode": "FAIL_CLOSED_UNSUPPORTED_UNTIL_LOGICAL_TOMBSTONE_DESIGN_AND_TESTS",
+  "full_base_checkpoint_saver_conformance": false
 }

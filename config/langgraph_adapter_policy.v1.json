@@ -63,10 +63,10 @@
     "real_langgraph_integration_tests": "3_PASS"
   },
   "latest_validation_run": {
-    "run_id": 45318600997,
-    "job_id": 138191370528,
-    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45318600997",
-    "head_sha": "a2c3c5d656975c0077d5bc4ec8409cf6f8da8bfc",
+    "run_id": 45536463105,
+    "job_id": 138944152923,
+    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536463105",
+    "head_sha": "6b3310435490afde778e4c03d801dbcd4b9bdbd6",
     "conclusion": "success",
     "full_pytest": "200 passed, 1 expected skip, 6 subtests passed",
     "hash_locked_packages": 47,
@@ -98,7 +98,15 @@
     "max_graph_runtime_seconds": 600,
     "writer_lease_ttl_seconds": 900,
     "live_write_tested": false,
-    "publisher_workflow_enabled": false
+    "publisher_workflow_enabled": false,
+    "core_sync_methods": [
+      "put",
+      "put_writes",
+      "get_tuple",
+      "list"
+    ],
+    "delete_thread_mode": "FAIL_CLOSED_UNSUPPORTED_UNTIL_LOGICAL_TOMBSTONE_DESIGN_AND_TESTS",
+    "full_base_checkpoint_saver_conformance": false
   },
   "source_fetch_live_enabled": false
 }

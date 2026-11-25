@@ -39,11 +39,13 @@ Code inspection में:
 
 ### 4.1 LangGraph contract
 
-Pinned runtime `langgraph==1.2.22` के लिए implementation `langgraph.checkpoint.base.BaseCheckpointSaver` contract के अनुरूप होगी। Required synchronous data path:
+Pinned runtime `langgraph==1.2.22` के लिए implementation `langgraph.checkpoint.base.BaseCheckpointSaver` contract के अनुरूप होगी। Core synchronous execution path:
 - `put`: super-step checkpoint save।
 - `put_writes`: node/task pending writes save।
 - `get_tuple`: checkpoint, parent config और pending writes restore।
 - `list`: bounded checkpoint history।
+
+`BaseCheckpointSaver` also exposes `delete_thread`. Because the canonical Git ledger is append-only, physical deletion/history rewrite is not allowed in this phase. The initial adapter will fail closed for `delete_thread`; therefore **full BaseCheckpointSaver conformance will not be claimed** until a separately reviewed logical-tombstone behavior is implemented and tested. Async methods remain disabled.
 
 LangGraph में `thread_id` checkpoint thread की primary identity है; ZCIRA में इसे exact `run_id` से bind करेंगे। `checkpoint_ns` fixed empty string रहेगा। Async graph execution इस चरण में निषिद्ध रहेगी। Official interface reference: https://reference.langchain.com/python/langgraph.checkpoint/base/BaseCheckpointSaver
 
@@ -82,7 +84,8 @@ LangGraph में `thread_id` checkpoint thread की primary identity है
 4. Duplicate put/write idempotency; conflicting content rejection।
 5. Wrong mission/thread, stale head, expired lease, kill-switch, oversized payload, non-JSON/pickle, secret/raw-body rejection।
 6. Fake Git transport atomic commits, lost-response recovery और exact commit-ref fetch-back।
-7. Full hash-locked S7-A CI pass।
+7. `delete_thread` fail-closed test: no Git mutation and no claim of physical erasure; logical tombstone design remains a separate gate.
+8. Full hash-locked S7-A CI pass।
 
 ## 5. S6-B2 egress revalidation
 
@@ -122,3 +125,10 @@ LangGraph में `thread_id` checkpoint thread की primary identity है
 7. Only after these gates, proceed to S8 Cloudflare eligibility/heartbeat tests, then S9 read-only pilot.
 
 **No account/KYC/terms/billing/deployment/security testing/outreach/submission/product build/listing or spend was performed.**
+
+
+## 8. Post-report validation checkpoint
+
+- The design/config/continuity commit was validated by GitHub Actions run [45536463105](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536463105), job 138944152923, on exact head `6b3310435490afde778e4c03d801dbcd4b9bdbd6`.
+- Actual decoded job log: hash-locked installation of 47 packages succeeded; `pip check` reported no broken requirements; 3 real LangGraph integration tests passed; full pytest: **200 passed, 1 skipped, 6 subtests passed**.
+- Run conclusion SUCCESS. This is still S7-A read-only validation only; no live Git Data API write, source fetch, publisher credential or cloud deployment.
