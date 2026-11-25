@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "status": "DESIGN_LOCKED_IMPLEMENTATION_PENDING",
+  "framework": "langgraph",
+  "pinned_package": {
+    "name": "langgraph",
+    "version": "1.2.22",
+    "license": "MIT"
+  },
+  "saver_contract": "langgraph.checkpoint.base.BaseCheckpointSaver",
+  "required_sync_methods": [
+    "put",
+    "put_writes",
+    "get_tuple",
+    "list"
+  ],
+  "async_graph_execution_enabled": false,
+  "thread_binding": {
+    "thread_id": "run_id",
+    "pattern": "^zcira-run-[a-z0-9][a-z0-9-]{2,80}$",
+    "checkpoint_ns": "",
+    "cross_mission_threads_allowed": false
+  },
+  "canonical_storage": {
+    "backend": "StateRepository",
+    "ledger": "GitHub versioned immutable content-addressed state objects",
+    "object_kinds": [
+      "langgraph_checkpoint",
+      "langgraph_pending_writes"
+    ],
+    "object_path": "state/objects/<sha256>.json",
+    "writer_role": "evidence_publisher",
+    "write_mode": "write-through under one retained repository writer lease",
+    "lease_refresh": "refresh expiry on every checkpoint/pending-write commit",
+    "finalization": "publisher atomically writes final evidence/run-state and releases lease",
+    "stale_head": "FAIL_CLOSED_NO_FORCE_PUSH_NO_BLIND_RETRY",
+    "fetch_back": "exact commit ref, canonical JSON and SHA-256 verification",
+    "runner_disk_is_durable": false,
+    "d1_is_canonical": false
+  },
+  "serialization": {
+    "mode": "canonical-json-only",
+    "pickle_fallback": false,
+    "arbitrary_object_reconstruction": false,
+    "non_json_values": "REJECT",
+    "raw_source_body_persisted": false,
+    "secrets_tokens_credentials_pii": "REJECT",
+    "web_content_trust": "UNTRUSTED_DATA_ONLY",
+    "allowed_channels": "SwarmGraphState allowlist only"
+  },
+  "bounds": {
+    "max_parallel_research_workers": 2,
+    "max_checkpoints_per_run": 16,
+    "max_checkpoint_bytes": 262144,
+    "max_pending_write_batch_bytes": 65536,
+    "max_total_checkpoint_bytes_per_run": 4194304,
+    "max_graph_runtime_seconds": 600,
+    "writer_lease_ttl_seconds": 900,
+    "max_pending_write_records_per_checkpoint": 64
+  },
+  "recovery": {
+    "crash_recovery": "resume from latest fetch-back-verified checkpoint for same run_id",
+    "duplicate_put": "idempotent by thread_id/checkpoint_ns/checkpoint_id and canonical digest",
+    "duplicate_pending_write": "idempotent by thread_id/checkpoint_ns/checkpoint_id/task_path/task_id",
+    "conflicting_same_identity": "FAIL_CLOSED",
+    "expired_lease": "reacquire only after canonical expiry is verified",
+    "checkpoint_history": "append-only"
+  },
+  "destructive_operations": {
+    "delete_thread": false,
+    "prune_history": false,
+    "reason": "canonical public Git history is append-only; no destructive retention rewrite without separate owner approval"
+  },
+  "activation": {
+    "live_git_write_tested": false,
+    "publisher_workflow_enabled": false,
+    "publisher_write_credentials_enabled": false,
+    "branch_protection_enabled": false,
+    "cloud_runtime_deployed": false,
+    "source_fetch_enabled": false,
+    "spend_cap_inr": 0,
+    "paid_provider_routes_enabled": false
+  },
+  "acceptance_gates": [
+    "Draft 2020-12 checkpoint and pending-write schemas",
+    "StateRepository retained-lease commit and expiry-recovery tests",
+    "Pinned LangGraph 1.2.22 BaseCheckpointSaver API compatibility",
+    "real graph crash-after-node and resume-with-same-thread_id integration test",
+    "pending-write ordering and idempotency tests",
+    "wrong mission, oversized payload, pickle/object, secret/raw-body rejection tests",
+    "fake Git transport atomic commit and exact fetch-back tests",
+    "full hash-locked GitHub Actions CI pass"
+  ]
+}

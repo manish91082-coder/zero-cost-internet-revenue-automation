@@ -16,7 +16,7 @@
   "langsmith_or_hosted_deployment": false,
   "external_llm_calls_enabled": false,
   "graph_builtin_checkpointer_enabled": false,
-  "durable_checkpoint_contract": "PUBLISHER_COMMITTED_RUN_STATE",
+  "durable_checkpoint_contract": "GIT_VERSIONED_BASECHECKPOINTSAVER_DESIGN_LOCKED_IMPLEMENTATION_PENDING",
   "checkpoint_write_role": "evidence_publisher",
   "checkpoint_proposal_write_authorized": false,
   "max_parallel_research_workers": 2,
@@ -26,8 +26,8 @@
   "cloud_runtime_deployed": false,
   "actual_langgraph_package_integration": "PASS_3_REAL_STATEGRAPH_TESTS_GITHUB_ACTIONS_RUN_44228822825",
   "mock_graph_contract_tests": "PASS_24_LAST_VERIFIED",
-  "status": "S5_PASS_S6A_SOURCE_WORKER_CORE_VALIDATED_NOT_LIVE",
-  "combined_test_suite": "PASS_109_1_EXPECTED_SKIP_GITHUB_ACTIONS_RUN_44228822825",
+  "status": "S5_REAL_LANGGRAPH_GRAPH_INTEGRATION_PASS_DURABLE_CHECKPOINTER_PENDING",
+  "combined_test_suite": "PASS_200_PYTESTS_1_EXPECTED_SKIP_6_SUBTESTS_GITHUB_ACTIONS_RUN_45318600997",
   "graph_input_bounds": {
     "max_tasks": 100,
     "max_provider_records": 20,
@@ -63,14 +63,42 @@
     "real_langgraph_integration_tests": "3_PASS"
   },
   "latest_validation_run": {
-    "run_id": 44230210895,
-    "job_id": 134553105118,
-    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/44230210895",
+    "run_id": 45318600997,
+    "job_id": 138191370528,
+    "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45318600997",
+    "head_sha": "a2c3c5d656975c0077d5bc4ec8409cf6f8da8bfc",
     "conclusion": "success",
-    "full_pytest": "129 passed, 1 skipped",
-    "real_langgraph_tests": "3 passed",
+    "full_pytest": "200 passed, 1 expected skip, 6 subtests passed",
     "hash_locked_packages": 47,
-    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS"
+    "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+    "real_langgraph_runtime_tests": 3,
+    "runner": "ubuntu-24.04",
+    "python": "3.12.3"
   },
-  "source_worker_core": "20_TESTS_PASS_LIVE_NETWORK_DISABLED"
+  "source_worker_core": "20_TESTS_PASS_LIVE_NETWORK_DISABLED",
+  "durable_checkpoint_design": {
+    "policy_file": "config/s5_checkpoint_policy.v1.json",
+    "status": "DESIGN_LOCKED_IMPLEMENTATION_PENDING",
+    "base_interface": "langgraph.checkpoint.base.BaseCheckpointSaver",
+    "backend": "StateRepository / GitHub immutable state objects",
+    "thread_id": "run_id",
+    "checkpoint_ns": "",
+    "object_kinds": [
+      "langgraph_checkpoint",
+      "langgraph_pending_writes"
+    ],
+    "serializer": "canonical JSON only; pickle disabled",
+    "write_authority": "evidence_publisher only",
+    "write_through": true,
+    "retained_writer_lease": true,
+    "max_checkpoints_per_run": 16,
+    "max_checkpoint_bytes": 262144,
+    "max_pending_write_batch_bytes": 65536,
+    "max_total_checkpoint_bytes_per_run": 4194304,
+    "max_graph_runtime_seconds": 600,
+    "writer_lease_ttl_seconds": 900,
+    "live_write_tested": false,
+    "publisher_workflow_enabled": false
+  },
+  "source_fetch_live_enabled": false
 }
