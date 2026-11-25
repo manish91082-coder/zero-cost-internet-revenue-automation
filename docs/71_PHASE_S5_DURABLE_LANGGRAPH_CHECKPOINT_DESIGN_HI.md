@@ -139,3 +139,10 @@ LangGraph में `thread_id` checkpoint thread की primary identity है
 - GitHub Actions run [45536603459](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536603459) on exact head `3d5b1999324e1ff6332ed0e446e41639f93a71ca`: SUCCESS.
 - Job `138944626185`: 47 hash-locked packages installed; pip check clean; real LangGraph integration 3 passed; full pytest **200 passed, 1 skipped, 6 subtests passed**.
 - The log confirms the final policy and roster JSON were accepted by the current read-only workflow. No runtime code or deployment changed.
+
+
+## 10. Final exact-head metadata validation
+
+- After the roster and adapter-policy validation pointers were refreshed, GitHub Actions run [45536698778](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536698778) on exact head `b20a95f3c188c99fc289d9b3fd941ff6c7d3f7bd` completed SUCCESS.
+- Job `138944944252`: 47 hash-locked packages; pip check clean; 3 real LangGraph integration tests passed; full pytest **200 passed, 1 skipped, 6 subtests passed**.
+- The machine-readable roster/policy keep the preceding run ID to avoid a self-referential commit/run pointer loop; this continuity/report record is the exact-head run evidence.
