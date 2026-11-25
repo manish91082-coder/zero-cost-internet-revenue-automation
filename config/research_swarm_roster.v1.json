@@ -232,7 +232,7 @@
     "agents_executed": false,
     "scheduled_swarm_runs": false,
     "acceptance_tests_executed": true,
-    "reason": "S7-B3 Git Data transport contract and S5 checkpoint-design metadata passed read-only GitHub-hosted validation. Run 45536463105 on exact head 6b3310435490afde778e4c03d801dbcd4b9bdbd6 completed SUCCESS: 200 passed, 1 expected skip, 6 subtests; 47 SHA-256-locked packages; pip check PASS; real LangGraph integration 3 PASS. Git Data transport tests use FakeTransport only. Durable native LangGraph BaseCheckpointSaver remains design-only; no live Git Data write, production evidence publication, publisher credential, protected branch, deployed runtime or scheduled swarm exists.",
+    "reason": "S7-B3 Git Data transport contract and S5 checkpoint-design metadata passed read-only GitHub-hosted validation. Latest observed exact-head run 45536603459 completed SUCCESS: 200 passed, 1 expected skip, 6 subtests; 47 SHA-256-locked packages; pip check PASS; real LangGraph integration 3 PASS. Git Data transport tests use FakeTransport only. Durable native LangGraph BaseCheckpointSaver remains design-only; no live Git Data write, production evidence publication, publisher credential, protected branch, deployed runtime or scheduled swarm exists.",
     "validated_components": [
       "S4 deterministic control-plane core",
       "S5 real LangGraph graph integration",
@@ -256,9 +256,9 @@
     "repository_write_credentials_enabled": false,
     "branch_protection_status": "NOT_ENABLED_CONFIRMED",
     "last_ci_validation": {
-      "run_id": 45536463105,
-      "job_id": 138944152923,
-      "head_sha": "6b3310435490afde778e4c03d801dbcd4b9bdbd6",
+      "run_id": 45536603459,
+      "job_id": 138944626185,
+      "head_sha": "3d5b1999324e1ff6332ed0e446e41639f93a71ca",
       "conclusion": "success",
       "passed": 200,
       "skipped": 1,
@@ -268,7 +268,7 @@
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
       "hash_locked_packages": 47,
       "langgraph_runtime_tests": 3,
-      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536463105"
+      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536603459"
     },
     "github_git_data_transport": {
       "status": "FAKE_TRANSPORT_CI_PASS",
@@ -277,7 +277,7 @@
       "blind_retry": false,
       "ambiguous_response_resolution": "READ_CANONICAL_MAIN_HEAD"
     },
-    "latest_validated_code_config_head": "6b3310435490afde778e4c03d801dbcd4b9bdbd6",
+    "latest_validated_code_config_head": "3d5b1999324e1ff6332ed0e446e41639f93a71ca",
     "current_main_head_at_checkpoint": "a55a01002ce2472faf6d4f79b67dfb357de34237"
   }
 }

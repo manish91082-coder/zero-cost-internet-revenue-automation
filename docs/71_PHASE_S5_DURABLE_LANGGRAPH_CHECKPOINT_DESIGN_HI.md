@@ -132,3 +132,10 @@ LangGraph में `thread_id` checkpoint thread की primary identity है
 - The design/config/continuity commit was validated by GitHub Actions run [45536463105](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536463105), job 138944152923, on exact head `6b3310435490afde778e4c03d801dbcd4b9bdbd6`.
 - Actual decoded job log: hash-locked installation of 47 packages succeeded; `pip check` reported no broken requirements; 3 real LangGraph integration tests passed; full pytest: **200 passed, 1 skipped, 6 subtests passed**.
 - Run conclusion SUCCESS. This is still S7-A read-only validation only; no live Git Data API write, source fetch, publisher credential or cloud deployment.
+
+
+## 9. Exact-head validation of the conformance correction
+
+- GitHub Actions run [45536603459](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45536603459) on exact head `3d5b1999324e1ff6332ed0e446e41639f93a71ca`: SUCCESS.
+- Job `138944626185`: 47 hash-locked packages installed; pip check clean; real LangGraph integration 3 passed; full pytest **200 passed, 1 skipped, 6 subtests passed**.
+- The log confirms the final policy and roster JSON were accepted by the current read-only workflow. No runtime code or deployment changed.
