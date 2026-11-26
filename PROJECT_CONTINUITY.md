@@ -946,3 +946,57 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Decoded job log: 47 SHA-256-locked packages installed; pip check clean; real LangGraph integration 3 passed; full pytest **200 passed, 1 skipped, 6 subtests passed**.
 - Roster and adapter policy retain run 45536603459 as the preceding validation reference; run 45536698778 validates the exact subsequent metadata-pointer update. The latter is recorded here to avoid a self-referential run-ID update loop.
 - No code behavior, runtime permission, live write, source fetch, deployment or external action changed.
+
+
+## 51. Phase S5 — retained writer-lease checkpoint transition (2026-11-26)
+
+### Canonical preflight and scope
+- Preflight main HEAD: `50ae9f2ea1a12d58d4b38dc59151e999e9dd2f20`; canonical repository and branch unchanged.
+- Re-read `docs/45_PHASE_S2B_FINAL_CLOUD_ONLY_FAILOVER_ARCHITECTURE_DECISION_HI.md`, `docs/42_RESEARCH_SWARM_S1_AGENT_ROSTER_CONTROL_CONTRACT_HI.md`, `config/research_swarm_roster.v1.json`, S5 policies/report, S6-B2 egress report and S7-B2/69/70 reports.
+- Controlling Library archive `02_complete-research-hi.md`, version 1: 1,402,707 bytes; SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`. Reopened via Files and read the source index/ledger. Only the registered category/destination source data is used; the archive's legacy source-project heading does not change ZCIRA mission scope.
+- A2.4-B: 219/219 category IDs in six batches; zero missing/extra/duplicate IDs. A2.4-C: 8/8 shared lists, 168/168 entries, 213 explicit cross-reference edges. A2.5: 3,482 source occurrences, 315 repeated-name groups, 283 same-name/same-host candidates, 32 ambiguous groups; no identity merge; unique-platform count NOT ESTABLISHED.
+- Priority order P1/P2/P3/P4/P5/B/M and Category #24=B remain unchanged.
+
+### S5 implementation increment
+- Added `StateRepository.commit_under_lease()` in `src/zcira_control/state_repository.py`.
+- The method validates timezone, bounded non-boolean TTL (30–3,600 seconds), exact expected branch head, kill switch, active canonical lease and expiry; rejects caller lease replacement; refreshes expiry to at least `now + ttl`; recomputes lease idempotency digest; and commits state objects plus refreshed active lease in one manifest transition.
+- Same `active_writer_lease_id` is retained. The returned commit SHA is required for the next transition. Stale/expired/invalid transitions fail closed. No force push or blind retry.
+- Default transition TTL: 900 seconds. Final release remains a separate explicit transition.
+- Added five regression tests: retained/renewed lease and subsequent release; stale head; expired lease; caller lease override; invalid TTL (three subcases).
+- This primitive is FakeDurableStore-tested only. It is not a live Git Data API write or production publisher execution.
+
+### Exact source/config/test commits and fetch-back
+- Code commit `5f7e57513453ae4c501b34ca8713dca36c90c27e`; `state_repository.py` blob `e1c5894a50bdee5ea54b55337e091623abaf5f2c`.
+- Test commit `efcf51eeb951b5a58d6891ccd97affa8c881a748`; `test_state_persistence.py` blob `eb25efafd5032dc1582dc4b73c7016db8d9e0657`.
+- S5 policy commit `cdf3ac466ea2e48e29fdba4db751c809d6091ded`; blob `53e17cf1342ed984a2f93100fd2c80f24340f028`.
+- LangGraph adapter policy commit `d2fd3212c73c20e381b90d1c69e0ba15bb26ce8c`; blob `6f600cf519e997c13059c108a27893527fad8077`.
+- Roster commit `bf4a5add27d08dda8f1252001d7add52c8725f47`; blob `641aae77e095ded898866e815e110740555bb79f`.
+- All five changed source/config/test artifacts were fetched back from canonical main and exact content/blob SHA matched.
+
+### Exact GitHub Actions evidence
+- Code/test head `efcf51eeb951b5a58d6891ccd97affa8c881a748`: run [45748064728](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45748064728), SUCCESS.
+- S5 policy head `d2fd3212c73c20e381b90d1c69e0ba15bb26ce8c`: run [45748177348](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45748177348), SUCCESS.
+- Roster/config head `bf4a5add27d08dda8f1252001d7add52c8725f47`: run [45748309672](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45748309672), SUCCESS.
+- Latest decoded job log: 205 passed, 1 expected skip, 9 subtests passed; 47 SHA-256-locked packages; `pip check` no broken requirements; real LangGraph integration 3 passed; runner `ubuntu-24.04`, Python 3.12.3.
+- Latest observed exact code/config/roster validation run is 45748309672. This is read-only CI validation, not an agent/swarm run.
+
+### Current status and blockers
+- S5 real LangGraph graph integration: PASS.
+- S5 retained writer-lease checkpoint transition: IMPLEMENTED / CI PASS.
+- S5 checkpoint and pending-write schemas: NOT IMPLEMENTED.
+- S5 native JSON-only `BaseCheckpointSaver`: NOT IMPLEMENTED.
+- S5 crash/resume across separate ephemeral invocations: NOT TESTED.
+- S6-B2 egress: HOLD; `dns_pinning=false`, `egress_controls_audited=false`, `live_network_enabled=false`; live source requests 0.
+- S7-B3 Git Data content-integrity and ambiguous-ref logic: FakeTransport CI PASS; live Git Data API write NOT TESTED.
+- Publisher workflow/credential isolation: disabled; main branch protection/ruleset not enabled.
+- S8 Cloudflare Worker/Cron/D1: not deployed; account/payment-method no-billing eligibility remains UNKNOWN.
+- S9 seven-day unattended read-only pilot: not started.
+- Runtime agents/scheduled swarm executions: 0. Spend ₹0; settled revenue evidence ₹0; commercial execution HOLD.
+
+### Next sequential actions
+1. Add versioned Draft 2020-12 checkpoint and pending-write schemas/fixtures; extend manifest object-kind allowlist without changing existing contract meanings.
+2. Implement synchronous JSON-only `BaseCheckpointSaver` backed by `StateRepository`; no pickle/arbitrary object reconstruction; enforce run/thread/size/count limits and secret/raw-source rejection.
+3. Implement `put`, `put_writes`, `get_tuple`, bounded `list`, deterministic pending-write ordering, immutable identity/idempotency and exact fetch-back.
+4. Add pinned LangGraph crash-after-node/resume integration tests across separate saver instances and a simulated ephemeral-runner boundary.
+5. Keep `delete_thread` fail-closed pending logical tombstone design; do not claim full interface conformance early.
+6. Continue S6-B2 and S7-B isolation gates separately. Do not enable live source requests, publisher writes, S8 deployment or S9 pilot without exact no-cost eligibility and approval gates.
