@@ -316,6 +316,74 @@ class StateRepository:
         )
         return lease, commit_sha
 
+    def commit_under_lease(
+        self,
+        lease_id: str,
+        lease_commit_sha: str,
+        objects: list[tuple[str, str, Mapping[str, Any]]],
+        now: datetime,
+        message: str,
+        ttl_seconds: int = 900,
+        extra_files: Mapping[str, str] | None = None,
+    ) -> str:
+        """Commit a checkpoint while retaining and refreshing the active writer lease.
+
+        The exact current branch head must equal lease_commit_sha. The lease remains
+        referenced by the next manifest and is refreshed in the same atomic commit
+        as the supplied immutable state objects. A caller must use the returned
+        commit SHA for the next transition; stale heads are never retried.
+        """
+        validate_git_sha(lease_commit_sha)
+        if now.tzinfo is None:
+            raise PolicyError("writer lease time must include a timezone")
+        if (
+            not isinstance(ttl_seconds, int)
+            or isinstance(ttl_seconds, bool)
+            or ttl_seconds < 30
+            or ttl_seconds > 3600
+        ):
+            raise PolicyError("writer lease TTL must be between 30 and 3600 seconds")
+        if not isinstance(objects, list):
+            raise PolicyError("lease-bound state objects must be a list")
+        if any(kind == "resource_lease" for kind, _, _ in objects):
+            raise PolicyError("checkpoint caller cannot replace the active writer lease")
+
+        head, manifest = self.load()
+        if head != lease_commit_sha:
+            raise StaleCheckpoint("writer lease head is stale; re-fetch before checkpoint commit")
+        if manifest["kill_switch"]:
+            raise PolicyError("kill switch blocks checkpoint publication")
+        if manifest["active_writer_lease_id"] != lease_id:
+            raise PolicyError("writer lease is not the active canonical lease")
+
+        lease = self.load_object("resource_lease", lease_id, head, manifest)
+        validate_lease(lease, now)
+        if (
+            lease.get("status") != "ACTIVE"
+            or _parse_time(lease["expires_at"]) <= now.astimezone(timezone.utc)
+        ):
+            raise PolicyError("writer lease expired before checkpoint publication")
+
+        refreshed = dict(lease)
+        requested_expiry = now + timedelta(seconds=ttl_seconds)
+        current_expiry = _parse_time(lease["expires_at"])
+        refreshed["expires_at"] = _iso(max(requested_expiry, current_expiry))
+        unsigned_lease = dict(refreshed)
+        unsigned_lease.pop("idempotency_key", None)
+        refreshed["idempotency_key"] = sha256_text(canonical_json(unsigned_lease))
+
+        pending_objects = list(objects)
+        pending_objects.append(("resource_lease", lease_id, refreshed))
+        return self._commit_transition(
+            head,
+            manifest,
+            pending_objects,
+            active_writer_lease_id=lease_id,
+            now=now,
+            message=message,
+            extra_files=extra_files,
+        )
+
     def commit_and_release(
         self,
         lease_id: str,
