@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "DESIGN_LOCKED_IMPLEMENTATION_PENDING",
+  "status": "RETAINED_WRITER_LEASE_PRIMITIVE_PASS_CHECKPOINTER_IMPLEMENTATION_PENDING",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -26,12 +26,13 @@
     "object_path": "state/objects/<sha256>.json",
     "writer_role": "evidence_publisher",
     "write_mode": "write-through under one retained repository writer lease",
-    "lease_refresh": "refresh expiry on every checkpoint/pending-write commit",
+    "lease_refresh": "commit_under_lease atomically refreshes expiry and retains the active lease reference on every checkpoint transition",
     "finalization": "publisher atomically writes final evidence/run-state and releases lease",
     "stale_head": "FAIL_CLOSED_NO_FORCE_PUSH_NO_BLIND_RETRY",
     "fetch_back": "exact commit ref, canonical JSON and SHA-256 verification",
     "runner_disk_is_durable": false,
-    "d1_is_canonical": false
+    "d1_is_canonical": false,
+    "retained_lease_commit": "StateRepository.commit_under_lease"
   },
   "serialization": {
     "mode": "canonical-json-only",
@@ -77,6 +78,7 @@
     "paid_provider_routes_enabled": false
   },
   "acceptance_gates": [
+    "StateRepository.commit_under_lease retains the active writer lease, refreshes expiry atomically and rejects stale/expired/invalid lease transitions",
     "Draft 2020-12 checkpoint and pending-write schemas",
     "StateRepository retained-lease commit and expiry-recovery tests",
     "Pinned LangGraph 1.2.22 BaseCheckpointSaver API compatibility",
@@ -94,5 +96,25 @@
     "list"
   ],
   "delete_thread_mode": "FAIL_CLOSED_UNSUPPORTED_UNTIL_LOGICAL_TOMBSTONE_DESIGN_AND_TESTS",
-  "full_base_checkpoint_saver_conformance": false
+  "full_base_checkpoint_saver_conformance": false,
+  "implementation_status": {
+    "retained_writer_lease_transition": "IMPLEMENTED",
+    "native_base_checkpoint_saver": "NOT_IMPLEMENTED",
+    "checkpoint_and_pending_write_schemas": "PENDING",
+    "graph_crash_resume_integration": "PENDING",
+    "live_git_data_api_write_tested": false,
+    "publisher_workflow_enabled": false,
+    "branch_protection_enabled": false,
+    "latest_validation_run": {
+      "run_id": 45748064728,
+      "head_sha": "efcf51eeb951b5a58d6891ccd97affa8c881a748",
+      "conclusion": "success",
+      "passed": 205,
+      "skipped": 1,
+      "subtests_passed": 9,
+      "hash_locked_packages": 47,
+      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+      "langgraph_runtime_tests": 3
+    }
+  }
 }
