@@ -58,6 +58,8 @@ except ImportError:  # pragma: no cover - exercised only in minimal environments
 RUN_ID_RE = re.compile(r"^zcira-run-[a-z0-9][a-z0-9-]{2,80}$")
 CHECKPOINT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 ALLOWED_CHANNELS = frozenset(SwarmGraphState.__annotations__)
+LANGGRAPH_INTERNAL_CHANNELS = frozenset({"__start__"})
+CHECKPOINT_CHANNELS = ALLOWED_CHANNELS | LANGGRAPH_INTERNAL_CHANNELS
 SPECIAL_CHANNELS = frozenset(WRITES_IDX_MAP)
 CHECKPOINT_KIND = "langgraph_checkpoint"
 PENDING_WRITES_KIND = "langgraph_pending_writes"
@@ -282,7 +284,7 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             if not isinstance(checkpoint, Mapping) or checkpoint.get("id") != payload.get("checkpoint_id"):
                 raise CheckpointContractError("checkpoint envelope ID must equal the LangGraph checkpoint ID")
             channels = checkpoint.get("channel_values")
-            if not isinstance(channels, Mapping) or not set(channels).issubset(ALLOWED_CHANNELS):
+            if not isinstance(channels, Mapping) or not set(channels).issubset(CHECKPOINT_CHANNELS):
                 raise CheckpointContractError("checkpoint contains a channel outside SwarmGraphState")
         else:
             identity = {

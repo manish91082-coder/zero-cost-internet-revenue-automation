@@ -15,7 +15,10 @@
     "channel_values": {
       "project_id": "ZCIRA-2026-11-13",
       "completed_task_ids": [],
-      "status": "RUNNING"
+      "status": "RUNNING",
+      "__start__": {
+        "completed_task_ids": []
+      }
     },
     "channel_versions": {
       "project_id": 1,

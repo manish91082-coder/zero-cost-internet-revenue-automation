@@ -101,7 +101,8 @@
               "source_worker_status",
               "source_worker_errors",
               "source_worker_batch_proposal",
-              "write_performed"
+              "write_performed",
+              "__start__"
             ]
           },
           "additionalProperties": true
