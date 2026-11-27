@@ -1087,3 +1087,12 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 - S7-B5 design/policy exact-head validation: run 45934801142 / job 140295416686, SUCCESS on commit b328b7d84370df1eeb8a476e157ddc82242c1e96; Python 3.12.3, LangGraph 1.2.22, 47 hash-locked packages, pip check clean, 228 passed, 1 expected skip, 9 subtests, 3 LangGraph runtime tests. This validates the design/policy commit, not branch rulesets or live permissions.
 - Fetch-back SHA for S7-B5 policy/report/continuity at design commit: policy 20d9f22427999acf6e355533f20290dcfa9cb72a; ADR 77 cdf1474ee7997c90780100bed069a3fe4008557d; continuity 4e25483660187ab3bcdcc3bdb7874f93d5e4224c.
+
+
+## 60. S5/S6 metadata-validation chain (2026-11-27)
+
+- S5 policy metadata commit f9ec51dc79caa355bdb5758f81b87a1851a377a3: run 45933726265 / job 140291995234 SUCCESS; 228 passed, 1 expected skip, 9 subtests; 47 hash-locked packages; pip check clean; 3 LangGraph runtime tests passed.
+- S6 transport policy/revalidation commit fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac: run 45934000236 / job 140292879898 SUCCESS; same 228/1/9 counts and clean pip check.
+- S7 publisher policy commit efb1bcb7ad977c4a0122561dbe1e0d1ca20949ab: run 45934364778 / job 140294054092 SUCCESS; 228 passed, 1 expected skip, 9 subtests; 47 hash-locked packages; pip check clean.
+- S7-B5 branch-ledger design commit b328b7d84370df1eeb8a476e157ddc82242c1e96: run 45934801142 / job 140295416686 SUCCESS; same counts. Exact-head validation does not mean any live branch, ruleset, App, egress or deployment gate has passed.
+- All four runs are read-only GitHub-hosted CI using FakeDurableStore/FakeTransport. Live Git Data writes = 0; live source requests = 0; deployments = 0; spend = ₹0; verified settled revenue = ₹0.

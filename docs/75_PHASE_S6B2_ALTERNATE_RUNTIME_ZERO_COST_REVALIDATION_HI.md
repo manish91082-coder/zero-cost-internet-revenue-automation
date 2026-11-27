@@ -87,3 +87,8 @@ Offline/synthetic source-worker tests and metadata-only immutable snapshot proce
 ## 5. Next action
 
 Proceed with S7 mechanical publisher isolation design and read-only CI review only. Keep live Git Data writes, publisher credential creation, Cloudflare deployment and S9 unattended pilot disabled until exact zero-cost eligibility and required owner approval are satisfied.
+
+
+### Transport-policy metadata validation
+
+The S6 transport-policy and revalidation-report commit `fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac` passed run [45934000236](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45934000236), job `140292879898`: SUCCESS; 228 passed, 1 expected skip, 9 subtests, 47 hash-locked packages, pip check clean, 3 LangGraph runtime tests passed. This validates the policy and deterministic test suite, not Cloudflare account eligibility or any live egress.
