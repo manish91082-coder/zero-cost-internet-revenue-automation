@@ -2,7 +2,7 @@
 
 **तिथि:** 2026-11-27  
 **Project:** ZCIRA-2026-11-13  
-**स्थिति:** NATIVE SAVER CORE PASS / FULL BASE CONFORMANCE NOT CLAIMED / NO DEPLOYMENT
+**स्थिति:** NATIVE SAVER CORE PASS / EDGE-CASE HARDENING CI PENDING / FULL BASE CONFORMANCE NOT CLAIMED / NO DEPLOYMENT
 
 ## 1. Canonical preflight and immutable mission scope
 
@@ -85,3 +85,13 @@ The second correction now applies the bounded route pattern to checkpoint `chann
 ## 8. Current disposition after code CI
 
 The native saver core is accepted for the deterministic FakeDurableStore test harness only. Do not interpret this as permission to activate a live publisher. The next S5 work is a separate edge-case review (idempotent retry timestamp handling, zero-limit listing semantics, exact graph binding tests) before S5 is frozen. S6-B2 egress, S7 mechanical writer isolation, S8 deployment and S9 unattended pilot remain independently blocked by their existing gates.
+
+
+## 9. Additional S5 edge-case hardening — exact-head CI pending
+
+A post-pass code review found three edge cases worth closing before S5 freeze:
+1. A retry of the same pending-write identity at a later clock time generated a different `created_at`, so a logically identical retry could be rejected as conflicting. Duplicate comparison now excludes only `created_at`; all identity, task, path and write content fields remain exact. Conflicting content still fails closed.
+2. `list(limit=0)` previously entered the loop and could emit one item. It now returns an empty iterator after validating the arguments.
+3. The adapter's `build_langgraph_graph(..., checkpointer=...)` node-binding hook lacked a direct test. The FakeStateGraph now accepts the checkpointer argument and a recorder test verifies the exact node set is bound before compile.
+
+Added tests cover clock-advanced retry idempotency, conflicting content, zero-limit listing and adapter-level node binding. The code-only changes are committed separately; their exact-head CI is pending. Existing accepted code-head run 45933402182 remains the last observed PASS until the new run completes.

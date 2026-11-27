@@ -107,6 +107,42 @@ def test_checkpoint_roundtrip_pending_write_order_and_list():
     assert listed[0].checkpoint["id"] == checkpoint_id
 
 
+def test_list_limit_zero_returns_no_checkpoint():
+    _, _, _, saver, now = make_saver()
+    checkpoint_id = "00000000-0000-6000-8000-000000000008"
+    saver.put(make_config(), make_checkpoint(checkpoint_id, now), {}, {})
+    assert list(saver.list(make_config(), limit=0)) == []
+
+
+def test_pending_write_retry_is_idempotent_when_clock_advances():
+    now = datetime.now(timezone.utc).replace(microsecond=0)
+    clock = [now]
+    store = FakeDurableStore()
+    repository = StateRepository(store)
+    repository.initialize(now)
+    lease, lease_head = repository.acquire_writer_lease("s5-idempotency-test", now, ttl_seconds=900)
+    saver = LangGraphCheckpointSaver(
+        repository, lease["lease_id"], lease_head, "zcira-run-idempotency-test-001",
+        now_fn=lambda: clock[0], schema_dir=ROOT / "schemas" / "v1",
+        policy_path=ROOT / "config" / "s5_checkpoint_policy.v1.json",
+    )
+    checkpoint_id = "00000000-0000-6000-8000-000000000009"
+    saved = saver.put(
+        make_config("zcira-run-idempotency-test-001"),
+        make_checkpoint(checkpoint_id, now), {}, {},
+    )
+    writes = [("completed_task_ids", ["same"])]
+    saver.put_writes(saved, writes, "task-idempotent", "node_a")
+    head_after_first_write = store.read_head()
+
+    clock[0] = now + timedelta(seconds=5)
+    saver.put_writes(saved, writes, "task-idempotent", "node_a")
+    assert store.read_head() == head_after_first_write
+
+    with pytest.raises(CheckpointContractError):
+        saver.put_writes(saved, [("completed_task_ids", ["different"])], "task-idempotent", "node_a")
+
+
 def test_duplicate_checkpoint_and_pending_write_are_idempotent_but_conflicts_fail_closed():
     store, _, _, saver, now = make_saver()
     checkpoint_id = "00000000-0000-6000-8000-000000000002"

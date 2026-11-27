@@ -553,7 +553,11 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             if existing["task_id"] == task_id and existing["task_path"] != task_path:
                 raise CheckpointContractError("same task_id cannot be rebound to another task_path")
             if existing["pending_write_id"] == pending_id:
-                if _canonical_json(existing) != _canonical_json(payload):
+                existing_content = dict(existing)
+                candidate_content = dict(payload)
+                existing_content.pop("created_at", None)
+                candidate_content.pop("created_at", None)
+                if _canonical_json(existing_content) != _canonical_json(candidate_content):
                     raise CheckpointContractError("same pending-write identity was reused with different content")
                 return
         existing_count = sum(
@@ -627,6 +631,8 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             limit = self.max_checkpoints
         if not isinstance(limit, int) or isinstance(limit, bool) or limit < 0 or limit > self.max_checkpoints:
             raise CheckpointContractError("checkpoint list limit must be between zero and the S5 maximum")
+        if limit == 0:
+            return
         head, manifest, _ = self._assert_lease()
         checkpoints, pending = self._run_objects(head, manifest)
         before_index: int | None = None

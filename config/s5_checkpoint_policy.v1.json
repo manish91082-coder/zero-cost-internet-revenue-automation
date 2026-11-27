@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "NATIVE_SAVER_CORE_IMPLEMENTED_CI_PASS_FULL_CONFORMANCE_NOT_CLAIMED",
+  "status": "S5_EDGE_CASE_HARDENING_CI_PENDING",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -89,7 +89,10 @@
     "delete_thread explicitly fails closed without mutating canonical Git state; full conformance remains false until logical tombstone semantics are implemented",
     "full hash-locked GitHub Actions CI pass",
     "LangGraph branch:to routing channels are accepted only when the target is in the exact compiled graph node allowlist; __end__ is the sole fixed terminal target",
-    "Checkpoint channel_values and pending writes both support only schema-bounded branch:to routes whose targets are bound to the exact compiled graph node set"
+    "Checkpoint channel_values and pending writes both support only schema-bounded branch:to routes whose targets are bound to the exact compiled graph node set",
+    "Duplicate pending writes remain idempotent when created_at changes across retry while conflicting content for the same identity fails closed",
+    "LangGraph list(limit=0) returns an empty iterator without emitting one checkpoint",
+    "build_langgraph_graph binds the saver to the exact graph node set before compile"
   ],
   "core_sync_methods": [
     "put",
@@ -130,7 +133,10 @@
       "skipped": 1,
       "subtests_passed": 9,
       "failure": "checkpoint channel_values schema rejected branch:to:node_a"
-    }
+    },
+    "pending_write_timestamp_independent_idempotency": "IMPLEMENTED_CI_PENDING",
+    "zero_limit_list_semantics": "IMPLEMENTED_CI_PENDING",
+    "adapter_graph_binding_test": "IMPLEMENTED_CI_PENDING"
   },
   "routing_channels": {
     "prefix": "branch:to:",

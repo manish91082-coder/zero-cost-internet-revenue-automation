@@ -124,7 +124,8 @@ class FakeStateGraph:
     def add_conditional_edges(self, source, route_fn, path_map):
         self.conditional[source] = (route_fn, path_map)
 
-    def compile(self):
+    def compile(self, checkpointer=None):
+        self.compiled_with_checkpointer = checkpointer is not None
         return FakeCompiledGraph(self)
 
 FACTORY = SimpleNamespace(StateGraph=FakeStateGraph, START="START", END="END")
@@ -140,6 +141,16 @@ class LangGraphAdapterTests(unittest.TestCase):
         self.assertIn(("plan", "checkpoint_proposal"), builder.edges)
         self.assertIn(("checkpoint_proposal", "END"), builder.edges)
         self.assertEqual(builder.conditional["admission"][1], {"plan": "plan", "checkpoint": "checkpoint_proposal"})
+
+    def test_graph_binds_checkpointer_to_exact_compiled_nodes(self):
+        class BindingRecorder:
+            def bind_graph_nodes(self, node_names):
+                self.node_names = tuple(node_names)
+
+        recorder = BindingRecorder()
+        graph = build_langgraph_graph(MISSION, FACTORY, checkpointer=recorder)
+        self.assertEqual(recorder.node_names, ("admission", "plan", "checkpoint_proposal"))
+        self.assertTrue(graph.builder.compiled_with_checkpointer)
 
     def test_research_plan_is_bounded_to_two(self):
         tasks = [make_task("zcira-task-a", "P1"), make_task("zcira-task-b", "P2"), make_task("zcira-task-c", "P3")]
