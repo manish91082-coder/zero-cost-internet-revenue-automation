@@ -1,6 +1,6 @@
 # Project Continuity Checkpoint
 
-Last verified: 2026-11-24 (Asia/Kolkata)
+Last verified: 2026-11-27 (Asia/Kolkata)
 Project ID: ZCIRA-2026-11-13
 Canonical repository: https://github.com/manish91082-coder/zero-cost-internet-revenue-automation
 Default branch: main
@@ -1040,5 +1040,7 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Policy/report/continuity metadata is being updated separately. Synchronous core methods are accepted for the FakeDurableStore test harness only. Async methods and destructive `delete_thread` remain disabled; full `BaseCheckpointSaver` conformance is NOT CLAIMED.
 - S6-B2 egress remains HOLD; live source requests 0. S7 live Git Data write and publisher credential isolation remain disabled. Main branch protection/rulesets remain unenabled. S8 Cloudflare not deployed; S9 pilot not started. Runtime agents/scheduled swarm executions 0.
 - Spend ₹0; settled revenue evidence ₹0; all five commercial gates remain not all PASS; commercial execution HOLD. No accounts/KYC/terms/billing/deployment/security testing/outreach/submissions/product listing or spend.
-- Post-pass edge review identified and corrected three deterministic issues: pending-write retry comparison now ignores only the non-identity `created_at` field (while conflicting content still fails); `list(limit=0)` returns no records; and adapter graph construction has a direct test that binds the exact compiled node set. Added regression tests for all three. New exact-head CI is pending.
-- After edge-case CI passes, freeze the S5 synchronous core (full BaseCheckpointSaver conformance remains false), then continue S6-B2 egress and S7 mechanical publisher isolation before S8/S9. No live source fetch, live write, cloud deployment or commercial launch.
+- Post-pass edge review closed three deterministic issues: pending-write retry comparison ignores only the non-identity `created_at` field while conflicting content fails; `list(limit=0)` returns no records; and adapter graph construction binds the exact compiled node set. Added regression tests for all three.
+- Exact-head code commit `49ebf122b198855d6f3ecaf87d7b225985233c09` passed run `45933633563` / job `140291698070`: SUCCESS; Python 3.12.3; LangGraph 1.2.22; 47 SHA-256-locked packages; pip check clean; real LangGraph integration 3 passed; full pytest **228 passed, 1 expected skip, 9 subtests passed, 0 failed**.
+- S5 synchronous core and edge-case acceptance are PASS in FakeDurableStore CI. Full BaseCheckpointSaver conformance remains NOT CLAIMED because `delete_thread` and async methods are disabled fail-closed. No live Git Data write or production publisher is enabled.
+- Next: proceed to the S6-B2 zero-cost egress feasibility gate and S7 mechanical writer-isolation review, without enabling live source fetch, live write, cloud deployment or commercial launch.

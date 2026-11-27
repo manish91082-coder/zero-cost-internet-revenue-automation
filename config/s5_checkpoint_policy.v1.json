@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S5_EDGE_CASE_HARDENING_CI_PENDING",
+  "status": "S5_EDGE_CASE_HARDENING_CI_PASS_FULL_CONFORMANCE_NOT_CLAIMED",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -111,11 +111,11 @@
     "publisher_workflow_enabled": false,
     "branch_protection_enabled": false,
     "latest_validation_run": {
-      "run_id": 45933402182,
-      "job_id": 140290971295,
-      "head_sha": "c01d8e46fe6355fcfe43a5f9c995816ff5db882d",
+      "run_id": 45933633563,
+      "job_id": 140291698070,
+      "head_sha": "49ebf122b198855d6f3ecaf87d7b225985233c09",
       "conclusion": "success",
-      "passed": 225,
+      "passed": 228,
       "failed": 0,
       "skipped": 1,
       "subtests_passed": 9,
@@ -134,9 +134,9 @@
       "subtests_passed": 9,
       "failure": "checkpoint channel_values schema rejected branch:to:node_a"
     },
-    "pending_write_timestamp_independent_idempotency": "IMPLEMENTED_CI_PENDING",
-    "zero_limit_list_semantics": "IMPLEMENTED_CI_PENDING",
-    "adapter_graph_binding_test": "IMPLEMENTED_CI_PENDING"
+    "pending_write_timestamp_independent_idempotency": "PASS",
+    "zero_limit_list_semantics": "PASS",
+    "adapter_graph_binding_test": "PASS"
   },
   "routing_channels": {
     "prefix": "branch:to:",
