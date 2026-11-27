@@ -188,6 +188,26 @@ def test_new_saver_resumes_after_old_lease_expires():
     assert restored.checkpoint["channel_values"]["completed_task_ids"] == ["durable"]
 
 
+def test_branch_route_channel_requires_exact_compiled_node_binding():
+    _, _, _, saver, now = make_saver()
+    checkpoint_id = "00000000-0000-6000-8000-000000000006"
+    saved = saver.put(make_config(), make_checkpoint(checkpoint_id, now), {}, {})
+
+    with pytest.raises(CheckpointContractError):
+        saver.put_writes(saved, [("branch:to:node_a", None)], "route-task-a", "~__pregel_pull, __start__")
+
+    saver.bind_graph_nodes(("node_a",))
+    saver.put_writes(saved, [("branch:to:node_a", None)], "route-task-a", "~__pregel_pull, __start__")
+    restored = saver.get_tuple(saved)
+    assert restored is not None
+    assert restored.pending_writes == [("route-task-a", "branch:to:node_a", None)]
+
+    with pytest.raises(CheckpointContractError):
+        saver.put_writes(saved, [("branch:to:node_b", None)], "route-task-b", "~__pregel_pull, __start__")
+    with pytest.raises(CheckpointContractError):
+        saver.bind_graph_nodes(("node_b",))
+
+
 def test_real_langgraph_interrupt_resume_across_two_saver_instances():
     from langgraph.graph import END, START, StateGraph
 
@@ -204,6 +224,7 @@ def test_real_langgraph_interrupt_resume_across_two_saver_instances():
         now_fn=lambda: now, schema_dir=ROOT / "schemas" / "v1",
         policy_path=ROOT / "config" / "s5_checkpoint_policy.v1.json",
     )
+    saver1.bind_graph_nodes(("node_a", "node_b"))
 
     calls = {"node_a": 0, "node_b": 0}
 
@@ -245,6 +266,7 @@ def test_real_langgraph_interrupt_resume_across_two_saver_instances():
         now_fn=lambda: later, schema_dir=ROOT / "schemas" / "v1",
         policy_path=ROOT / "config" / "s5_checkpoint_policy.v1.json",
     )
+    saver2.bind_graph_nodes(("node_a", "node_b"))
     graph2 = builder.compile(checkpointer=saver2)
     resumed = graph2.invoke(None, config)
     assert calls == {"node_a": 1, "node_b": 1}

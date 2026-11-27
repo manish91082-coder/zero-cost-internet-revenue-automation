@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "CHECKPOINT_SCHEMAS_PUBLISHED_NATIVE_SAVER_PENDING",
+  "status": "NATIVE_SAVER_IMPLEMENTED_CI_PENDING",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -42,7 +42,7 @@
     "raw_source_body_persisted": false,
     "secrets_tokens_credentials_pii": "REJECT",
     "web_content_trust": "UNTRUSTED_DATA_ONLY",
-    "allowed_channels": "SwarmGraphState allowlist only"
+    "allowed_channels": "SwarmGraphState allowlist plus graph-bound LangGraph control channels"
   },
   "bounds": {
     "max_parallel_research_workers": 2,
@@ -87,7 +87,8 @@
     "wrong mission, oversized payload, pickle/object, secret/raw-body rejection tests",
     "fake Git transport atomic commit and exact fetch-back tests",
     "delete_thread explicitly fails closed without mutating canonical Git state; full conformance remains false until logical tombstone semantics are implemented",
-    "full hash-locked GitHub Actions CI pass"
+    "full hash-locked GitHub Actions CI pass",
+    "LangGraph branch:to routing channels are accepted only when the target is in the exact compiled graph node allowlist; __end__ is the sole fixed terminal target"
   ],
   "core_sync_methods": [
     "put",
@@ -99,9 +100,9 @@
   "full_base_checkpoint_saver_conformance": false,
   "implementation_status": {
     "retained_writer_lease_transition": "IMPLEMENTED",
-    "native_base_checkpoint_saver": "NOT_IMPLEMENTED",
+    "native_base_checkpoint_saver": "IMPLEMENTED_CI_PENDING",
     "checkpoint_and_pending_write_schemas": "PUBLISHED_DRAFT_2020_12",
-    "graph_crash_resume_integration": "PENDING",
+    "graph_crash_resume_integration": "TEST_PENDING",
     "live_git_data_api_write_tested": false,
     "publisher_workflow_enabled": false,
     "branch_protection_enabled": false,
@@ -117,5 +118,13 @@
       "langgraph_runtime_tests": 3
     },
     "schema_contract_validation": "PASS_EXACT_HEAD_READ_ONLY_CI"
+  },
+  "routing_channels": {
+    "prefix": "branch:to:",
+    "schema_pattern": "^branch:to:(?:[a-z][a-z0-9_-]{0,63}|__end__)$",
+    "runtime_binding": "exact node names are bound from the compiled graph before execution",
+    "max_graph_nodes": 32,
+    "terminal_target": "__end__",
+    "unknown_target": "REJECT"
   }
 }

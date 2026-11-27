@@ -482,6 +482,10 @@ def build_langgraph_graph(
         StateGraph = graph_factory.StateGraph
 
     nodes = create_graph_nodes(mission_context, source_worker_executor)
+    if checkpointer is not None:
+        bind_graph_nodes = getattr(checkpointer, "bind_graph_nodes", None)
+        if callable(bind_graph_nodes):
+            bind_graph_nodes(tuple(nodes.keys()))
     builder = StateGraph(SwarmGraphState)
     for name, node in nodes.items():
         builder.add_node(name, node)

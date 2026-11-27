@@ -248,6 +248,18 @@ def test_langgraph_checkpoint_requires_empty_namespace():
     assert_rejected("langgraph_checkpoint", value)
 
 
+def test_langgraph_pending_writes_accepts_bounded_branch_route_channel():
+    value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
+    value["writes"] = [{"channel": "branch:to:node_a", "index": 0, "value": None}]
+    schema_for("langgraph_pending_writes").validate(value)
+
+
+def test_langgraph_pending_writes_rejects_malformed_branch_route_channel():
+    value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
+    value["writes"] = [{"channel": "branch:to:node.a", "index": 0, "value": None}]
+    assert_rejected("langgraph_pending_writes", value)
+
+
 def test_langgraph_pending_writes_rejects_invalid_index():
     value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
     value["writes"][0]["index"] = 64

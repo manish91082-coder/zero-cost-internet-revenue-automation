@@ -61,6 +61,10 @@ ALLOWED_CHANNELS = frozenset(SwarmGraphState.__annotations__)
 LANGGRAPH_INTERNAL_CHANNELS = frozenset({"__start__"})
 CHECKPOINT_CHANNELS = ALLOWED_CHANNELS | LANGGRAPH_INTERNAL_CHANNELS
 SPECIAL_CHANNELS = frozenset(WRITES_IDX_MAP)
+NODE_NAME_RE = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+MAX_GRAPH_NODES = 32
+ROUTE_CHANNEL_PREFIX = "branch:to:"
+TERMINAL_ROUTE_CHANNEL = "branch:to:__end__"
 CHECKPOINT_KIND = "langgraph_checkpoint"
 PENDING_WRITES_KIND = "langgraph_pending_writes"
 FORBIDDEN_KEY_EXACT = {
@@ -196,6 +200,7 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
         self.lease_commit_sha = lease_commit_sha
         self.run_id = run_id
         self.now_fn = now_fn or (lambda: datetime.now(timezone.utc))
+        self.allowed_node_names: frozenset[str] | None = None
 
         repo_root = Path(__file__).resolve().parents[2]
         selected_schema_dir = Path(schema_dir) if schema_dir is not None else repo_root / "schemas" / "v1"
@@ -245,6 +250,32 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
         repository.object_validator = composed_validator
         super().__init__(serde=StrictJsonSerializer())
         self._assert_lease()
+
+    def bind_graph_nodes(self, node_names: Sequence[str]) -> None:
+        """Bind routing-channel permissions to the exact compiled graph node set."""
+        if not isinstance(node_names, Sequence) or isinstance(node_names, (str, bytes)):
+            raise CheckpointContractError("compiled graph node names must be a bounded sequence")
+        if not 1 <= len(node_names) <= MAX_GRAPH_NODES:
+            raise CheckpointContractError("compiled graph must contain between 1 and 32 nodes")
+        if any(not isinstance(name, str) or NODE_NAME_RE.fullmatch(name) is None for name in node_names):
+            raise CheckpointContractError("compiled graph contains an invalid node name")
+        candidate = frozenset(node_names)
+        if len(candidate) != len(node_names):
+            raise CheckpointContractError("compiled graph node names must be unique")
+        if self.allowed_node_names is not None and self.allowed_node_names != candidate:
+            raise CheckpointContractError("checkpoint saver cannot be rebound to a different graph node set")
+        self.allowed_node_names = candidate
+
+    def _is_allowed_pending_channel(self, channel: Any) -> bool:
+        if not isinstance(channel, str):
+            return False
+        if channel in CHECKPOINT_CHANNELS or channel in SPECIAL_CHANNELS:
+            return True
+        if channel == TERMINAL_ROUTE_CHANNEL:
+            return True
+        if not channel.startswith(ROUTE_CHANNEL_PREFIX) or self.allowed_node_names is None:
+            return False
+        return channel[len(ROUTE_CHANNEL_PREFIX):] in self.allowed_node_names
 
     def _now(self) -> datetime:
         value = self.now_fn()
@@ -299,8 +330,9 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
                 raise CheckpointContractError("pending-write identity digest mismatch")
             for index, record in enumerate(payload.get("writes", [])):
                 channel = record["channel"]
-                if channel not in CHECKPOINT_CHANNELS and channel not in SPECIAL_CHANNELS:
-                    raise CheckpointContractError("pending write channel is outside the S5 allowlist")
+                if not self._is_allowed_pending_channel(channel):
+                    safe_channel = channel[:128] if isinstance(channel, str) else type(channel).__name__
+                    raise CheckpointContractError(f"pending write channel {safe_channel!r} is outside the S5 graph/state allowlist")
                 if record["index"] != WRITES_IDX_MAP.get(channel, index):
                     raise CheckpointContractError("pending write index does not match LangGraph's reserved-index contract")
 
@@ -465,8 +497,9 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             if not isinstance(item, (tuple, list)) or len(item) != 2:
                 raise CheckpointContractError("each pending write must be a (channel, value) pair")
             channel, value = item
-            if not isinstance(channel, str) or (channel not in CHECKPOINT_CHANNELS and channel not in SPECIAL_CHANNELS):
-                raise CheckpointContractError("pending write channel is outside the S5 allowlist")
+            if not self._is_allowed_pending_channel(channel):
+                safe_channel = channel[:128] if isinstance(channel, str) else type(channel).__name__
+                raise CheckpointContractError(f"pending write channel {safe_channel!r} is outside the S5 graph/state allowlist")
             write_index = WRITES_IDX_MAP.get(channel, index)
             if write_index < -4 or write_index > 63:
                 raise CheckpointContractError("pending write index is outside the bounded range")
