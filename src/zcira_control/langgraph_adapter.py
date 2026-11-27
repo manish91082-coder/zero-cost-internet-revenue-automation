@@ -466,6 +466,7 @@ def build_langgraph_graph(
     mission_context: Mapping[str, Any],
     graph_factory: Any | None = None,
     source_worker_executor: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
+    checkpointer: Any | None = None,
 ) -> Any:
     """Build the optional LangGraph graph. The graph has no built-in in-memory checkpointer."""
     if graph_factory is None:
@@ -496,12 +497,26 @@ def build_langgraph_graph(
         builder.add_edge("plan", "source_workers")
         builder.add_edge("source_workers", "checkpoint_proposal")
     builder.add_edge("checkpoint_proposal", END)
-    return builder.compile()
+    return builder.compile(checkpointer=checkpointer) if checkpointer is not None else builder.compile()
 
 
-def invoke_graph(graph: Any, initial_state: Mapping[str, Any]) -> dict[str, Any]:
-    """Invoke a bounded planning graph; durable checkpoint persistence is a separate publisher handoff."""
-    result = graph.invoke(dict(initial_state))
+def invoke_graph(
+    graph: Any,
+    initial_state: Mapping[str, Any],
+    checkpoint_config: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Invoke a bounded planning graph, optionally with a run-bound durable checkpointer config."""
+    if checkpoint_config is None:
+        result = graph.invoke(dict(initial_state))
+    else:
+        configurable = checkpoint_config.get("configurable")
+        if (
+            not isinstance(configurable, Mapping)
+            or configurable.get("thread_id") != initial_state.get("run_id")
+            or configurable.get("checkpoint_ns", "") != ""
+        ):
+            raise StateError("checkpoint config must bind the exact run_id and empty checkpoint namespace")
+        result = graph.invoke(dict(initial_state), dict(checkpoint_config))
     proposal = result.get("checkpoint_proposal")
     if not isinstance(proposal, Mapping):
         raise StateError("graph did not return a checkpoint proposal")
