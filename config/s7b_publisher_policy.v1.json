@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B_GITHUB_CONTENTS_INTEGRITY_AND_AMBIGUOUS_REF_RECOVERY_CI_PASS_NOT_DEPLOYED",
+  "status": "S7B_CORE_CI_PASS_NOT_DEPLOYED_BRANCH_ISOLATION_REDESIGN_REQUIRED",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -74,28 +74,29 @@
   },
   "acceptance": {
     "unit_tests_added": 6,
-    "expected_full_suite_total": 200,
-    "previous_verified_baseline": "194_PASSED_1_EXPECTED_SKIP_6_SUBTESTS",
+    "expected_full_suite_total": 228,
+    "previous_verified_baseline": "228_PASSED_1_EXPECTED_SKIP_9_SUBTESTS",
     "current_ci_status": "PASS",
     "fetchback_verification_required": true,
-    "expected_passed": 200,
+    "expected_passed": 228,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45318412657,
-      "head_sha": "305803d97ce962e48c8a85038fabeee47bef5642",
+      "run_id": 45934000236,
+      "head_sha": "fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac",
       "conclusion": "success",
-      "passed": 200,
+      "passed": 228,
+      "failed": 0,
       "skipped": 1,
-      "subtests_passed": 6,
-      "validated": "strict GitHub Contents base64 and Git blob SHA read verification; Git blob SHA write-response verification; ambiguous ref-update recovery for response loss before and after server-side ref movement"
+      "subtests_passed": 9,
+      "validated": "full hash-locked suite including evidence publisher, Git Data FakeTransport, ambiguous-ref reconciliation, native LangGraph checkpoint and S6 transport policy"
     },
-    "verified_run_id": 45318412657,
-    "verified_head_sha": "305803d97ce962e48c8a85038fabeee47bef5642",
+    "verified_run_id": 45934000236,
+    "verified_head_sha": "fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac",
     "verified_result": {
       "conclusion": "success",
-      "passed": 200,
+      "passed": 228,
       "skipped": 1,
-      "subtests_passed": 6,
+      "subtests_passed": 9,
       "runner": "ubuntu-24.04",
       "python": "3.12.3",
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
@@ -130,7 +131,10 @@
     "repository_only_engineering": "ALLOWED",
     "publisher_workflow_activation": "EXACT_OWNER_APPROVAL_REQUIRED",
     "cloud_deployment": "EXACT_OWNER_APPROVAL_REQUIRED",
-    "billing_or_payment_method": "PROHIBITED_WITHOUT_SEPARATE_EXPLICIT_APPROVAL"
+    "billing_or_payment_method": "PROHIBITED_WITHOUT_SEPARATE_EXPLICIT_APPROVAL",
+    "branch_ruleset_configuration": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "ledger_branch_creation": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "github_app_creation_installation": "EXACT_OWNER_APPROVAL_REQUIRED"
   },
   "evidence_grade_policy": {
     "semantics": "SOURCE_DEFAULT_IS_MAXIMUM_AUTHORITY_CEILING_NOT_MANDATORY_CLAIM_GRADE",
@@ -174,5 +178,46 @@
     },
     "validation_scope": "FAKE_TRANSPORT_ONLY",
     "live_git_data_api_write_tested": false
+  },
+  "repository_ruleset_assessment": {
+    "public_repository_rulesets_available_on_github_free": true,
+    "admin_permission_required_to_create_or_edit": true,
+    "observed_main_protected": false,
+    "observed_rulesets_count": 0,
+    "branch_protection_endpoint": "403_RESOURCE_NOT_ACCESSIBLE_BY_INTEGRATION",
+    "push_rulesets_available_on_public_github_free": false,
+    "path_restriction_rule_type": "PUSH_RULESET",
+    "app_bypass_actor_bypasses_rules_in_its_ruleset": true,
+    "source_urls": [
+      "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets",
+      "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository"
+    ]
+  },
+  "publisher_isolation_reassessment": {
+    "current_single_main_branch_design": "NOT_ACCEPTED_AS_MECHANICALLY_ISOLATED",
+    "reason": "Public GitHub Free branch rulesets are available, but path restrictions are push-rule features; push rulesets are not available for public Free repositories. A publisher App that bypasses the main ruleset can bypass all rules in that ruleset, so application-level path allowlists do not protect code/workflow paths against credential compromise.",
+    "candidate_design": {
+      "code_branch": "main",
+      "state_and_evidence_branch": "evidence-ledger",
+      "main_updates": "OWNER_ADMIN_ONLY; PUBLISHER_APP_NOT_A_BYPASS_ACTOR",
+      "ledger_updates": "DEDICATED_PUBLISHER_APP_ONLY",
+      "ledger_branch_creation": "OWNER_CREATES_ONCE",
+      "app_permissions": [
+        "metadata:read",
+        "contents:read/write"
+      ],
+      "app_bypass_on_main": false,
+      "ledger_data_executed_as_code": false,
+      "ledger_content_treated_as_untrusted_data": true,
+      "publisher_workflow_source": "TRUSTED_MAIN_ONLY",
+      "status": "DESIGN_CANDIDATE_NOT_IMPLEMENTED"
+    },
+    "current_code_constraint": {
+      "github_git_data_store_branch_lock": "main",
+      "state_manifest_branch_lock": "main",
+      "branch_split_code_implemented": false,
+      "migration_performed": false
+    },
+    "activation": false
   }
 }
