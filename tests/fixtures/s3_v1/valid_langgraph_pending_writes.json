@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "ZCIRA-2026-11-13",
+  "run_id": "zcira-run-schema-fixture-001",
+  "thread_id": "zcira-run-schema-fixture-001",
+  "checkpoint_ns": "",
+  "checkpoint_id": "00000000-0000-6000-8000-000000000001",
+  "pending_write_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "task_id": "task-001",
+  "task_path": "",
+  "created_at": "2026-11-27T00:00:00Z",
+  "writes": [
+    {
+      "channel": "completed_task_ids",
+      "index": 0,
+      "value": [
+        "task-a"
+      ]
+    }
+  ]
+}

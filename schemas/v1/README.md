@@ -30,3 +30,12 @@ Version 1.0.0 contracts for deterministic task control and bounded read-only res
 - Bounded excerpts and titles use the versioned redaction policy. Source text remains `UNTRUSTED_DATA_ONLY`; reviewer verdict is PENDING and commercial gate is UNKNOWN.
 - The fetch-back verifier checks the SHA-256, exact canonical byte representation and schema after a future publisher retrieves the stored blob.
 - This is a contract and deterministic code path, not a live crawler or publisher deployment. Live source networking remains disabled.
+
+
+## S5 native LangGraph checkpoint object contracts
+
+- `langgraph_checkpoint.schema.json` defines one immutable checkpoint envelope, bound to the ZCIRA project, run/thread ID and the fixed empty checkpoint namespace.
+- `langgraph_pending_writes.schema.json` defines bounded per-task pending-write batches. The maximum batch size is 64 records and the maximum index is 63 (with LangGraph's reserved negative indices).
+- `state_manifest.schema.json` and the runtime `StateRepository` allowlist now recognize both new object kinds.
+- These schemas are publication contracts only. Runtime cross-field equality, canonical JSON, secret/raw-body rejection, idempotency, byte limits, ordering, writer lease enforcement and crash/resume remain the native saver implementation's responsibility.
+- The saver is not yet implemented; async execution, deletion, pruning and history rewriting remain disabled.

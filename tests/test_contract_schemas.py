@@ -24,6 +24,8 @@ SCHEMA_FILES = {
     "resource_lease": "resource_lease.schema.json",
     "mission_registry": "mission_registry.schema.json",
     "state_manifest": "state_manifest.schema.json",
+    "langgraph_checkpoint": "langgraph_checkpoint.schema.json",
+    "langgraph_pending_writes": "langgraph_pending_writes.schema.json",
 }
 FIXTURES = {
     "task": "valid_task.json",
@@ -39,6 +41,8 @@ FIXTURES = {
     "resource_lease": "valid_resource_lease.json",
     "mission_registry": "valid_mission_registry.json",
     "state_manifest": "valid_state_manifest.json",
+    "langgraph_checkpoint": "valid_langgraph_checkpoint.json",
+    "langgraph_pending_writes": "valid_langgraph_pending_writes.json",
 }
 
 def load_json(path):
@@ -203,3 +207,54 @@ def test_non_completed_source_worker_proposal_cannot_claim_evidence():
     value = copy.deepcopy(fixture_for("source_worker_proposal"))
     value["result_status"] = "BLOCKED"
     assert_rejected("source_worker_proposal", value)
+
+
+def test_state_manifest_accepts_langgraph_object_kinds():
+    value = copy.deepcopy(fixture_for("state_manifest"))
+    value["objects"].extend([
+        {
+            "kind": "langgraph_checkpoint",
+            "object_id": "00000000-0000-6000-8000-000000000001",
+            "path": "state/objects/" + "a" * 64 + ".json",
+            "sha256": "a" * 64,
+            "schema_version": "1.0.0",
+        },
+        {
+            "kind": "langgraph_pending_writes",
+            "object_id": "b" * 64,
+            "path": "state/objects/" + "b" * 64 + ".json",
+            "sha256": "b" * 64,
+            "schema_version": "1.0.0",
+        },
+    ])
+    schema_for("state_manifest").validate(value)
+
+
+def test_langgraph_checkpoint_rejects_unknown_state_channel():
+    value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
+    value["checkpoint"]["channel_values"]["raw_source_body"] = "must-not-persist"
+    assert_rejected("langgraph_checkpoint", value)
+
+
+def test_langgraph_checkpoint_rejects_other_mission():
+    value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
+    value["project_id"] = "OTHER-MISSION"
+    assert_rejected("langgraph_checkpoint", value)
+
+
+def test_langgraph_checkpoint_requires_empty_namespace():
+    value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
+    value["checkpoint_ns"] = "other"
+    assert_rejected("langgraph_checkpoint", value)
+
+
+def test_langgraph_pending_writes_rejects_invalid_index():
+    value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
+    value["writes"][0]["index"] = 64
+    assert_rejected("langgraph_pending_writes", value)
+
+
+def test_langgraph_pending_writes_rejects_more_than_64_records():
+    value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
+    value["writes"] = value["writes"] * 65
+    assert_rejected("langgraph_pending_writes", value)

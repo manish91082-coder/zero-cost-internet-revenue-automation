@@ -33,6 +33,8 @@ OBJECT_ID_FIELDS = {
     "quota_ledger": "provider_id",
     "resource_lease": "lease_id",
     "state_event": "event_id",
+    "langgraph_checkpoint": "checkpoint_id",
+    "langgraph_pending_writes": "pending_write_id",
 }
 OBJECT_KINDS = set(OBJECT_ID_FIELDS)
 

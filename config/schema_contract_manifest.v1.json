@@ -15,7 +15,9 @@
     "mission_registry": "schemas/v1/mission_registry.schema.json",
     "state_manifest": "schemas/v1/state_manifest.schema.json",
     "source_snapshot_envelope": "schemas/v1/source_snapshot_envelope.schema.json",
-    "source_worker_proposal": "schemas/v1/source_worker_proposal.schema.json"
+    "source_worker_proposal": "schemas/v1/source_worker_proposal.schema.json",
+    "langgraph_checkpoint": "schemas/v1/langgraph_checkpoint.schema.json",
+    "langgraph_pending_writes": "schemas/v1/langgraph_pending_writes.schema.json"
   },
   "mission_registry": "config/mission_registry.v1.json",
   "test_suite": "tests/test_contract_schemas.py",
@@ -51,6 +53,7 @@
     "schema_contract_tests": "PASS_13_CONTRACT_FIXTURES_PLUS_23_NEGATIVE_CASES_RUN_44860401524",
     "schema_negative_tests": 23,
     "source_snapshot_envelope": "PASS_RUN_44668168900_2026-11-20",
-    "source_worker_proposal": "PASS_RUN_44860401524"
+    "source_worker_proposal": "PASS_RUN_44860401524",
+    "s5_checkpoint_schemas": "PUBLISHED_DRAFT_2020_12_NOT_RUNTIME_CONNECTED"
   }
 }

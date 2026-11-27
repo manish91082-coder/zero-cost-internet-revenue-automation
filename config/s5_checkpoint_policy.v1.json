@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "RETAINED_WRITER_LEASE_PRIMITIVE_PASS_CHECKPOINTER_IMPLEMENTATION_PENDING",
+  "status": "CHECKPOINT_SCHEMAS_PUBLISHED_NATIVE_SAVER_PENDING",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -100,7 +100,7 @@
   "implementation_status": {
     "retained_writer_lease_transition": "IMPLEMENTED",
     "native_base_checkpoint_saver": "NOT_IMPLEMENTED",
-    "checkpoint_and_pending_write_schemas": "PENDING",
+    "checkpoint_and_pending_write_schemas": "PUBLISHED_DRAFT_2020_12",
     "graph_crash_resume_integration": "PENDING",
     "live_git_data_api_write_tested": false,
     "publisher_workflow_enabled": false,
