@@ -196,7 +196,17 @@ def test_branch_route_channel_requires_exact_compiled_node_binding():
     with pytest.raises(CheckpointContractError):
         saver.put_writes(saved, [("branch:to:node_a", None)], "route-task-a", "~__pregel_pull, __start__")
 
+    route_checkpoint_id = "00000000-0000-6000-8000-000000000007"
+    route_checkpoint = make_checkpoint(route_checkpoint_id, now, {"branch:to:node_a": None})
+    with pytest.raises(CheckpointContractError):
+        saver.put(make_config(), route_checkpoint, {}, {})
+
     saver.bind_graph_nodes(("node_a",))
+    route_saved = saver.put(make_config(), route_checkpoint, {}, {})
+    route_restored = saver.get_tuple(route_saved)
+    assert route_restored is not None
+    assert route_restored.checkpoint["channel_values"]["branch:to:node_a"] is None
+
     saver.put_writes(saved, [("branch:to:node_a", None)], "route-task-a", "~__pregel_pull, __start__")
     restored = saver.get_tuple(saved)
     assert restored is not None

@@ -266,16 +266,26 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             raise CheckpointContractError("checkpoint saver cannot be rebound to a different graph node set")
         self.allowed_node_names = candidate
 
-    def _is_allowed_pending_channel(self, channel: Any) -> bool:
+    def _is_allowed_route_channel(self, channel: Any) -> bool:
         if not isinstance(channel, str):
             return False
-        if channel in CHECKPOINT_CHANNELS or channel in SPECIAL_CHANNELS:
-            return True
         if channel == TERMINAL_ROUTE_CHANNEL:
             return True
         if not channel.startswith(ROUTE_CHANNEL_PREFIX) or self.allowed_node_names is None:
             return False
         return channel[len(ROUTE_CHANNEL_PREFIX):] in self.allowed_node_names
+
+    def _is_allowed_checkpoint_channel(self, channel: Any) -> bool:
+        return isinstance(channel, str) and (
+            channel in CHECKPOINT_CHANNELS or self._is_allowed_route_channel(channel)
+        )
+
+    def _is_allowed_pending_channel(self, channel: Any) -> bool:
+        return isinstance(channel, str) and (
+            channel in CHECKPOINT_CHANNELS
+            or channel in SPECIAL_CHANNELS
+            or self._is_allowed_route_channel(channel)
+        )
 
     def _now(self) -> datetime:
         value = self.now_fn()
@@ -315,8 +325,10 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             if not isinstance(checkpoint, Mapping) or checkpoint.get("id") != payload.get("checkpoint_id"):
                 raise CheckpointContractError("checkpoint envelope ID must equal the LangGraph checkpoint ID")
             channels = checkpoint.get("channel_values")
-            if not isinstance(channels, Mapping) or not set(channels).issubset(CHECKPOINT_CHANNELS):
-                raise CheckpointContractError("checkpoint contains a channel outside SwarmGraphState")
+            if not isinstance(channels, Mapping) or not all(
+                self._is_allowed_checkpoint_channel(channel) for channel in channels
+            ):
+                raise CheckpointContractError("checkpoint contains a channel outside the bound graph/state allowlist")
         else:
             identity = {
                 "project_id": PROJECT_ID,

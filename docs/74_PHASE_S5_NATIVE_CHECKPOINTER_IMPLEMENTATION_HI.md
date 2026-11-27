@@ -54,11 +54,17 @@ This is code/schema/test work only. The saver uses the existing FakeDurableStore
 
 S6-B2 egress remains HOLD; live source requests remain disabled. S7 publisher isolation and live write remain disabled. S8 Cloudflare is not deployed. S9 unattended pilot is not started. Commercial execution remains HOLD; spend ₹0; settled revenue evidence ₹0.
 
-## 5. Exact-head validation
+## 5. First corrective CI result and second demonstrated gap
 
-This report records the implementation checkpoint before the new commit-triggered S7-A validation. The new code/schema/tests are **CI PENDING** until the exact pushed head has a completed successful run and the decoded job log is inspected. A push or a queued run is not a PASS.
+The first routing-channel correction was committed at `2ea9aec1c439cbdd533c3d8acd0f0f40b14d4dec`. Exact-head run [45933219636](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45933219636) completed **FAILURE**: 222 passed, 1 failed, 1 expected skip, 9 subtests. The decoded failure moved past `put_writes` and identified `checkpoint.channel_values` containing `branch:to:node_a`; the checkpoint schema still had a state-only `propertyNames.enum`. This confirmed that LangGraph route channels must be handled in both checkpoint snapshots and pending writes.
 
-## 6. Next action
+The second correction now applies the bounded route pattern to checkpoint `channel_values` as well as pending writes, and the Python validator accepts route channels only after exact graph-node binding. A new test proves a route channel is rejected before binding and accepted after binding in a checkpoint snapshot.
+
+## 6. Exact-head validation
+
+This report records the second corrective implementation checkpoint before its new commit-triggered S7-A validation. The new code/schema/tests are **CI PENDING** until the exact pushed head has a completed successful run and the decoded job log is inspected. A push or a queued run is not a PASS.
+
+## 7. Next action
 
 1. Observe the exact-head read-only S7-A run.
 2. If it passes, fetch back every changed artifact and record the exact run/job/log counts in this report, S5 policy and `PROJECT_CONTINUITY.md`.

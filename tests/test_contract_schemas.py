@@ -230,6 +230,18 @@ def test_state_manifest_accepts_langgraph_object_kinds():
     schema_for("state_manifest").validate(value)
 
 
+def test_langgraph_checkpoint_accepts_bounded_branch_route_channel():
+    value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
+    value["checkpoint"]["channel_values"]["branch:to:node_a"] = None
+    schema_for("langgraph_checkpoint").validate(value)
+
+
+def test_langgraph_checkpoint_rejects_malformed_branch_route_channel():
+    value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
+    value["checkpoint"]["channel_values"]["branch:to:node.a"] = None
+    assert_rejected("langgraph_checkpoint", value)
+
+
 def test_langgraph_checkpoint_rejects_unknown_state_channel():
     value = copy.deepcopy(fixture_for("langgraph_checkpoint"))
     value["checkpoint"]["channel_values"]["raw_source_body"] = "must-not-persist"

@@ -88,7 +88,8 @@
     "fake Git transport atomic commit and exact fetch-back tests",
     "delete_thread explicitly fails closed without mutating canonical Git state; full conformance remains false until logical tombstone semantics are implemented",
     "full hash-locked GitHub Actions CI pass",
-    "LangGraph branch:to routing channels are accepted only when the target is in the exact compiled graph node allowlist; __end__ is the sole fixed terminal target"
+    "LangGraph branch:to routing channels are accepted only when the target is in the exact compiled graph node allowlist; __end__ is the sole fixed terminal target",
+    "Checkpoint channel_values and pending writes both support only schema-bounded branch:to routes whose targets are bound to the exact compiled graph node set"
   ],
   "core_sync_methods": [
     "put",
@@ -117,7 +118,17 @@
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
       "langgraph_runtime_tests": 3
     },
-    "schema_contract_validation": "PASS_EXACT_HEAD_READ_ONLY_CI"
+    "schema_contract_validation": "PASS_EXACT_HEAD_READ_ONLY_CI",
+    "latest_attempted_run": {
+      "run_id": 45933219636,
+      "head_sha": "2ea9aec1c439cbdd533c3d8acd0f0f40b14d4dec",
+      "conclusion": "failure",
+      "passed": 222,
+      "failed": 1,
+      "skipped": 1,
+      "subtests_passed": 9,
+      "failure": "checkpoint channel_values schema rejected branch:to:node_a"
+    }
   },
   "routing_channels": {
     "prefix": "branch:to:",
