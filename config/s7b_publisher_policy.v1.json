@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B_CORE_CI_PASS_NOT_DEPLOYED_BRANCH_ISOLATION_REDESIGN_REQUIRED",
+  "status": "S7B5_BRANCH_SEPARATED_LEDGER_DESIGN_LOCKED_CODE_MIGRATION_PENDING",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -81,17 +81,19 @@
     "expected_passed": 228,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45934000236,
-      "head_sha": "fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac",
+      "run_id": 45934364778,
+      "job_id": 140294054092,
+      "head_sha": "efb1bcb7ad977c4a0122561dbe1e0d1ca20949ab",
       "conclusion": "success",
       "passed": 228,
       "failed": 0,
       "skipped": 1,
       "subtests_passed": 9,
-      "validated": "full hash-locked suite including evidence publisher, Git Data FakeTransport, ambiguous-ref reconciliation, native LangGraph checkpoint and S6 transport policy"
+      "hash_locked_packages": 47,
+      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS"
     },
-    "verified_run_id": 45934000236,
-    "verified_head_sha": "fc5ab96a2cdcf02c7050b8a2ba5f11afe57d31ac",
+    "verified_run_id": 45934364778,
+    "verified_head_sha": "efb1bcb7ad977c4a0122561dbe1e0d1ca20949ab",
     "verified_result": {
       "conclusion": "success",
       "passed": 228,
@@ -134,7 +136,12 @@
     "billing_or_payment_method": "PROHIBITED_WITHOUT_SEPARATE_EXPLICIT_APPROVAL",
     "branch_ruleset_configuration": "EXACT_OWNER_APPROVAL_REQUIRED",
     "ledger_branch_creation": "EXACT_OWNER_APPROVAL_REQUIRED",
-    "github_app_creation_installation": "EXACT_OWNER_APPROVAL_REQUIRED"
+    "github_app_creation_installation": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "dispatcher_app_creation_installation": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "publisher_app_secret_placement": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "dispatcher_app_secret_placement": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "ledger_ruleset_configuration": "EXACT_OWNER_APPROVAL_REQUIRED",
+    "main_ruleset_configuration": "EXACT_OWNER_APPROVAL_REQUIRED"
   },
   "evidence_grade_policy": {
     "semantics": "SOURCE_DEFAULT_IS_MAXIMUM_AUTHORITY_CEILING_NOT_MANDATORY_CLAIM_GRADE",
@@ -194,7 +201,7 @@
     ]
   },
   "publisher_isolation_reassessment": {
-    "current_single_main_branch_design": "NOT_ACCEPTED_AS_MECHANICALLY_ISOLATED",
+    "current_single_main_branch_design": "REJECTED_MECHANICAL_ISOLATION_GAP",
     "reason": "Public GitHub Free branch rulesets are available, but path restrictions are push-rule features; push rulesets are not available for public Free repositories. A publisher App that bypasses the main ruleset can bypass all rules in that ruleset, so application-level path allowlists do not protect code/workflow paths against credential compromise.",
     "candidate_design": {
       "code_branch": "main",
@@ -210,13 +217,146 @@
       "ledger_data_executed_as_code": false,
       "ledger_content_treated_as_untrusted_data": true,
       "publisher_workflow_source": "TRUSTED_MAIN_ONLY",
-      "status": "DESIGN_CANDIDATE_NOT_IMPLEMENTED"
+      "status": "LOCKED_FOR_IMPLEMENTATION"
     },
     "current_code_constraint": {
       "github_git_data_store_branch_lock": "main",
       "state_manifest_branch_lock": "main",
       "branch_split_code_implemented": false,
       "migration_performed": false
+    },
+    "activation": false,
+    "decision": "BRANCH_SEPARATED_LEDGER_DESIGN_LOCKED_FOR_REPO_ONLY_IMPLEMENTATION"
+  },
+  "branch_separation_decision": {
+    "status": "DESIGN_LOCKED_CODE_MIGRATION_PENDING",
+    "code_branch": "main",
+    "state_branch": "evidence-ledger",
+    "current_state_store_branch": "main",
+    "current_manifest_branch": "main",
+    "target_state_namespace": "zcira-2026-11-13/evidence-ledger",
+    "current_main_only_branch_count": 1,
+    "current_state_manifest_generation": 0,
+    "current_state_objects": 0,
+    "evidence_directory_present": false,
+    "rulesets": [
+      {
+        "name": "global-branch-creation-owner-only",
+        "target": "*",
+        "rules": [
+          "restrict_creations"
+        ],
+        "bypass": [
+          "repository_admins"
+        ],
+        "publisher_app_bypass": false
+      },
+      {
+        "name": "main-code-owner-only",
+        "target": "main",
+        "rules": [
+          "restrict_updates",
+          "require_pull_request",
+          "require_status_checks",
+          "block_force_pushes",
+          "restrict_deletions"
+        ],
+        "bypass": [
+          "repository_admins"
+        ],
+        "publisher_app_bypass": false
+      },
+      {
+        "name": "ledger-publisher-only-updates",
+        "target": "evidence-ledger",
+        "rules": [
+          "restrict_updates"
+        ],
+        "bypass": [
+          "publisher_github_app"
+        ],
+        "publisher_app_bypass": true
+      },
+      {
+        "name": "ledger-history-immutability",
+        "target": "evidence-ledger",
+        "rules": [
+          "block_force_pushes",
+          "restrict_deletions"
+        ],
+        "bypass": [],
+        "publisher_app_bypass": false
+      },
+      {
+        "name": "tag-creation-owner-only",
+        "target": "*",
+        "rules": [
+          "restrict_creations",
+          "restrict_updates",
+          "restrict_deletions"
+        ],
+        "bypass": [
+          "repository_admins"
+        ],
+        "publisher_app_bypass": false
+      }
+    ],
+    "publisher_app": {
+      "repository_selection": "ONLY_ZERO_COST_REVENUE_REPO",
+      "permissions": {
+        "metadata": "read",
+        "contents": "write",
+        "workflows": "none",
+        "actions": "none",
+        "administration": "none",
+        "secrets": "none",
+        "deployments": "none",
+        "id_token": "none"
+      },
+      "bypass_actor_on": "evidence-ledger update ruleset only",
+      "bypass_actor_on_main": false,
+      "can_create_branches": false,
+      "token_ttl_minutes": 60
+    },
+    "dispatcher_app": {
+      "role": "TRIGGER_ONLY",
+      "permissions": {
+        "metadata": "read",
+        "actions": "write",
+        "contents": "none",
+        "workflows": "none",
+        "administration": "none",
+        "secrets": "none"
+      },
+      "may_dispatch_publisher_workflow": true,
+      "may_write_repository_content": false,
+      "token_ttl_minutes": 60
+    },
+    "workflow_execution": {
+      "publisher_workflow_source": "main only",
+      "publisher_workflow_secret_scope": "trusted main workflow only",
+      "read_only_ci_source": "main only",
+      "ledger_branch_checkout_as_code": false,
+      "ledger_branch_read_mode": "DATA_ONLY_SCHEMA_AND_HASH_VALIDATION",
+      "publisher_post_commit_fetchback_required": true,
+      "scheduled_audit_from_main": true
+    },
+    "current_code_changes_required": [
+      "Introduce CANONICAL_CODE_BRANCH=main and CANONICAL_STATE_BRANCH=evidence-ledger.",
+      "Parameterize GitHubGitDataStore on the locked state branch, with no fallback to main.",
+      "Move state_manifest and writer_lease branch/namespace contracts to evidence-ledger while task/missions remain on main.",
+      "Update state, lease, run-state schemas and fixtures; retain task/source code branch as main.",
+      "Update mission registry, isolation policy, S5 checkpoint policy and publisher policy.",
+      "Add FakeTransport tests proving publisher token cannot target main and state operations use evidence-ledger.",
+      "Add an owner-only empty-ledger bootstrap/migration dry-run; no live branch creation."
+    ],
+    "migration": {
+      "current_manifest_generation": 0,
+      "current_objects": 0,
+      "source_snapshots": 0,
+      "mode": "NEW_EMPTY_DATA_ONLY_BRANCH",
+      "branch_creation": "OWNER_ONLY",
+      "live_migration_performed": false
     },
     "activation": false
   }
