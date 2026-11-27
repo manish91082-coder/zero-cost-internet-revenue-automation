@@ -106,15 +106,16 @@
     "publisher_workflow_enabled": false,
     "branch_protection_enabled": false,
     "latest_validation_run": {
-      "run_id": 45748064728,
-      "head_sha": "efcf51eeb951b5a58d6891ccd97affa8c881a748",
+      "run_id": 45930981211,
+      "head_sha": "46afca7cfa35931522cbb9b080eda75b67854a72",
       "conclusion": "success",
-      "passed": 205,
+      "passed": 213,
       "skipped": 1,
       "subtests_passed": 9,
       "hash_locked_packages": 47,
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
       "langgraph_runtime_tests": 3
-    }
+    },
+    "schema_contract_validation": "PASS_EXACT_HEAD_READ_ONLY_CI"
   }
 }

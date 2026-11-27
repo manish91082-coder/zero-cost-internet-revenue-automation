@@ -1000,3 +1000,17 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 4. Add pinned LangGraph crash-after-node/resume integration tests across separate saver instances and a simulated ephemeral-runner boundary.
 5. Keep `delete_thread` fail-closed pending logical tombstone design; do not claim full interface conformance early.
 6. Continue S6-B2 and S7-B isolation gates separately. Do not enable live source requests, publisher writes, S8 deployment or S9 pilot without exact no-cost eligibility and approval gates.
+
+
+## 54. Phase S5 — versioned checkpoint and pending-write schema contracts (2026-11-27)
+
+- Preflight main HEAD: `1fd7467b7b166da08702acd08d5965ff6a262ff0`; reread current continuity, architecture decision `docs/45`, roster contract `docs/42`, S5 design/report `docs/71` and `docs/72`, S7-B3 report `docs/70`, S5 policy and schema manifest.
+- Reopened controlling Library archive `02_complete-research-hi.md`, version 1: 1,402,707 bytes; SHA-256 `c61be12a55385d0780a6a5bdf45f2fc22086be9edf6bbba96e78cfb0726d1e5`. Its legacy heading does not alter ZCIRA scope; only registered category/destination evidence is used.
+- A2.4-B: 219/219 category IDs across six batches; no missing/extra/duplicate IDs. A2.4-C: 8/8 shared lists, 168/168 entries, 213 explicit edges. A2.5: 3,482 occurrences, 315 repeated-name groups, 283 same-name/same-host candidates, 32 ambiguous groups; no identity merge; unique-platform count NOT ESTABLISHED. Priority order P1/P2/P3/P4/P5/B/M and Category #24=B unchanged.
+- Added Draft 2020-12 contracts `schemas/v1/langgraph_checkpoint.schema.json` and `schemas/v1/langgraph_pending_writes.schema.json`, two valid fixtures, state-manifest enum support, runtime object-kind ID mapping, contract-manifest references, S5 policy status and schema README documentation.
+- Added contract tests for valid fixtures, new manifest object kinds, unknown channel, cross-mission checkpoint, non-empty namespace, invalid pending-write index and over-64-record batch.
+- Schema/code commit: `46afca7cfa35931522cbb9b080eda75b67854a72`; all ten changed artifacts fetched back from exact commit and all ten Git blob SHA values matched. Detailed report: `docs/73_PHASE_S5_CHECKPOINT_SCHEMA_CONTRACTS_HI.md`.
+- Exact-head read-only CI: run [45930981211](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45930981211), job `140283285807`, SUCCESS; ubuntu-24.04 / Python 3.12.3; 47 SHA-256-locked packages; pip check clean; real LangGraph integration 3 passed; full pytest **213 passed, 1 expected skip, 9 subtests passed**.
+- This increment publishes schema contracts only. Native saver, runtime schema-validator composition, JSON-only serialization, byte accounting, pending-write restoration, crash/resume and cross-run recovery remain PENDING.
+- S6-B2 egress remains HOLD; live source requests 0. S7 live Git Data write and publisher isolation remain untested/disabled. S8 Cloudflare not deployed. S9 pilot not started. Runtime agents/scheduled swarm executions 0. Spend ₹0; settled revenue evidence ₹0; commercial execution HOLD.
+- Next: implement the strict synchronous JSON-only `BaseCheckpointSaver` over `StateRepository.commit_under_lease`; then fake-transport idempotency/order/size tests and a two-saver crash/resume integration test. Keep deletion/async disabled and do not bypass S6/S7 gates.
