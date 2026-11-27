@@ -1044,3 +1044,15 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Exact-head code commit `49ebf122b198855d6f3ecaf87d7b225985233c09` passed run `45933633563` / job `140291698070`: SUCCESS; Python 3.12.3; LangGraph 1.2.22; 47 SHA-256-locked packages; pip check clean; real LangGraph integration 3 passed; full pytest **228 passed, 1 expected skip, 9 subtests passed, 0 failed**.
 - S5 synchronous core and edge-case acceptance are PASS in FakeDurableStore CI. Full BaseCheckpointSaver conformance remains NOT CLAIMED because `delete_thread` and async methods are disabled fail-closed. No live Git Data write or production publisher is enabled.
 - Next: proceed to the S6-B2 zero-cost egress feasibility gate and S7 mechanical writer-isolation review, without enabling live source fetch, live write, cloud deployment or commercial launch.
+
+
+## 57. S6-B2 alternate free-runtime revalidation (2026-11-27) — HOLD retained
+
+- Re-read docs/63, config/s6_transport_policy.v1.json, source-worker policy and canonical S2-B architecture. No architecture change.
+- GitHub official docs confirm standard hosted runners have public internet by default and are shared across customers. Azure VNET outbound policy is available only to larger runners; standard runners are unsupported. GitHub Team/Enterprise and Azure VNET resources are required, so this is not the strict ₹0 route.
+- Cloudflare Sandbox/Container outbound host allow/deny controls are technically documented. However, product-specific Container pricing says Free=N/A and requires Workers Paid $5/month, while the general Cloudflare plans page currently shows a conflicting Free allocation. This official-source conflict means eligibility is UNKNOWN/BLOCKED; no activation or billing.
+- Deno Deploy supports Cron, but its Free plan is limited to 1M requests/month, 20 GiB egress, 10 active CPU hours and 150 GiB-hours memory. Official changelog says a credit card is required to lift restricted Free limits, and Deno Deploy is scheduled to sunset in April 2027. Rejected as long-term failover.
+- No third independent provider-managed egress-isolated runtime is verified as eligible at ₹0. Cloudflare Workers Free remains a future lightweight heartbeat/dispatcher candidate only; account-level no-payment-method eligibility remains UNKNOWN.
+- Machine policy updated: config/s6_transport_policy.v1.json; report addendum: docs/63_PHASE_S6B2_GITHUB_RUNNER_EGRESS_CONTROL_FEASIBILITY_HI.md; new detailed report docs/75_PHASE_S6B2_ALTERNATE_RUNTIME_ZERO_COST_REVALIDATION_HI.md.
+- Decision: S6-B2 HOLD. dns_pinning=false, egress_controls_audited=false, live_network_enabled=false, live source requests 0. No security tests, account actions, KYC, terms acceptance, billing, deployment, outreach or spend. Offline/synthetic worker tests and metadata-only snapshot processing may continue.
+- Next: keep S6 live fetching disabled; continue S7 mechanical publisher isolation design/CI review only, with no live Git Data write or credential creation. S8 Cloudflare and S9 unattended pilot remain blocked until exact ₹0 eligibility and approvals pass.

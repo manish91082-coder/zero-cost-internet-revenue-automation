@@ -85,3 +85,67 @@ After the S6-B2 report and policy update were committed, GitHub Actions run 4445
 - Full pytest: 150 passed, 1 expected skip, 6 subtests passed.
 
 This run validates the report/config checkpoint. It did not perform a live source request, egress firewall test, or cloud deployment.
+
+
+## 8. 2026-11-27 alternate-runtime revalidation — no eligible egress-isolated ₹0 failover found
+
+This addendum rechecks candidate runtimes without creating accounts, accepting terms, configuring billing, deploying, testing security controls or making live source requests.
+
+### 8.1 GitHub Actions standard runner
+
+Official GitHub documentation states that hosted runners have public-internet access by default and are shared across customers. Azure VNET networking provides outbound network-policy control, but it is available only for larger runners; standard runners are unsupported. The documented configuration requires GitHub Team/Enterprise eligibility and Azure VNET resources. This does not meet the current strict ₹0 standard-runner design.
+
+Sources:
+- https://docs.github.com/en/enterprise-cloud@latest/actions/concepts/runners/private-networking
+- https://docs.github.com/en/enterprise-cloud@latest/admin/configuring-settings/configuring-private-networking-for-hosted-compute-products/about-azure-private-networking-for-github-hosted-runners-in-your-enterprise
+
+### 8.2 Cloudflare Containers / Sandbox
+
+Cloudflare Sandbox/Container outbound handlers document allowed-host / denied-host controls and default-deny behavior when internet access is disabled. This is technically relevant to egress isolation, but it is not the selected Workers Free Cron product.
+
+Official pricing sources conflict:
+- Product-specific Containers pricing says Free=N/A and that the included 25 GiB-hours / 375 vCPU-minutes / 200 GB-hours are part of the $5/month Workers Paid plan.
+- The general Cloudflare plans page currently displays a Free allocation for Containers.
+
+Decision: BLOCKED_OFFICIAL_PRICING_CONFLICT. No account-level eligibility, billing state or no-payment-method status has been verified. Because the product-specific page explicitly requires Workers Paid, do not assume the generic page is sufficient to activate a strict ₹0 runtime. No account creation or deployment.
+
+Sources:
+- https://developers.cloudflare.com/containers/guides/outbound-traffic/
+- https://developers.cloudflare.com/containers/platform/pricing/
+- https://www.cloudflare.com/plans/
+
+### 8.3 Deno Deploy
+
+Deno Deploy supports Deno.cron(), but its official pricing page lists the Free plan at 1 million requests/month, 20 GiB egress, 10 active CPU hours and 150 GiB-hours memory. The official changelog says free organizations pause applications after usage limits are exceeded and that linking a credit card is required to lift restricted Free limits. Deno's current docs also state that Deno Deploy will be sunset in April 2027.
+
+This is not a durable independent failover for a long-lived 24x7 system and does not meet the no-payment-method constraint for unrestricted free limits. Mark INELIGIBLE_LONG_TERM_FAILOVER; no account or deployment.
+
+Sources:
+- https://deno.com/deploy/pricing
+- https://docs.deno.com/deploy/changelog/
+
+### 8.4 Cloudflare Workers Free
+
+Workers Free remains a possible lightweight Cron/dispatcher path under the locked architecture. It is not an egress firewall for GitHub runners and must not be repurposed as a source-fetch proxy or heavy Python runtime. Account-level no-payment-method eligibility remains UNKNOWN because no account dashboard or activation was performed.
+
+Decision: retain as a future candidate only; not deployed.
+
+### 8.5 Decision
+
+| Candidate | Decision |
+|---|---|
+| GitHub Actions standard | Keep bounded deterministic CI only; live source fetch remains HOLD |
+| GitHub larger runner + Azure VNET | Reject under strict ₹0 / no paid resource rule |
+| Cloudflare Workers Free | Keep as future lightweight heartbeat/dispatcher only; account-level no-payment-method eligibility UNKNOWN |
+| Cloudflare Containers/Sandbox | Blocked by conflicting official pricing and explicit Workers Paid requirement in product docs |
+| Deno Deploy | Reject as long-term failover; credit-card verification and April 2027 sunset |
+| Runner-local firewall/network namespace | Not tested or audited; no security-test permission inferred |
+
+No third independent, provider-managed, long-term, egress-isolated runtime has been verified as eligible at ₹0. Therefore:
+- dns_pinning=false
+- egress_controls_audited=false
+- live_network_enabled=false
+- live source requests = 0
+- S6-B2 remains HOLD
+
+Offline/synthetic evidence-worker tests and metadata-only snapshot work may continue. The architecture is not changed, no paid fallback is introduced, and no account, billing, legal, deployment or security-testing action is authorized.

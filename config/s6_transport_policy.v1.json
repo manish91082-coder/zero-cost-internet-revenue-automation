@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S6B1_PASS_S6B2_PROVIDER_EGRESS_NOT_AVAILABLE_ON_STANDARD_RUNNER",
+  "status": "S6B1_PASS_S6B2_NO_VERIFIED_ZERO_COST_EGRESS_PROVIDER",
   "transport": "Python standard-library HTTPSConnection with literal-IP socket pinning",
   "dns_resolution": {
     "api": "socket.getaddrinfo",
@@ -54,7 +54,7 @@
     "egress_controls_audited": false,
     "live_network_enabled": false,
     "source_worker_pipeline_live_fetch_enabled": false,
-    "reason": "GitHub-hosted standard runners have public internet access by default and do not expose a provider-managed per-job egress firewall. Static-IP larger runners require GitHub Enterprise Cloud; private networking is restricted to larger runners and Azure VNET. These options are outside the current strict zero-cost design. A runner-local firewall/network namespace is only a candidate and has not been security-tested or audited.",
+    "reason": "GitHub-hosted standard runners have public internet access by default and no provider-managed per-job egress firewall. Larger-runner Azure VNET isolation is restricted to larger runners and requires GitHub Team/Enterprise plus Azure resources. Cloudflare Containers/Sandbox has documented allowlisted egress controls, but current official product pricing says Free=N/A and requires Workers Paid $5/month while the general plans page shows a conflicting Free allocation; eligibility is unresolved and activation is prohibited. Deno Deploy Free has limited quotas, requires credit-card verification for unrestricted Free limits, and is scheduled to sunset in April 2027. No alternative is independently verified as an eligible long-term ₹0 egress-isolated runtime. Keep live network disabled.",
     "provider_managed_egress_controls": "NOT_AVAILABLE_ON_STANDARD_GITHUB_HOSTED_STANDARD_RUNNERS",
     "local_firewall_candidate": "UNVERIFIED_NOT_AUDITED"
   },
@@ -67,5 +67,63 @@
     "paid_provider_routes": false,
     "spend_cap_inr": 0
   },
-  "next_gate": "S6C_METADATA_ONLY_IMMUTABLE_SNAPSHOT_CONTRACT"
+  "next_gate": "S6B2_REMAIN_HOLD_UNTIL_INDEPENDENTLY_VERIFIED_ZERO_COST_PROVIDER_MANAGED_EGRESS",
+  "alternative_provider_assessment": {
+    "github_actions_standard": {
+      "status": "ELIGIBLE_FOR_BOUNDED_DETERMINISTIC_CI_ONLY",
+      "public_internet_default": true,
+      "shared_across_customers": true,
+      "provider_managed_per_job_egress_firewall": false,
+      "live_source_fetch": false
+    },
+    "github_larger_runner_azure_vnet": {
+      "status": "INELIGIBLE_STRICT_ZERO_COST",
+      "azure_vnet_available": true,
+      "standard_runners_supported": false,
+      "plan_requirement": "GitHub Team or Enterprise Cloud",
+      "external_azure_resources_required": true,
+      "activation": false
+    },
+    "cloudflare_workers_free": {
+      "status": "CANDIDATE_LIGHTWEIGHT_DISPATCH_ONLY",
+      "cpu_ms_per_invocation": 10,
+      "requests_per_day": 100000,
+      "provider_managed_egress_allowlist": false,
+      "account_no_payment_method_eligibility": "UNKNOWN",
+      "source_fetch_enabled": false,
+      "activation": false
+    },
+    "cloudflare_containers_sandbox": {
+      "status": "BLOCKED_OFFICIAL_PRICING_CONFLICT",
+      "technical_outbound_allowlist": "DOCUMENTED_FOR_CONTAINER_SANDBOX",
+      "product_specific_docs_free_status": "N_A",
+      "product_specific_plan_requirement": "Workers Paid $5/month",
+      "general_cloudflare_plans_page_shows_free_allocation": true,
+      "decision": "DO_NOT_ACTIVATE_UNTIL_OFFICIAL_PRICING_CONFLICT_AND_NO_BILLING_ELIGIBILITY_ARE_RESOLVED",
+      "activation": false
+    },
+    "deno_deploy": {
+      "status": "INELIGIBLE_LONG_TERM_FAILOVER",
+      "free_plan_limits": {
+        "requests_per_month": 1000000,
+        "egress_gib": 20,
+        "active_cpu_hours": 10,
+        "memory_gib_hours": 150
+      },
+      "cron_api_available": true,
+      "free_over_limit_behavior": "APPLICATIONS_PAUSED_UNTIL_NEXT_BILLING_CYCLE",
+      "credit_card_required_to_lift_restricted_free_limits": true,
+      "sunset": "2027-04",
+      "activation": false
+    }
+  },
+  "evidence_sources": [
+    "https://docs.github.com/en/enterprise-cloud@latest/actions/concepts/runners/private-networking",
+    "https://docs.github.com/en/enterprise-cloud@latest/admin/configuring-settings/configuring-private-networking-for-hosted-compute-products/about-azure-private-networking-for-github-hosted-runners-in-your-enterprise",
+    "https://www.cloudflare.com/plans/",
+    "https://developers.cloudflare.com/containers/platform/pricing/",
+    "https://developers.cloudflare.com/containers/guides/outbound-traffic/",
+    "https://deno.com/deploy/pricing",
+    "https://docs.deno.com/deploy/changelog/"
+  ]
 }
