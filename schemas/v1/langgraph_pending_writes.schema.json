@@ -92,7 +92,8 @@
               "__error__",
               "__interrupt__",
               "__resume__",
-              "__scheduled__"
+              "__scheduled__",
+              "__start__"
             ]
           },
           "index": {

@@ -299,7 +299,7 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
                 raise CheckpointContractError("pending-write identity digest mismatch")
             for index, record in enumerate(payload.get("writes", [])):
                 channel = record["channel"]
-                if channel not in ALLOWED_CHANNELS and channel not in SPECIAL_CHANNELS:
+                if channel not in CHECKPOINT_CHANNELS and channel not in SPECIAL_CHANNELS:
                     raise CheckpointContractError("pending write channel is outside the S5 allowlist")
                 if record["index"] != WRITES_IDX_MAP.get(channel, index):
                     raise CheckpointContractError("pending write index does not match LangGraph's reserved-index contract")
@@ -465,7 +465,7 @@ class LangGraphCheckpointSaver(BaseCheckpointSaver):
             if not isinstance(item, (tuple, list)) or len(item) != 2:
                 raise CheckpointContractError("each pending write must be a (channel, value) pair")
             channel, value = item
-            if not isinstance(channel, str) or (channel not in ALLOWED_CHANNELS and channel not in SPECIAL_CHANNELS):
+            if not isinstance(channel, str) or (channel not in CHECKPOINT_CHANNELS and channel not in SPECIAL_CHANNELS):
                 raise CheckpointContractError("pending write channel is outside the S5 allowlist")
             write_index = WRITES_IDX_MAP.get(channel, index)
             if write_index < -4 or write_index > 63:

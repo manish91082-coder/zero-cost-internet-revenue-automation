@@ -16,6 +16,13 @@
       "value": [
         "task-a"
       ]
+    },
+    {
+      "channel": "__start__",
+      "index": 1,
+      "value": {
+        "completed_task_ids": []
+      }
     }
   ]
 }
