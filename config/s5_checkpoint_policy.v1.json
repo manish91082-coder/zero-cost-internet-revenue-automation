@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "NATIVE_SAVER_IMPLEMENTED_CI_PENDING",
+  "status": "NATIVE_SAVER_CORE_IMPLEMENTED_CI_PASS_FULL_CONFORMANCE_NOT_CLAIMED",
   "framework": "langgraph",
   "pinned_package": {
     "name": "langgraph",
@@ -101,17 +101,19 @@
   "full_base_checkpoint_saver_conformance": false,
   "implementation_status": {
     "retained_writer_lease_transition": "IMPLEMENTED",
-    "native_base_checkpoint_saver": "IMPLEMENTED_CI_PENDING",
+    "native_base_checkpoint_saver": "IMPLEMENTED_CORE_CI_PASS",
     "checkpoint_and_pending_write_schemas": "PUBLISHED_DRAFT_2020_12",
-    "graph_crash_resume_integration": "TEST_PENDING",
+    "graph_crash_resume_integration": "PASS_TWO_SAVER_INTERRUPT_RESUME",
     "live_git_data_api_write_tested": false,
     "publisher_workflow_enabled": false,
     "branch_protection_enabled": false,
     "latest_validation_run": {
-      "run_id": 45930981211,
-      "head_sha": "46afca7cfa35931522cbb9b080eda75b67854a72",
+      "run_id": 45933402182,
+      "job_id": 140290971295,
+      "head_sha": "c01d8e46fe6355fcfe43a5f9c995816ff5db882d",
       "conclusion": "success",
-      "passed": 213,
+      "passed": 225,
+      "failed": 0,
       "skipped": 1,
       "subtests_passed": 9,
       "hash_locked_packages": 47,
@@ -137,5 +139,18 @@
     "max_graph_nodes": 32,
     "terminal_target": "__end__",
     "unknown_target": "REJECT"
+  },
+  "capability_boundary": {
+    "synchronous_core_methods": [
+      "put",
+      "put_writes",
+      "get_tuple",
+      "list"
+    ],
+    "async_methods": "DISABLED_FAIL_CLOSED",
+    "delete_thread": "DISABLED_FAIL_CLOSED_APPEND_ONLY",
+    "full_base_checkpoint_saver_conformance": false,
+    "live_git_data_write_tested": false,
+    "publisher_workflow_enabled": false
   }
 }

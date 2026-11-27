@@ -2,7 +2,7 @@
 
 **तिथि:** 2026-11-27  
 **Project:** ZCIRA-2026-11-13  
-**स्थिति:** NATIVE SAVER IMPLEMENTED / EXACT-HEAD CI PENDING / NO DEPLOYMENT
+**स्थिति:** NATIVE SAVER CORE PASS / FULL BASE CONFORMANCE NOT CLAIMED / NO DEPLOYMENT
 
 ## 1. Canonical preflight and immutable mission scope
 
@@ -60,9 +60,19 @@ The first routing-channel correction was committed at `2ea9aec1c439cbdd533c3d8ac
 
 The second correction now applies the bounded route pattern to checkpoint `channel_values` as well as pending writes, and the Python validator accepts route channels only after exact graph-node binding. A new test proves a route channel is rejected before binding and accepted after binding in a checkpoint snapshot.
 
-## 6. Exact-head validation
+## 6. Exact-head validation — observed PASS
 
-This report records the second corrective implementation checkpoint before its new commit-triggered S7-A validation. The new code/schema/tests are **CI PENDING** until the exact pushed head has a completed successful run and the decoded job log is inspected. A push or a queued run is not a PASS.
+- Exact code head: `c01d8e46fe6355fcfe43a5f9c995816ff5db882d`.
+- GitHub Actions run: [45933402182](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45933402182); job: `140290971295`; conclusion: **SUCCESS**.
+- Runner: `ubuntu-24.04`; Python: `3.12.3`; LangGraph: `1.2.22`; hash-locked packages installed: 47.
+- `pip check`: `No broken requirements found`.
+- Real LangGraph runtime integration: **3 passed**.
+- Full pytest: **225 passed, 1 expected skip, 9 subtests passed**; 0 failures.
+- Decoded job log confirms the full hash-locked validation step completed. The expected skip is the LangGraph-missing fallback test, because the pinned LangGraph package is installed.
+- This is read-only CI against FakeDurableStore. It does not prove live Git Data API write, production publisher isolation, source egress safety or cloud deployment.
+- Exact fetch-back for the code/schema/test commit `c01d8e46fe6355fcfe43a5f9c995816ff5db882d` returned the committed blob SHAs recorded in the continuity log. The policy/report/continuity metadata update is a separate documentation/config commit.
+
+**Acceptance boundary:** synchronous core methods `put`, `put_writes`, `get_tuple`, and bounded `list` are implemented and exact-head CI-tested. `delete_thread` and async methods remain disabled fail-closed; therefore full `BaseCheckpointSaver` conformance is **NOT CLAIMED**.
 
 ## 7. Next action
 
@@ -70,3 +80,8 @@ This report records the second corrective implementation checkpoint before its n
 2. If it passes, fetch back every changed artifact and record the exact run/job/log counts in this report, S5 policy and `PROJECT_CONTINUITY.md`.
 3. If it fails, inspect the decoded job log, correct only the demonstrated contract mismatch, and rerun. Do not bypass channel, schema, quota or approval controls.
 4. After native checkpointer acceptance, continue separate S6-B2 egress and S7 publisher-isolation gates. Do not enable source fetching, live publishing, S8 deployment or S9 pilot.
+
+
+## 8. Current disposition after code CI
+
+The native saver core is accepted for the deterministic FakeDurableStore test harness only. Do not interpret this as permission to activate a live publisher. The next S5 work is a separate edge-case review (idempotent retry timestamp handling, zero-limit listing semantics, exact graph binding tests) before S5 is frozen. S6-B2 egress, S7 mechanical writer isolation, S8 deployment and S9 unattended pilot remain independently blocked by their existing gates.
