@@ -117,3 +117,8 @@ No settings, branches, Apps, secrets, credentials, billing or deployments were c
 ## 9. Next action
 
 Proceed with S7-B5A branch-aware state-store and schema code plus FakeTransport tests only. The branch migration remains an owner-controlled action.
+
+
+## 10. Exact-head policy validation
+
+The design/policy commit `b328b7d84370df1eeb8a476e157ddc82242c1e96` passed read-only GitHub Actions run [45934801142](https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/45934801142), job `140295416686`: **228 passed, 1 expected skip, 9 subtests passed, 0 failures**; 47 hash-locked packages; Python 3.12.3; LangGraph 1.2.22; pip check clean; 3 LangGraph runtime tests passed. The exact commit and three changed artifacts were fetched back with matching Git blob SHAs. This does not validate or enable any live branch/ruleset/App permission.

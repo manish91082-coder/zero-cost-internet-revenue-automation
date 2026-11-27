@@ -1084,3 +1084,6 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 - Latest S7B4 policy-validation run: 45934364778 / job 140294054092, SUCCESS; 228 passed, 1 expected skip, 9 subtests; 47 hash-locked packages; pip check clean. This validates the repository-only policy/tests, not any live publisher permission.
 - S6-B2 remains HOLD; live source requests 0. S7 live publisher remains disabled. S8 Cloudflare is undeployed. S9 pilot not started. Spend ₹0; settled revenue evidence ₹0.
 - Next: S7-B5A branch-aware state-store, manifest and lease schema implementation with FakeTransport only. Do not create `evidence-ledger`, change rulesets or create/install Apps until exact owner approval.
+
+- S7-B5 design/policy exact-head validation: run 45934801142 / job 140295416686, SUCCESS on commit b328b7d84370df1eeb8a476e157ddc82242c1e96; Python 3.12.3, LangGraph 1.2.22, 47 hash-locked packages, pip check clean, 228 passed, 1 expected skip, 9 subtests, 3 LangGraph runtime tests. This validates the design/policy commit, not branch rulesets or live permissions.
+- Fetch-back SHA for S7-B5 policy/report/continuity at design commit: policy 20d9f22427999acf6e355533f20290dcfa9cb72a; ADR 77 cdf1474ee7997c90780100bed069a3fe4008557d; continuity 4e25483660187ab3bcdcc3bdb7874f93d5e4224c.
