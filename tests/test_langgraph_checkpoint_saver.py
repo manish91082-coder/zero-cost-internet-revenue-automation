@@ -324,7 +324,6 @@ def test_real_langgraph_interrupt_resume_across_two_saver_instances():
         (item["checkpoint_id"], item["parent_checkpoint_id"], item["run_id"])
         for item in checkpoint_payloads
     ]
-    print("ZCIRA_CHECKPOINT_CHAIN_DEBUG", json.dumps(parent_pairs, sort_keys=True))
     assert all(
         item["parent_checkpoint_id"] is None or item["parent_checkpoint_id"] in checkpoint_ids
         for item in checkpoint_payloads if item["run_id"] == run_id

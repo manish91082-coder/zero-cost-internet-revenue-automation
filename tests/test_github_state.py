@@ -50,6 +50,36 @@ class FakeTransport:
             self.ref_paths.append(path)
         if method == "GET" and path == "/git/ref/heads/evidence-ledger":
             return {"object": {"sha": self.head}}
+        if method == "GET" and path.startswith("/compare/"):
+            pair = path[len("/compare/"):]
+            base_sha, head_ref = pair.split("...", 1)
+            head_sha = self.head if head_ref == "evidence-ledger" else head_ref
+
+            def ancestors(start):
+                found = set()
+                stack = [start]
+                while stack:
+                    current = stack.pop()
+                    commit = self.commits.get(current)
+                    if commit is None:
+                        continue
+                    parents = commit.get("parents", [])
+                    for parent in parents:
+                        parent_sha = parent["sha"] if isinstance(parent, dict) else parent
+                        if parent_sha not in found:
+                            found.add(parent_sha)
+                            stack.append(parent_sha)
+                return found
+
+            if base_sha == head_sha:
+                status = "identical"
+            elif base_sha in ancestors(head_sha):
+                status = "ahead"
+            elif head_sha in ancestors(base_sha):
+                status = "behind"
+            else:
+                status = "diverged"
+            return {"status": status}
         if method == "GET" and path.startswith("/git/commits/"):
             sha = path.rsplit("/", 1)[-1]
             return self.commits[sha]
@@ -252,6 +282,28 @@ class GitHubStateStoreTests(unittest.TestCase):
                 base, {"state/manifest.v1.json": '{"generation":1}'}, "preserve uncommitted ref update"
             )
         self.assertEqual(self.store.read_head(), base)
+
+
+    def test_non_ancestor_commit_sha_is_rejected(self):
+        foreign = "f" * 40
+        self.transport.commits[foreign] = {"tree": {"sha": "b" * 40}, "parents": []}
+        with self.assertRaises(PolicyError):
+            self.store.read_file("state/manifest.v1.json", ref=foreign)
+
+    def test_ancestor_commit_sha_is_allowed_for_deterministic_fetchback(self):
+        base = self.store.read_head()
+        manifest_content = '{"generation":0}'
+        first = self.store.commit_files(
+            base, {"state/manifest.v1.json": manifest_content}, "first ledger commit"
+        )
+        first_head = first["commit_sha"]
+        object_content = "{}"
+        object_path = "state/objects/" + hashlib.sha256(object_content.encode()).hexdigest() + ".json"
+        self.store.commit_files(first_head, {object_path: object_content}, "second ledger commit")
+        self.assertEqual(
+            self.store.read_file("state/manifest.v1.json", ref=first_head),
+            manifest_content,
+        )
 
     def test_branch_is_locked_to_evidence_ledger_and_never_falls_back_to_main(self):
         from zcira_control.github_state import GitHubGitDataStore

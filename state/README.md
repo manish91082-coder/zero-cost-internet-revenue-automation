@@ -1,12 +1,10 @@
 # ZCIRA durable state
 
-# ZCIRA durable state
-
 This directory on `main` retains the historical generation-zero bootstrap manifest only. It is not the canonical mutable runtime ledger.
 
 - `state/manifest.v1.json` on `main` is a legacy empty bootstrap record and must never be used as a live state pointer.
 - The canonical mutable state branch is `evidence-ledger`; its manifest and immutable objects are read/written only through the branch-locked Git Data API adapter.
-- The state adapter rejects `main`, unknown branches and symbolic cross-branch refs. It has no fallback to the code branch.
+- The state adapter rejects `main`, unknown branches, symbolic cross-branch refs and commit SHAs that are not ancestors of `evidence-ledger`. It has no fallback to the code branch.
 - Content-addressed objects are stored below `objects/` and are referenced by SHA-256.
 - Every state transition uses an expected evidence-ledger head and a non-force ref update.
 - The repository writer lease is cooperative until a publisher-only credential and protected publication path are configured.

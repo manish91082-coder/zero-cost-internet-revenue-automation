@@ -111,6 +111,7 @@ class GitHubGitDataStore:
             raise PolicyError("state store branch is locked to evidence-ledger")
         self.transport = transport
         self.branch = branch
+        self._verified_branch_pairs: set[tuple[str, str]] = set()
 
     def read_head(self) -> str:
         result = self.transport.request("GET", f"/git/ref/heads/{quote(self.branch, safe='')}")
@@ -118,11 +119,27 @@ class GitHubGitDataStore:
         validate_git_sha(sha)
         return sha
 
+    def _assert_commit_on_state_branch(self, commit_sha: str) -> None:
+        head = self.read_head()
+        if commit_sha == head:
+            return
+        pair = (commit_sha, head)
+        if pair in self._verified_branch_pairs:
+            return
+        comparison = self.transport.request(
+            "GET",
+            f"/compare/{quote(commit_sha, safe='')}...{quote(self.branch, safe='')}",
+        )
+        if comparison.get("status") not in {"ahead", "identical"}:
+            raise PolicyError("state commit SHA is not an ancestor of evidence-ledger")
+        self._verified_branch_pairs.add(pair)
+
     def read_file(self, path: str, ref: str | None = None) -> str | None:
         validate_state_path(path)
         target_ref = ref or self.branch
         if target_ref != self.branch:
             validate_git_sha(target_ref)
+            self._assert_commit_on_state_branch(target_ref)
         encoded_path = quote(path, safe="/")
         encoded_ref = quote(target_ref, safe="")
         try:
