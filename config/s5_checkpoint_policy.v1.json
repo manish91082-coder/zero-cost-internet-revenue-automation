@@ -32,7 +32,11 @@
     "fetch_back": "exact commit ref, canonical JSON and SHA-256 verification",
     "runner_disk_is_durable": false,
     "d1_is_canonical": false,
-    "retained_lease_commit": "StateRepository.commit_under_lease"
+    "retained_lease_commit": "StateRepository.commit_under_lease",
+    "code_branch": "main",
+    "state_branch": "evidence-ledger",
+    "state_namespace": "zcira-2026-11-13/evidence-ledger",
+    "branch_separation": "STRICT_NO_FALLBACK_TO_MAIN"
   },
   "serialization": {
     "mode": "canonical-json-only",

@@ -58,7 +58,7 @@ def plan_publisher_task(
     now: datetime,
 ) -> dict[str, Any] | None:
     """Select at most one repository-writer task, and only when its lease is free."""
-    if any(lease.get("resource_key") == "repo-main-single-writer" and lease.get("project_id") == mission_context.get("project_id") and lease.get("canonical_repo") == mission_context.get("canonical_repo") and lease.get("state_namespace") == mission_context.get("state_namespace") and lease_is_active(lease, now) for lease in active_leases):
+    if any(lease.get("resource_key") == "repo-evidence-ledger-single-writer" and lease.get("project_id") == mission_context.get("project_id") and lease.get("canonical_repo") == mission_context.get("canonical_repo") and lease.get("state_namespace") == mission_context.get("state_namespace") and lease_is_active(lease, now) for lease in active_leases):
         return None
     candidates: list[dict[str, Any]] = []
     for raw in tasks:

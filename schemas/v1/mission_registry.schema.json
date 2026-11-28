@@ -24,7 +24,7 @@
       "const": "zcira-readonly-research"
     },
     "state_namespace": {
-      "const": "zcira-2026-11-13/main"
+      "const": "zcira-2026-11-13/evidence-ledger"
     },
     "credential_scope": {
       "const": "repository-scoped-contents-write"
@@ -105,6 +105,9 @@
     },
     "trial_credit_dependency_allowed": {
       "const": false
+    },
+    "state_branch": {
+      "const": "evidence-ledger"
     }
   },
   "required": [
@@ -128,6 +131,7 @@
     "cross_mission_write_allowed",
     "branch_isolation_required",
     "active",
-    "trial_credit_dependency_allowed"
+    "trial_credit_dependency_allowed",
+    "state_branch"
   ]
 }

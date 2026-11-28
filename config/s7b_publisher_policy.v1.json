@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B5_BRANCH_SEPARATED_LEDGER_DESIGN_LOCKED_CODE_MIGRATION_PENDING",
+  "status": "S7B5A_BRANCH_AWARE_STATE_STORE_IMPLEMENTED_CI_PENDING",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -232,8 +232,8 @@
     "status": "DESIGN_LOCKED_CODE_MIGRATION_PENDING",
     "code_branch": "main",
     "state_branch": "evidence-ledger",
-    "current_state_store_branch": "main",
-    "current_manifest_branch": "main",
+    "current_state_store_branch": "evidence-ledger",
+    "current_manifest_branch": "evidence-ledger",
     "target_state_namespace": "zcira-2026-11-13/evidence-ledger",
     "current_main_only_branch_count": 1,
     "current_state_manifest_generation": 0,
@@ -358,6 +358,22 @@
       "branch_creation": "OWNER_ONLY",
       "live_migration_performed": false
     },
-    "activation": false
+    "activation": false,
+    "branch_split_code_implemented": true,
+    "live_ledger_branch_created": false
+  },
+  "canonical_code_branch": "main",
+  "canonical_state_branch": "evidence-ledger",
+  "canonical_state_namespace": "zcira-2026-11-13/evidence-ledger",
+  "implementation_status": {
+    "branch_constants": "IMPLEMENTED",
+    "github_git_data_store_lock": "EVIDENCE_LEDGER_ONLY_NO_MAIN_FALLBACK",
+    "state_manifest_and_lease_namespace": "EVIDENCE_LEDGER",
+    "run_state_namespace": "EVIDENCE_LEDGER",
+    "langgraph_run_state_branch": "EVIDENCE_LEDGER",
+    "fake_transport_branch_isolation": "TESTS_ADDED",
+    "empty_legacy_manifest_bootstrap": "IMPLEMENTED_TESTS_PENDING",
+    "live_branch_creation": false,
+    "publisher_activation": false
   }
 }

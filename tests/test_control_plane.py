@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from zcira_control.checkpoints import StaleCheckpoint, compare_and_swap_checkpoint
 from zcira_control.leases import acquire_lease
 from zcira_control.policy import (
-    CANONICAL_REPO, ENVIRONMENT_NAMESPACE, PROJECT_ID, STATE_NAMESPACE,
+    CANONICAL_REPO, CANONICAL_STATE_BRANCH, ENVIRONMENT_NAMESPACE, PROJECT_ID, STATE_NAMESPACE,
     PolicyError, evaluate_commercial_release, validate_mission_context, validate_task, validate_repo_path,
 )
 from zcira_control.queue import plan_batch, plan_publisher_task
@@ -21,7 +21,7 @@ SHA = "a" * 40
 
 MISSION = {
     "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO,
-    "branch": "main", "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
+    "branch": "main", "state_branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
     "max_parallel_research_workers": 2, "single_writer_role": "evidence_publisher", "spend_cap_inr": 0,
     "paid_fallback_allowed": False, "trial_credit_dependency_allowed": False, "shared_state_with_other_missions": False, "cross_mission_write_allowed": False,
     "active": True, "allowed_paths": ["PROJECT_CONTINUITY.md", "docs/**", "config/**", "schemas/**", "tests/**", "scripts/**", "src/**", "requirements-test.txt", ".github/workflows/zcira-readonly-validation.yml"],
@@ -41,9 +41,9 @@ def make_task(task_id="zcira-task-001", priority="P1", created="2026-11-15T02:00
 
 def make_lease(lease_id="lease-1", holder="evidence_publisher", write=True, status="ACTIVE", expiry="2026-11-15T04:00:00Z"):
     return {
-        "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO, "branch": "main",
+        "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO, "branch": CANONICAL_STATE_BRANCH,
         "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
-        "lease_id": lease_id, "resource_key": "repo-main-single-writer", "lease_kind": "REPOSITORY_SINGLE_WRITER",
+        "lease_id": lease_id, "resource_key": "repo-evidence-ledger-single-writer", "lease_kind": "REPOSITORY_SINGLE_WRITER",
         "task_id": "zcira-task-001", "holder_id": "worker-1", "holder_role": holder, "write_access": write,
         "cross_mission_share_allowed": False, "status": status, "acquired_at": "2026-11-15T02:00:00Z",
         "expires_at": expiry, "base_commit_sha": SHA,

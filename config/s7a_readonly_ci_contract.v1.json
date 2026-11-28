@@ -111,7 +111,10 @@
       "source_worker_tests": 20,
       "full_pytest": "129 passed, 1 skipped",
       "expected_skip_test": "test_missing_langgraph_dependency_is_reported_without_fallback"
-    }
+    },
+    "code_branch": "main",
+    "state_ledger_branch": "evidence-ledger",
+    "ledger_branch_created": false
   },
   "dependency_bootstrap": {
     "python": "3.12",
@@ -182,5 +185,14 @@
     "candidate_lock_generated": true,
     "full_test_suite_executed": true,
     "actual_langgraph_integration": "PASS_3_REAL_TESTS"
+  },
+  "branch_separation": {
+    "code_branch": "main",
+    "state_branch": "evidence-ledger",
+    "ledger_branch_created": false,
+    "current_ci_source": "main only",
+    "future_ledger_access": "READ_ONLY_DATA_FETCH_AND_SCHEMA_HASH_VALIDATION",
+    "execute_ledger_branch_code": false,
+    "publisher_workflow_enabled": false
   }
 }

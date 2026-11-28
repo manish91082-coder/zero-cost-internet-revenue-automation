@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Any, Iterable, Mapping
 
 from .policy import (
-    CANONICAL_BRANCH,
+    CANONICAL_STATE_BRANCH,
     CANONICAL_REPO,
     ENVIRONMENT_NAMESPACE,
     PROJECT_ID,
@@ -36,7 +36,7 @@ def validate_lease(lease: Mapping[str, Any], now: datetime) -> None:
         "project_id": PROJECT_ID,
         "mission_id": PROJECT_ID,
         "canonical_repo": CANONICAL_REPO,
-        "branch": CANONICAL_BRANCH,
+        "branch": CANONICAL_STATE_BRANCH,
         "environment_namespace": ENVIRONMENT_NAMESPACE,
         "state_namespace": STATE_NAMESPACE,
         "cross_mission_share_allowed": False,
@@ -51,7 +51,7 @@ def validate_lease(lease: Mapping[str, Any], now: datetime) -> None:
     if now.tzinfo is None:
         raise PolicyError("lease validation time must include a timezone")
     if lease.get("lease_kind") == "REPOSITORY_SINGLE_WRITER":
-        if lease.get("resource_key") != "repo-main-single-writer":
+        if lease.get("resource_key") != "repo-evidence-ledger-single-writer":
             raise PolicyError("repository writer lease must use the canonical resource key")
         if lease.get("holder_role") != SINGLE_WRITER_ROLE or lease.get("write_access") is not True:
             raise PolicyError("only evidence_publisher may hold the repository single-writer lease")

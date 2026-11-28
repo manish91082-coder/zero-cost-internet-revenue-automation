@@ -282,3 +282,24 @@ def test_langgraph_pending_writes_rejects_more_than_64_records():
     value = copy.deepcopy(fixture_for("langgraph_pending_writes"))
     value["writes"] = value["writes"] * 65
     assert_rejected("langgraph_pending_writes", value)
+
+@pytest.mark.parametrize("name", ["state_manifest", "run_state", "resource_lease"])
+def test_durable_state_objects_are_pinned_to_evidence_ledger(name):
+    value = copy.deepcopy(fixture_for(name))
+    assert value["branch"] == "evidence-ledger"
+    value["branch"] = "main"
+    assert_rejected(name, value)
+
+
+def test_mission_registry_separates_code_and_state_branches():
+    value = copy.deepcopy(fixture_for("mission_registry"))
+    assert value["branch"] == "main"
+    assert value["state_branch"] == "evidence-ledger"
+    value["state_branch"] = "main"
+    assert_rejected("mission_registry", value)
+
+
+def test_repository_writer_lease_uses_evidence_ledger_resource_key():
+    value = copy.deepcopy(fixture_for("resource_lease"))
+    value["resource_key"] = "repo-main-single-writer"
+    assert_rejected("resource_lease", value)

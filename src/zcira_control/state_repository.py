@@ -9,7 +9,9 @@ from .checkpoints import StaleCheckpoint
 from .github_state import validate_state_path
 from .leases import validate_lease
 from .policy import (
-    CANONICAL_BRANCH,
+    CANONICAL_CODE_BRANCH,
+    CANONICAL_STATE_BRANCH,
+    LEGACY_STATE_NAMESPACE,
     CANONICAL_REPO,
     ENVIRONMENT_NAMESPACE,
     PROJECT_ID,
@@ -108,7 +110,7 @@ def validate_manifest(manifest: Mapping[str, Any]) -> None:
         "project_id": PROJECT_ID,
         "mission_id": PROJECT_ID,
         "canonical_repo": CANONICAL_REPO,
-        "branch": CANONICAL_BRANCH,
+        "branch": CANONICAL_STATE_BRANCH,
         "environment_namespace": ENVIRONMENT_NAMESPACE,
         "state_namespace": STATE_NAMESPACE,
         "paid_provider_routes_enabled": False,
@@ -164,7 +166,7 @@ def make_initial_manifest(now: datetime) -> dict[str, Any]:
         "project_id": PROJECT_ID,
         "mission_id": PROJECT_ID,
         "canonical_repo": CANONICAL_REPO,
-        "branch": CANONICAL_BRANCH,
+        "branch": CANONICAL_STATE_BRANCH,
         "environment_namespace": ENVIRONMENT_NAMESPACE,
         "state_namespace": STATE_NAMESPACE,
         "generation": 0,
@@ -205,6 +207,77 @@ class StateRepository:
         manifest = make_initial_manifest(now)
         result = self.store.commit_files(head, {MANIFEST_PATH: canonical_json(manifest)}, message)
         self._verify_commit(result["commit_sha"], {MANIFEST_PATH: canonical_json(manifest)})
+        return result["commit_sha"]
+
+    def bootstrap_empty_ledger(
+        self,
+        now: datetime,
+        message: str = "zcira: bootstrap empty evidence ledger",
+    ) -> str:
+        """Replace only an inherited generation-zero main manifest on an owner-created ledger branch.
+
+        This method never creates a branch. The caller must first create the
+        evidence-ledger branch through an owner-approved repository operation.
+        Non-empty, leased, killed, malformed or digest-invalid legacy state is
+        rejected. The old main commit remains immutable in Git history.
+        """
+        if now.tzinfo is None:
+            raise PolicyError("ledger bootstrap time must include a timezone")
+        store_branch = getattr(self.store, "branch", CANONICAL_STATE_BRANCH)
+        if store_branch != CANONICAL_STATE_BRANCH:
+            raise PolicyError("empty-ledger bootstrap is restricted to evidence-ledger")
+        head = self.store.read_head()
+        raw = self.store.read_file(MANIFEST_PATH, ref=head)
+        if raw is None:
+            raise StateNotInitialized("inherited main bootstrap manifest is missing")
+        try:
+            legacy = json.loads(raw)
+        except json.JSONDecodeError:
+            raise StateIntegrityError("inherited main manifest is not valid JSON") from None
+        required = {
+            "schema_version", "project_id", "mission_id", "canonical_repo", "branch",
+            "environment_namespace", "state_namespace", "generation", "previous_commit_sha",
+            "updated_at", "objects", "active_writer_lease_id", "kill_switch",
+            "paid_provider_routes_enabled", "spend_cap_inr", "state_digest",
+        }
+        if not isinstance(legacy, Mapping) or set(legacy.keys()) != required:
+            raise StateIntegrityError("inherited main manifest does not match the exact legacy contract")
+        legacy_constants = {
+            "schema_version": "1.0.0",
+            "project_id": PROJECT_ID,
+            "mission_id": PROJECT_ID,
+            "canonical_repo": CANONICAL_REPO,
+            "branch": CANONICAL_CODE_BRANCH,
+            "environment_namespace": ENVIRONMENT_NAMESPACE,
+            "state_namespace": LEGACY_STATE_NAMESPACE,
+            "paid_provider_routes_enabled": False,
+            "spend_cap_inr": 0,
+        }
+        for key, expected in legacy_constants.items():
+            if legacy.get(key) != expected:
+                raise StateIntegrityError(f"inherited main manifest mismatch: {key}")
+        generation = legacy.get("generation")
+        if (
+            not isinstance(generation, int)
+            or isinstance(generation, bool)
+            or generation != 0
+            or legacy.get("previous_commit_sha") is not None
+            or legacy.get("objects") != []
+            or legacy.get("active_writer_lease_id") is not None
+            or legacy.get("kill_switch") is not False
+        ):
+            raise StateIntegrityError("only an untouched generation-zero empty main manifest may be migrated")
+        _parse_time(legacy.get("updated_at"))
+        if legacy.get("state_digest") != compute_state_digest(legacy):
+            raise StateIntegrityError("inherited main manifest digest mismatch")
+
+        next_manifest = make_initial_manifest(now)
+        next_manifest["previous_commit_sha"] = head
+        next_manifest["state_digest"] = compute_state_digest(next_manifest)
+        validate_manifest(next_manifest)
+        files = {MANIFEST_PATH: canonical_json(next_manifest)}
+        result = self.store.commit_files(head, files, message)
+        self._verify_commit(result["commit_sha"], files)
         return result["commit_sha"]
 
     def load(self) -> tuple[str, dict[str, Any]]:
@@ -289,10 +362,10 @@ class StateRepository:
             "lease_id": lease_id,
             "mission_id": PROJECT_ID,
             "canonical_repo": CANONICAL_REPO,
-            "branch": CANONICAL_BRANCH,
+            "branch": CANONICAL_STATE_BRANCH,
             "environment_namespace": ENVIRONMENT_NAMESPACE,
             "state_namespace": STATE_NAMESPACE,
-            "resource_key": "repo-main-single-writer",
+            "resource_key": "repo-evidence-ledger-single-writer",
             "lease_kind": "REPOSITORY_SINGLE_WRITER",
             "task_id": "zcira-system-writer-lease",
             "holder_id": holder_id.strip(),
@@ -509,7 +582,7 @@ class StateRepository:
             "project_id": PROJECT_ID,
             "mission_id": PROJECT_ID,
             "canonical_repo": CANONICAL_REPO,
-            "branch": CANONICAL_BRANCH,
+            "branch": CANONICAL_STATE_BRANCH,
             "environment_namespace": ENVIRONMENT_NAMESPACE,
             "state_namespace": STATE_NAMESPACE,
             "generation": current_manifest["generation"] + 1,

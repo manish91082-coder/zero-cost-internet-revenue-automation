@@ -24,6 +24,8 @@ def git_blob_sha(content):
 class FakeTransport:
     def __init__(self):
         self.head = "a" * 40
+        self.ref_paths = []
+        self.content_refs = []
         self.trees = {"b" * 40: {}}
         self.commits = {self.head: {"tree": {"sha": "b" * 40}, "parents": []}}
         self.blobs = {}
@@ -44,7 +46,9 @@ class FakeTransport:
 
     def request(self, method, path, payload=None):
         method = method.upper()
-        if method == "GET" and path == "/git/ref/heads/main":
+        if path.startswith("/git/ref/heads/") or path.startswith("/git/refs/heads/"):
+            self.ref_paths.append(path)
+        if method == "GET" and path == "/git/ref/heads/evidence-ledger":
             return {"object": {"sha": self.head}}
         if method == "GET" and path.startswith("/git/commits/"):
             sha = path.rsplit("/", 1)[-1]
@@ -53,7 +57,8 @@ class FakeTransport:
             parsed = urlsplit(path)
             file_path = unquote(parsed.path[len("/contents/"):])
             ref = parse_qs(parsed.query)["ref"][0]
-            commit_sha = self.head if ref == "main" else ref
+            self.content_refs.append(ref)
+            commit_sha = self.head if ref == "evidence-ledger" else ref
             tree_sha = self.commits[commit_sha]["tree"]["sha"]
             blob_sha = self.trees[tree_sha].get(file_path)
             if blob_sha is None:
@@ -90,7 +95,7 @@ class FakeTransport:
                 "parents": [{"sha": parent} for parent in payload["parents"]],
             }
             return {"sha": sha}
-        if method == "PATCH" and path == "/git/refs/heads/main":
+        if method == "PATCH" and path == "/git/refs/heads/evidence-ledger":
             if self.lose_patch_response_before_update:
                 self.lose_patch_response_before_update = False
                 raise GitHubAPIError(0, "simulated connection loss before ref update")
@@ -248,10 +253,20 @@ class GitHubStateStoreTests(unittest.TestCase):
             )
         self.assertEqual(self.store.read_head(), base)
 
-    def test_branch_is_locked_to_main(self):
+    def test_branch_is_locked_to_evidence_ledger_and_never_falls_back_to_main(self):
         from zcira_control.github_state import GitHubGitDataStore
         with self.assertRaises(PolicyError):
+            GitHubGitDataStore(self.transport, branch="main")
+        with self.assertRaises(PolicyError):
             GitHubGitDataStore(self.transport, branch="other")
+        self.store.read_head()
+        self.store.read_file("state/manifest.v1.json")
+        self.assertEqual(self.transport.ref_paths, ["/git/ref/heads/evidence-ledger"])
+        self.assertEqual(self.transport.content_refs, ["evidence-ledger"])
+
+    def test_main_branch_ref_cannot_be_used_for_state_reads(self):
+        with self.assertRaises(PolicyError):
+            self.store.read_file("state/manifest.v1.json", ref="main")
 
 
 if __name__ == "__main__":

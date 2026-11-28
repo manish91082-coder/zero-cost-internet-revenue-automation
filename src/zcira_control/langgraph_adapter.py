@@ -9,6 +9,7 @@ from typing import Any, Callable, Mapping, TypedDict
 from .leases import lease_is_active, validate_lease
 from .policy import (
     CANONICAL_BRANCH,
+    CANONICAL_STATE_BRANCH,
     CANONICAL_REPO,
     ENVIRONMENT_NAMESPACE,
     MAX_PARALLEL_RESEARCH_WORKERS,
@@ -357,7 +358,7 @@ def create_graph_nodes(
             "run_id": state["run_id"],
             "mission_id": PROJECT_ID,
             "canonical_repo": CANONICAL_REPO,
-            "branch": CANONICAL_BRANCH,
+            "branch": CANONICAL_STATE_BRANCH,
             "environment_namespace": ENVIRONMENT_NAMESPACE,
             "state_namespace": STATE_NAMESPACE,
             "status": state.get("status", "PAUSED"),
@@ -591,7 +592,7 @@ def prepare_resume_input(
     validate_mission_context(mission_context)
     if run_state.get("project_id") != PROJECT_ID or run_state.get("mission_id") != PROJECT_ID:
         raise PolicyError("resume state belongs to another mission")
-    if run_state.get("canonical_repo") != CANONICAL_REPO or run_state.get("branch") != CANONICAL_BRANCH:
+    if run_state.get("canonical_repo") != CANONICAL_REPO or run_state.get("branch") != CANONICAL_STATE_BRANCH:
         raise PolicyError("resume state targets another repository or branch")
     if run_state.get("environment_namespace") != ENVIRONMENT_NAMESPACE or run_state.get("state_namespace") != STATE_NAMESPACE:
         raise PolicyError("resume state namespace mismatch")

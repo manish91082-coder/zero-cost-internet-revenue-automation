@@ -3,9 +3,9 @@
   "project_id": "ZCIRA-2026-11-13",
   "mission_id": "ZCIRA-2026-11-13",
   "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
-  "branch": "main",
+  "branch": "evidence-ledger",
   "environment_namespace": "zcira-readonly-research",
-  "state_namespace": "zcira-2026-11-13/main",
+  "state_namespace": "zcira-2026-11-13/evidence-ledger",
   "generation": 0,
   "previous_commit_sha": null,
   "updated_at": "2026-11-16T02:32:16Z",
@@ -14,5 +14,5 @@
   "kill_switch": false,
   "paid_provider_routes_enabled": false,
   "spend_cap_inr": 0,
-  "state_digest": "55cbfc1517431ac05ee65e89cefe1c05b6303760fe791c4b824e9ea8d5beaaa3"
+  "state_digest": "df6a62e227e178e6f46168700e8c7f0a4fc18d8c0163978204ecc38f324424ca"
 }

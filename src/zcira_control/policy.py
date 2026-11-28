@@ -8,9 +8,12 @@ from typing import Any, Mapping
 
 PROJECT_ID = "ZCIRA-2026-11-13"
 CANONICAL_REPO = "manish91082-coder/zero-cost-internet-revenue-automation"
-CANONICAL_BRANCH = "main"
+CANONICAL_CODE_BRANCH = "main"
+CANONICAL_STATE_BRANCH = "evidence-ledger"
+CANONICAL_BRANCH = CANONICAL_CODE_BRANCH
 ENVIRONMENT_NAMESPACE = "zcira-readonly-research"
-STATE_NAMESPACE = "zcira-2026-11-13/main"
+LEGACY_STATE_NAMESPACE = "zcira-2026-11-13/main"
+STATE_NAMESPACE = "zcira-2026-11-13/evidence-ledger"
 PRIORITY_ORDER = ("P1", "P2", "P3", "P4", "P5", "B", "M")
 PRIORITY_RANK = {value: index for index, value in enumerate(PRIORITY_ORDER)}
 MAX_PARALLEL_RESEARCH_WORKERS = 2
@@ -43,7 +46,8 @@ def validate_mission_context(context: Mapping[str, Any]) -> None:
         "project_id": PROJECT_ID,
         "mission_id": PROJECT_ID,
         "canonical_repo": CANONICAL_REPO,
-        "branch": CANONICAL_BRANCH,
+        "branch": CANONICAL_CODE_BRANCH,
+        "state_branch": CANONICAL_STATE_BRANCH,
         "environment_namespace": ENVIRONMENT_NAMESPACE,
         "state_namespace": STATE_NAMESPACE,
         "max_parallel_research_workers": MAX_PARALLEL_RESEARCH_WORKERS,

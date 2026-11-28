@@ -19,7 +19,7 @@ from zcira_control.langgraph_adapter import (
     prepare_resume_input,
 )
 from zcira_control.policy import (
-    CANONICAL_BRANCH, CANONICAL_REPO, ENVIRONMENT_NAMESPACE, PROJECT_ID,
+    CANONICAL_BRANCH, CANONICAL_STATE_BRANCH, CANONICAL_REPO, ENVIRONMENT_NAMESPACE, PROJECT_ID,
     STATE_NAMESPACE, PolicyError,
 )
 
@@ -28,7 +28,7 @@ SHA = "a" * 40
 
 MISSION = {
     "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO,
-    "branch": CANONICAL_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
+    "branch": CANONICAL_BRANCH, "state_branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
     "max_parallel_research_workers": 2, "single_writer_role": "evidence_publisher", "spend_cap_inr": 0,
     "paid_fallback_allowed": False, "trial_credit_dependency_allowed": False, "shared_state_with_other_missions": False,
     "cross_mission_write_allowed": False, "active": True,
@@ -76,7 +76,7 @@ def make_state(tasks, **overrides):
 def make_run_state(pending_ids):
     return {
         "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO,
-        "branch": CANONICAL_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
+        "branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
         "status": "RUNNING", "pending_task_ids": list(pending_ids), "completed_task_ids": [], "blocked_task_ids": [],
         "latest_commit_sha": SHA, "base_commit_sha": SHA, "run_id": "zcira-run-s5-test-001", "kill_switch": False,
     }
@@ -84,7 +84,7 @@ def make_run_state(pending_ids):
 def make_task_lease(lease_id, task_id, expires_at):
     return {
         "schema_version": "1.0.0", "project_id": PROJECT_ID, "lease_id": lease_id, "mission_id": PROJECT_ID,
-        "canonical_repo": CANONICAL_REPO, "branch": CANONICAL_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE,
+        "canonical_repo": CANONICAL_REPO, "branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE,
         "state_namespace": STATE_NAMESPACE, "resource_key": "task:" + task_id, "lease_kind": "TASK_EXECUTION",
         "task_id": task_id, "holder_id": "worker-a", "holder_role": "official_source_worker_a", "write_access": False,
         "cross_mission_share_allowed": False, "status": "ACTIVE", "acquired_at": "2026-11-17T03:00:00Z",
@@ -283,7 +283,7 @@ class LangGraphAdapterTests(unittest.TestCase):
     def test_resume_rejects_missing_pending_task(self):
         run_state = {
             "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO,
-            "branch": CANONICAL_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
+            "branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
             "status": "QUEUED", "pending_task_ids": ["zcira-missing"], "completed_task_ids": [], "blocked_task_ids": [],
             "latest_commit_sha": SHA, "base_commit_sha": SHA, "run_id": "zcira-run-s5-test-001", "kill_switch": False,
         }
@@ -293,7 +293,7 @@ class LangGraphAdapterTests(unittest.TestCase):
     def test_resume_preserves_kill_switch(self):
         run_state = {
             "project_id": PROJECT_ID, "mission_id": PROJECT_ID, "canonical_repo": CANONICAL_REPO,
-            "branch": CANONICAL_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
+            "branch": CANONICAL_STATE_BRANCH, "environment_namespace": ENVIRONMENT_NAMESPACE, "state_namespace": STATE_NAMESPACE,
             "status": "PAUSED", "pending_task_ids": [], "completed_task_ids": [], "blocked_task_ids": [],
             "latest_commit_sha": SHA, "base_commit_sha": SHA, "run_id": "zcira-run-s5-test-001", "kill_switch": True,
         }

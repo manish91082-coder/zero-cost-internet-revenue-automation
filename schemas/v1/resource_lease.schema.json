@@ -22,13 +22,13 @@
       "const": "manish91082-coder/zero-cost-internet-revenue-automation"
     },
     "branch": {
-      "const": "main"
+      "const": "evidence-ledger"
     },
     "environment_namespace": {
       "const": "zcira-readonly-research"
     },
     "state_namespace": {
-      "const": "zcira-2026-11-13/main"
+      "const": "zcira-2026-11-13/evidence-ledger"
     },
     "resource_key": {
       "type": "string",
@@ -154,6 +154,9 @@
           },
           "write_access": {
             "const": true
+          },
+          "resource_key": {
+            "const": "repo-evidence-ledger-single-writer"
           }
         }
       }

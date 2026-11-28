@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 from zcira_control.langgraph_adapter import build_langgraph_graph, invoke_graph, prepare_resume_input
 from test_langgraph_adapter import MISSION, make_state, make_task
+from zcira_control.policy import CANONICAL_STATE_BRANCH
 
 LANGGRAPH_AVAILABLE = importlib.util.find_spec("langgraph") is not None
 
@@ -72,7 +73,7 @@ class RealLangGraphRuntimeIntegrationTests(unittest.TestCase):
             "project_id": MISSION["project_id"],
             "mission_id": MISSION["mission_id"],
             "canonical_repo": MISSION["canonical_repo"],
-            "branch": MISSION["branch"],
+            "branch": CANONICAL_STATE_BRANCH,
             "environment_namespace": "zcira-readonly-research",
             "state_namespace": "zcira-2026-11-13/main",
             "status": "QUEUED",

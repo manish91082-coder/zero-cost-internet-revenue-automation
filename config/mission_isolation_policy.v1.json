@@ -12,7 +12,7 @@
     "secrets_or_personal_identifiers_may_be_committed_to_public_repo": false
   },
   "thread_isolation": {
-    "canonical_state_authority": "PROJECT_CONTINUITY.md plus canonical main branch",
+    "canonical_state_authority": "PROJECT_CONTINUITY.md plus canonical main code branch and evidence-ledger state branch",
     "read_access_for_other_threads": "ALLOWED",
     "write_access": "ONE_WRITER_AT_A_TIME_ONLY",
     "all_writers_must_check_latest_branch_head": true,
@@ -27,10 +27,11 @@
     "canonical_repo_is_fixed": true,
     "branch_is_fixed": "main",
     "environment_namespace": "zcira-readonly-research",
-    "state_namespace": "zcira-2026-11-13/main",
+    "state_namespace": "zcira-2026-11-13/evidence-ledger",
     "cross_mission_shared_state_allowed": false,
     "cross_mission_write_allowed": false,
-    "feature_branch_without_owner_approval_allowed": false
+    "feature_branch_without_owner_approval_allowed": false,
+    "state_branch": "evidence-ledger"
   },
   "shared_account_resources": {
     "shared_github_identity_may_cause_rate_limit_contention": true,
@@ -49,7 +50,9 @@
     "cloud_resource_ledger": "NOT_IMPLEMENTED",
     "cross_project_lock": "NOT_IMPLEMENTED",
     "cross_thread_write_exclusion": "COOPERATIVE_ONLY_NOT_MECHANICALLY_ENFORCED",
-    "durable_state_manifest": "GENERATION_0_EMPTY_BOOTSTRAP_COMMITTED"
+    "durable_state_manifest": "GENERATION_0_EMPTY_BOOTSTRAP_COMMITTED",
+    "state_branch_separation": "CODE_PATH_IMPLEMENTED_CI_PENDING_LEDGER_BRANCH_NOT_CREATED",
+    "state_store_branch_lock": "IMPLEMENTED_NOT_DEPLOYED"
   },
   "approval_policy": {
     "exact_service_and_oauth_scope_required": true,
@@ -59,5 +62,6 @@
     "unknown_billing_is_not_eligible": true,
     "billing_or_payment_method_required_is_not_eligible": true,
     "owner_approval_cannot_override_zero_cost_cap": true
-  }
+  },
+  "canonical_state_branch": "evidence-ledger"
 }

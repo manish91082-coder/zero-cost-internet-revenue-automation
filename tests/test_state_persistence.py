@@ -9,10 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from zcira_control.checkpoints import StaleCheckpoint
-from zcira_control.policy import PolicyError
+from zcira_control.policy import (
+    CANONICAL_CODE_BRANCH, CANONICAL_REPO, ENVIRONMENT_NAMESPACE,
+    LEGACY_STATE_NAMESPACE, PROJECT_ID, PolicyError,
+)
 from zcira_control.state_repository import (
     LeaseBusy, StateIntegrityError, StateRepository, canonical_json,
-    compute_state_digest, validate_manifest,
+    compute_state_digest, validate_manifest, MANIFEST_PATH,
 )
 
 
@@ -22,6 +25,7 @@ NOW = datetime(2026, 11, 16, 2, 32, 16, tzinfo=timezone.utc)
 class FakeDurableStore:
     def __init__(self):
         self.head = "a" * 40
+        self.branch = "evidence-ledger"
         self.snapshots = {self.head: {}}
 
     def read_head(self):
@@ -52,11 +56,77 @@ def validate_event(kind, payload):
         raise PolicyError("invalid synthetic state event")
 
 
+
+def make_legacy_main_manifest():
+    value = {
+        "schema_version": "1.0.0",
+        "project_id": PROJECT_ID,
+        "mission_id": PROJECT_ID,
+        "canonical_repo": CANONICAL_REPO,
+        "branch": CANONICAL_CODE_BRANCH,
+        "environment_namespace": ENVIRONMENT_NAMESPACE,
+        "state_namespace": LEGACY_STATE_NAMESPACE,
+        "generation": 0,
+        "previous_commit_sha": None,
+        "updated_at": "2026-11-16T02:32:16Z",
+        "objects": [],
+        "active_writer_lease_id": None,
+        "kill_switch": False,
+        "paid_provider_routes_enabled": False,
+        "spend_cap_inr": 0,
+    }
+    value["state_digest"] = compute_state_digest(value)
+    return value
+
+
 class StateRepositoryTests(unittest.TestCase):
     def setUp(self):
         self.store = FakeDurableStore()
         self.repo = StateRepository(self.store, object_validator=validate_event)
         self.repo.initialize(NOW)
+
+    def test_empty_ledger_bootstrap_migrates_only_legacy_generation_zero_manifest(self):
+        legacy = make_legacy_main_manifest()
+        legacy_raw = canonical_json(legacy)
+        legacy_head = self.store.read_head()
+        self.store.snapshots[legacy_head][MANIFEST_PATH] = legacy_raw
+
+        migrated_head = self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+        head, manifest = self.repo.load()
+
+        self.assertEqual(head, migrated_head)
+        self.assertEqual(manifest["branch"], "evidence-ledger")
+        self.assertEqual(manifest["state_namespace"], "zcira-2026-11-13/evidence-ledger")
+        self.assertEqual(manifest["generation"], 0)
+        self.assertEqual(manifest["objects"], [])
+        self.assertEqual(manifest["previous_commit_sha"], legacy_head)
+        self.assertEqual(self.store.read_file(MANIFEST_PATH, ref=legacy_head), legacy_raw)
+
+    def test_empty_ledger_bootstrap_rejects_nonempty_or_advanced_legacy_state(self):
+        legacy = make_legacy_main_manifest()
+        legacy["generation"] = 1
+        legacy["state_digest"] = compute_state_digest(legacy)
+        old_head = self.store.read_head()
+        self.store.snapshots[old_head][MANIFEST_PATH] = canonical_json(legacy)
+        with self.assertRaises(StateIntegrityError):
+            self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+        self.assertEqual(self.store.read_head(), old_head)
+
+    def test_empty_ledger_bootstrap_rejects_bad_legacy_digest(self):
+        legacy = make_legacy_main_manifest()
+        legacy["state_digest"] = "0" * 64
+        old_head = self.store.read_head()
+        self.store.snapshots[old_head][MANIFEST_PATH] = canonical_json(legacy)
+        with self.assertRaises(StateIntegrityError):
+            self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+        self.assertEqual(self.store.read_head(), old_head)
+
+    def test_empty_ledger_bootstrap_rejects_non_ledger_store(self):
+        self.store.branch = "main"
+        old_head = self.store.read_head()
+        with self.assertRaises(PolicyError):
+            self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+        self.assertEqual(self.store.read_head(), old_head)
 
     def test_initial_manifest_is_valid_and_empty(self):
         head, manifest = self.repo.load()

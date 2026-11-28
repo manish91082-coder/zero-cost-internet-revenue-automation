@@ -36,7 +36,10 @@
     "cross_mission_write_allowed": false,
     "commercial_release_requires_all_five_gates_pass": true,
     "unknown_is_pass": false,
-    "cloud_deployment_or_external_action_approval_required": true
+    "cloud_deployment_or_external_action_approval_required": true,
+    "canonical_code_branch": "main",
+    "canonical_state_branch": "evidence-ledger",
+    "canonical_state_namespace": "zcira-2026-11-13/evidence-ledger"
   },
   "status": {
     "schemas_published": true,

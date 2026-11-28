@@ -12,7 +12,7 @@ from urllib.parse import quote, urlsplit, parse_qs
 from urllib.request import Request, urlopen
 
 from .checkpoints import StaleCheckpoint
-from .policy import CANONICAL_BRANCH, CANONICAL_REPO, PolicyError, validate_git_sha
+from .policy import CANONICAL_STATE_BRANCH, CANONICAL_REPO, PolicyError, validate_git_sha
 
 
 class GitHubAPIError(RuntimeError):
@@ -106,9 +106,9 @@ class GitHubGitDataStore:
     cannot both advance the same branch head with force=false.
     """
 
-    def __init__(self, transport: StateTransport, branch: str = CANONICAL_BRANCH):
-        if branch != CANONICAL_BRANCH:
-            raise PolicyError("state store branch is locked to main")
+    def __init__(self, transport: StateTransport, branch: str = CANONICAL_STATE_BRANCH):
+        if branch != CANONICAL_STATE_BRANCH:
+            raise PolicyError("state store branch is locked to evidence-ledger")
         self.transport = transport
         self.branch = branch
 

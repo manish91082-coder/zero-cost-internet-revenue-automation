@@ -5,7 +5,7 @@
   "canonical_repo": "manish91082-coder/zero-cost-internet-revenue-automation",
   "branch": "main",
   "environment_namespace": "zcira-readonly-research",
-  "state_namespace": "zcira-2026-11-13/main",
+  "state_namespace": "zcira-2026-11-13/evidence-ledger",
   "credential_scope": "repository-scoped-contents-write",
   "allowed_paths": [
     "PROJECT_CONTINUITY.md",
@@ -52,5 +52,6 @@
   "cross_mission_write_allowed": false,
   "branch_isolation_required": true,
   "active": true,
-  "trial_credit_dependency_allowed": false
+  "trial_credit_dependency_allowed": false,
+  "state_branch": "evidence-ledger"
 }
