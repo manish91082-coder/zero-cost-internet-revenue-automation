@@ -3,7 +3,7 @@
   "project_id": "ZCIRA-2026-11-13",
   "phase": "S7-A",
   "title": "Read-only GitHub-hosted validation workflow",
-  "status": "S7A_FULL_VALIDATION_PASS_S6_CORE_VALIDATED",
+  "status": "S7A_READ_ONLY_CI_AND_S7B5A_BRANCH_SEPARATION_CODE_PASS",
   "rationale": "S5 real LangGraph integration requires a verified ephemeral runner; S6 is blocked until S5 passes. S7-A supplies only read-only CI before S6. S7-B remains publisher-only enforcement after S6.",
   "workflow": {
     "planned_path": ".github/workflows/zcira-readonly-validation.yml",
@@ -114,7 +114,22 @@
     },
     "code_branch": "main",
     "state_ledger_branch": "evidence-ledger",
-    "ledger_branch_created": false
+    "ledger_branch_created": false,
+    "latest_run": {
+      "run_id": 46103503398,
+      "job_id": 140851005008,
+      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/46103503398",
+      "event": "push",
+      "conclusion": "success",
+      "head_sha": "5cde956e596f7533f37e11a8b4e1965d7f52f7a7",
+      "runner": "ubuntu-24.04 standard GitHub-hosted",
+      "python": "3.12.3",
+      "langgraph": "1.2.22",
+      "hash_locked_packages": 47,
+      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+      "full_pytest": "240 passed, 1 skipped, 9 subtests passed",
+      "real_langgraph_integration": "3 passed"
+    }
   },
   "dependency_bootstrap": {
     "python": "3.12",
@@ -162,9 +177,9 @@
     "no_account_creation_or_terms_acceptance": true
   },
   "phase_order": {
-    "current": "S6A_SOURCE_WORKER_CORE_VALIDATED",
-    "next": "S6B_PINNED_TLS_TRANSPORT_AND_EGRESS_AUDIT",
-    "then": "S6C_DURABLE_RAW_SOURCE_SNAPSHOTS",
+    "current": "S7B5A_BRANCH_AWARE_STATE_STORE_CODE_CI_PASS",
+    "next": "S7B5B_OWNER_LEDGER_BRANCH_BOOTSTRAP_AND_RULESET_REVIEW",
+    "then": "S7B_SINGLE_WRITER_PUBLISHER_ISOLATION_ACCEPTANCE",
     "after": [
       "S6D_LANGGRAPH_SOURCE_WORKER_NODE",
       "S7B_SINGLE_WRITER_ENFORCEMENT",
@@ -184,7 +199,8 @@
     "workflow_executed": true,
     "candidate_lock_generated": true,
     "full_test_suite_executed": true,
-    "actual_langgraph_integration": "PASS_3_REAL_TESTS"
+    "actual_langgraph_integration": "PASS_3_REAL_TESTS",
+    "branch_aware_state_store_ci": "PASS_240_1_9"
   },
   "branch_separation": {
     "code_branch": "main",

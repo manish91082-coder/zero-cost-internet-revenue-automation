@@ -127,7 +127,8 @@
       ],
       "live_git_data_api_write": "NOT_TESTED",
       "production_evidence_publication": "NOT_PERFORMED"
-    }
+    },
+    "unit_tests_added_since_s7b5": 12
   },
   "approval_gates": {
     "repository_only_engineering": "ALLOWED",

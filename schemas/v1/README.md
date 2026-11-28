@@ -17,7 +17,7 @@ Version 1.0.0 contracts for deterministic task control and bounded read-only res
 - State transitions are stored as immutable JSON objects under `state/objects/`; `state/manifest.v1.json` points to the latest object versions.
 - The manifest carries a canonical SHA-256 digest, generation number, previous Git commit SHA, kill-switch state and active writer lease ID.
 - GitHub Git Data API writes create one multi-file commit and update `evidence-ledger` with `force=false`; `main` remains the trusted code branch and is never a state-store fallback.
-- The adapter is branch-locked to `evidence-ledger`; symbolic reads from `main` and all other branches are rejected.
+- The adapter is branch-locked to `evidence-ledger`; symbolic reads from `main` and all other branches are rejected. A historical commit SHA is accepted only when GitHub compare confirms it is an ancestor of the current evidence-ledger head; `behind`, `diverged`, unknown and error states fail closed.
 - This adapter is repo code only. It is not wired to Actions, does not hold a token in the repository, and has not been deployed or run against GitHub write APIs.
 
 

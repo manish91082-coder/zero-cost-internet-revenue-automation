@@ -45,14 +45,14 @@
     "canonical_branch_compare_and_swap_core_present": true,
     "in_memory_lease_core_present": true,
     "durable_writer_lock_file": "COOPERATIVE_GIT_CAS_ADAPTER_IMPLEMENTED_NOT_DEPLOYED",
-    "github_branch_protection": "NOT_VERIFIED_BRANCH_PROTECTION_API_RETURNED_403",
+    "github_branch_protection": "OBSERVED_MAIN_PROTECTED_FALSE_RULESETS_ZERO_BRANCH_PROTECTION_ENDPOINT_403",
     "github_actions_concurrency_group": "NOT_CONFIGURED",
     "cloud_resource_ledger": "NOT_IMPLEMENTED",
     "cross_project_lock": "NOT_IMPLEMENTED",
     "cross_thread_write_exclusion": "COOPERATIVE_ONLY_NOT_MECHANICALLY_ENFORCED",
     "durable_state_manifest": "GENERATION_0_EMPTY_BOOTSTRAP_COMMITTED",
-    "state_branch_separation": "CODE_PATH_IMPLEMENTED_CI_PENDING_LEDGER_BRANCH_NOT_CREATED",
-    "state_store_branch_lock": "IMPLEMENTED_NOT_DEPLOYED"
+    "state_branch_separation": "CODE_CI_PASS_LEDGER_BRANCH_NOT_CREATED_OWNER_SETUP_PENDING",
+    "state_store_branch_lock": "CI_PASS_NOT_DEPLOYED"
   },
   "approval_policy": {
     "exact_service_and_oauth_scope_required": true,
@@ -61,7 +61,9 @@
     "billing_and_payment_method_requirement_must_be_disclosed": true,
     "unknown_billing_is_not_eligible": true,
     "billing_or_payment_method_required_is_not_eligible": true,
-    "owner_approval_cannot_override_zero_cost_cap": true
+    "owner_approval_cannot_override_zero_cost_cap": true,
+    "ledger_branch_creation_owner_only": true,
+    "branch_ruleset_configuration_owner_only": true
   },
   "canonical_state_branch": "evidence-ledger"
 }
