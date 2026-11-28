@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "project_id": "ZCIRA-2026-11-13",
-  "status": "S7B5A_BRANCH_AWARE_STATE_STORE_IMPLEMENTED_CI_PENDING",
+  "status": "S7B5A_BRANCH_AWARE_STATE_STORE_CODE_CI_PASS_OWNER_SETUP_PENDING",
   "canonical_repository": "manish91082-coder/zero-cost-internet-revenue-automation",
   "canonical_branch": "main",
   "publisher_role": "evidence_publisher",
@@ -74,35 +74,39 @@
   },
   "acceptance": {
     "unit_tests_added": 6,
-    "expected_full_suite_total": 228,
+    "expected_full_suite_total": 240,
     "previous_verified_baseline": "228_PASSED_1_EXPECTED_SKIP_9_SUBTESTS",
     "current_ci_status": "PASS",
     "fetchback_verification_required": true,
-    "expected_passed": 228,
+    "expected_passed": 240,
     "expected_skipped": 1,
     "last_observed_run": {
-      "run_id": 45934364778,
-      "job_id": 140294054092,
-      "head_sha": "efb1bcb7ad977c4a0122561dbe1e0d1ca20949ab",
+      "run_id": 46103503398,
+      "job_id": 140851005008,
+      "head_sha": "5cde956e596f7533f37e11a8b4e1965d7f52f7a7",
       "conclusion": "success",
-      "passed": 228,
+      "passed": 240,
       "failed": 0,
       "skipped": 1,
       "subtests_passed": 9,
       "hash_locked_packages": 47,
-      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS"
+      "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
+      "langgraph_runtime_tests": 3,
+      "runner": "ubuntu-24.04",
+      "python": "3.12.3"
     },
-    "verified_run_id": 45934364778,
-    "verified_head_sha": "efb1bcb7ad977c4a0122561dbe1e0d1ca20949ab",
+    "verified_run_id": 46103503398,
+    "verified_head_sha": "5cde956e596f7533f37e11a8b4e1965d7f52f7a7",
     "verified_result": {
       "conclusion": "success",
-      "passed": 228,
+      "passed": 240,
       "skipped": 1,
       "subtests_passed": 9,
       "runner": "ubuntu-24.04",
       "python": "3.12.3",
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
       "hash_locked_packages": 47,
+      "langgraph_version": "1.2.22",
       "langgraph_runtime_tests": 3
     },
     "ambiguous_commit_recovery": {
@@ -116,17 +120,20 @@
     "github_git_data_fake_transport": {
       "status": "PASS",
       "test_file": "tests/test_github_state.py",
-      "test_methods": 15,
+      "test_methods": 18,
       "new_tests": [
         "test_read_file_accepts_wrapped_base64_and_verifies_git_blob_sha",
         "test_read_file_rejects_invalid_base64_instead_of_silently_ignoring_bytes",
         "test_read_file_rejects_git_blob_sha_mismatch",
         "test_blob_creation_response_sha_must_match_git_object_content",
         "test_ref_update_lost_response_after_server_commit_is_reconciled_read_only",
-        "test_ref_update_lost_response_before_server_commit_remains_uncommitted"
+        "test_ref_update_lost_response_before_server_commit_remains_uncommitted",
+        "test_non_ancestor_commit_sha_is_rejected",
+        "test_ancestor_commit_sha_is_allowed_for_deterministic_fetchback"
       ],
       "live_git_data_api_write": "NOT_TESTED",
-      "production_evidence_publication": "NOT_PERFORMED"
+      "production_evidence_publication": "NOT_PERFORMED",
+      "commit_sha_ancestry": "PASS_FAKE_TRANSPORT_ONLY"
     },
     "unit_tests_added_since_s7b5": 12
   },
@@ -178,14 +185,29 @@
         "network_status_0",
         "http_5xx"
       ],
-      "recovery": "READ_CANONICAL_MAIN_HEAD",
+      "recovery": "READ_CANONICAL_EVIDENCE_LEDGER_HEAD",
       "observed_head_equals_proposed_commit": "TREAT_AS_APPLIED_THEN_FETCH_BACK",
       "observed_head_equals_expected_parent": "RETHROW_ORIGINAL_ERROR_NO_RETRY",
       "observed_head_is_other": "FAIL_CLOSED_BRANCH_HEAD_CONFLICT",
       "blind_retry": false
     },
     "validation_scope": "FAKE_TRANSPORT_ONLY",
-    "live_git_data_api_write_tested": false
+    "live_git_data_api_write_tested": false,
+    "commit_sha_ancestry_check": {
+      "endpoint": "GET /compare/{commit_sha}...evidence-ledger",
+      "accepted_status": [
+        "ahead",
+        "identical"
+      ],
+      "rejected_status": [
+        "behind",
+        "diverged",
+        "unknown_or_error"
+      ],
+      "cache_key": "commit_sha + observed_evidence_ledger_head",
+      "fail_closed_on_error": true,
+      "symbolic_cross_branch_refs_allowed": false
+    }
   },
   "repository_ruleset_assessment": {
     "public_repository_rulesets_available_on_github_free": true,
@@ -218,23 +240,25 @@
       "ledger_data_executed_as_code": false,
       "ledger_content_treated_as_untrusted_data": true,
       "publisher_workflow_source": "TRUSTED_MAIN_ONLY",
-      "status": "LOCKED_FOR_IMPLEMENTATION"
+      "status": "IMPLEMENTED_IN_CODE_CI_PASS_NOT_ACTIVATED"
     },
     "current_code_constraint": {
-      "github_git_data_store_branch_lock": "main",
-      "state_manifest_branch_lock": "main",
-      "branch_split_code_implemented": false,
-      "migration_performed": false
+      "github_git_data_store_branch_lock": "evidence-ledger",
+      "state_manifest_branch_lock": "evidence-ledger",
+      "branch_split_code_implemented": true,
+      "commit_sha_ancestry_check": true,
+      "migration_performed": false,
+      "live_ledger_branch_created": false
     },
     "activation": false,
-    "decision": "BRANCH_SEPARATED_LEDGER_DESIGN_LOCKED_FOR_REPO_ONLY_IMPLEMENTATION"
+    "decision": "BRANCH_SEPARATED_LEDGER_CODE_PASS_OWNER_SETUP_PENDING"
   },
   "branch_separation_decision": {
-    "status": "DESIGN_LOCKED_CODE_MIGRATION_PENDING",
+    "status": "S7B5A_CODE_CI_PASS_OWNER_SETUP_PENDING",
     "code_branch": "main",
     "state_branch": "evidence-ledger",
-    "current_state_store_branch": "evidence-ledger",
-    "current_manifest_branch": "evidence-ledger",
+    "current_state_store_branch": "NOT_CREATED",
+    "current_manifest_branch": "main",
     "target_state_namespace": "zcira-2026-11-13/evidence-ledger",
     "current_main_only_branch_count": 1,
     "current_state_manifest_generation": 0,
@@ -342,15 +366,7 @@
       "publisher_post_commit_fetchback_required": true,
       "scheduled_audit_from_main": true
     },
-    "current_code_changes_required": [
-      "Introduce CANONICAL_CODE_BRANCH=main and CANONICAL_STATE_BRANCH=evidence-ledger.",
-      "Parameterize GitHubGitDataStore on the locked state branch, with no fallback to main.",
-      "Move state_manifest and writer_lease branch/namespace contracts to evidence-ledger while task/missions remain on main.",
-      "Update state, lease, run-state schemas and fixtures; retain task/source code branch as main.",
-      "Update mission registry, isolation policy, S5 checkpoint policy and publisher policy.",
-      "Add FakeTransport tests proving publisher token cannot target main and state operations use evidence-ledger.",
-      "Add an owner-only empty-ledger bootstrap/migration dry-run; no live branch creation."
-    ],
+    "current_code_changes_required": [],
     "migration": {
       "current_manifest_generation": 0,
       "current_objects": 0,
@@ -361,20 +377,42 @@
     },
     "activation": false,
     "branch_split_code_implemented": true,
-    "live_ledger_branch_created": false
+    "live_ledger_branch_created": false,
+    "configured_state_store_branch": "evidence-ledger",
+    "target_manifest_branch": "evidence-ledger",
+    "commit_sha_ancestry_enforced": true,
+    "completed_code_only_changes": [
+      "Separate CANONICAL_CODE_BRANCH=main and CANONICAL_STATE_BRANCH=evidence-ledger while preserving the code-branch alias.",
+      "Lock GitHubGitDataStore to evidence-ledger and reject main or any other symbolic branch.",
+      "Require historical commit SHA reads to be an ancestor of the current evidence-ledger head using GitHub compare status.",
+      "Pin state manifest, writer leases, resource key and run-state schema to evidence-ledger.",
+      "Keep tasks, source code, trusted workflow and mission code branch on main; mission registry records both branches.",
+      "Add explicit generation-zero legacy-manifest bootstrap with strict empty-state checks and parent preservation.",
+      "Add FakeTransport branch, SHA ancestry, schema, bootstrap and LangGraph resume regression tests."
+    ],
+    "remaining_owner_actions": [
+      "Owner creates evidence-ledger once from the current main head; automation must not create the branch.",
+      "Owner configures main and ledger rulesets and confirms publisher App is never a main-branch bypass actor.",
+      "After branch creation, run a read-only exact-head bootstrap preflight and fetch-back the inherited generation-zero manifest.",
+      "Only after separate approval and credential-scope review may the publisher workflow perform its first evidence-ledger write."
+    ]
   },
   "canonical_code_branch": "main",
   "canonical_state_branch": "evidence-ledger",
   "canonical_state_namespace": "zcira-2026-11-13/evidence-ledger",
   "implementation_status": {
-    "branch_constants": "IMPLEMENTED",
-    "github_git_data_store_lock": "EVIDENCE_LEDGER_ONLY_NO_MAIN_FALLBACK",
-    "state_manifest_and_lease_namespace": "EVIDENCE_LEDGER",
-    "run_state_namespace": "EVIDENCE_LEDGER",
-    "langgraph_run_state_branch": "EVIDENCE_LEDGER",
-    "fake_transport_branch_isolation": "TESTS_ADDED",
-    "empty_legacy_manifest_bootstrap": "IMPLEMENTED_TESTS_PENDING",
+    "branch_constants": "PASS",
+    "github_git_data_store_lock": "PASS_EVIDENCE_LEDGER_ONLY",
+    "commit_sha_ancestry_check": "PASS_COMPARE_API_POLICY_AND_FAKE_TRANSPORT",
+    "state_manifest_and_lease_namespace": "PASS_EVIDENCE_LEDGER",
+    "run_state_namespace": "PASS_EVIDENCE_LEDGER",
+    "langgraph_run_state_branch": "PASS_EVIDENCE_LEDGER",
+    "mission_registry_code_vs_state_branch": "PASS",
+    "fake_transport_branch_isolation": "PASS",
+    "empty_legacy_manifest_bootstrap": "PASS_SYNTHETIC_TEST_ONLY",
+    "exact_head_ci": "PASS_240_PASSED_1_EXPECTED_SKIP_9_SUBTESTS",
     "live_branch_creation": false,
+    "live_git_data_write": false,
     "publisher_activation": false
   }
 }
