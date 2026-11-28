@@ -75,7 +75,7 @@ class RealLangGraphRuntimeIntegrationTests(unittest.TestCase):
             "canonical_repo": MISSION["canonical_repo"],
             "branch": CANONICAL_STATE_BRANCH,
             "environment_namespace": "zcira-readonly-research",
-            "state_namespace": "zcira-2026-11-13/main",
+            "state_namespace": "zcira-2026-11-13/evidence-ledger",
             "status": "QUEUED",
             "started_at": original_started_at,
             "pending_task_ids": [second_task["task_id"]],
