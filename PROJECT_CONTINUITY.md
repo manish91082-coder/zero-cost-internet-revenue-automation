@@ -1114,3 +1114,6 @@ The Phase 24 work items in this section were completed in Phase 24 Batches 1–4
 
 
 - S7-B5A policy/report/continuity metadata commit d949efdb478e203a8bb735e0ca7c1598210b2548 was itself validated at exact head by GitHub Actions run 46103815879 / job 140851974595: SUCCESS; 240 passed, 1 expected skip, 9 subtests passed; 47 hash-locked packages; pip check clean. This validates the recorded code-only design and metadata, not a live ledger branch, ruleset, publisher credential or Git Data write.
+
+
+- Final S7-B5A code/policy/report metadata commit 5358e9b38b844b7e035b1c022800f6644ab4b923 was validated at exact head by GitHub Actions run 46104178490 / job 140853101827: SUCCESS; 242 passed, 1 expected skip, 11 subtests passed; 47 hash-locked packages; pip check clean. This run validates the recorded strict JSON type checks and policy/report metadata, not a live evidence-ledger branch or publisher activation.
