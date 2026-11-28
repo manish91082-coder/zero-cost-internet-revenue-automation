@@ -250,12 +250,16 @@ class StateRepository:
             "branch": CANONICAL_CODE_BRANCH,
             "environment_namespace": ENVIRONMENT_NAMESPACE,
             "state_namespace": LEGACY_STATE_NAMESPACE,
-            "paid_provider_routes_enabled": False,
-            "spend_cap_inr": 0,
         }
         for key, expected in legacy_constants.items():
             if legacy.get(key) != expected:
                 raise StateIntegrityError(f"inherited main manifest mismatch: {key}")
+        paid_routes = legacy.get("paid_provider_routes_enabled")
+        if type(paid_routes) is not bool or paid_routes is not False:
+            raise StateIntegrityError("inherited main manifest paid-provider flag must be boolean false")
+        spend_cap = legacy.get("spend_cap_inr")
+        if type(spend_cap) is not int or spend_cap != 0:
+            raise StateIntegrityError("inherited main manifest spend cap must be integer zero")
         generation = legacy.get("generation")
         if (
             not isinstance(generation, int)

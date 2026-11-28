@@ -121,6 +121,28 @@ class StateRepositoryTests(unittest.TestCase):
             self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
         self.assertEqual(self.store.read_head(), old_head)
 
+    def test_empty_ledger_bootstrap_rejects_non_boolean_paid_route_flag(self):
+        legacy = make_legacy_main_manifest()
+        legacy["paid_provider_routes_enabled"] = 0
+        legacy["state_digest"] = compute_state_digest(legacy)
+        old_head = self.store.read_head()
+        self.store.snapshots[old_head][MANIFEST_PATH] = canonical_json(legacy)
+        with self.assertRaises(StateIntegrityError):
+            self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+        self.assertEqual(self.store.read_head(), old_head)
+
+    def test_empty_ledger_bootstrap_rejects_non_integer_zero_spend_cap(self):
+        for invalid_cap in (False, 0.0):
+            with self.subTest(invalid_cap=invalid_cap):
+                legacy = make_legacy_main_manifest()
+                legacy["spend_cap_inr"] = invalid_cap
+                legacy["state_digest"] = compute_state_digest(legacy)
+                old_head = self.store.read_head()
+                self.store.snapshots[old_head][MANIFEST_PATH] = canonical_json(legacy)
+                with self.assertRaises(StateIntegrityError):
+                    self.repo.bootstrap_empty_ledger(NOW + timedelta(seconds=1))
+                self.assertEqual(self.store.read_head(), old_head)
+
     def test_empty_ledger_bootstrap_rejects_non_ledger_store(self):
         self.store.branch = "main"
         old_head = self.store.read_head()
