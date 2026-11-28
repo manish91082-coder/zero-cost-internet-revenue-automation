@@ -116,18 +116,18 @@
     "state_ledger_branch": "evidence-ledger",
     "ledger_branch_created": false,
     "latest_run": {
-      "run_id": 46103503398,
-      "job_id": 140851005008,
-      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/46103503398",
+      "run_id": 46103992252,
+      "job_id": 140852520683,
+      "url": "https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/46103992252",
       "event": "push",
       "conclusion": "success",
-      "head_sha": "5cde956e596f7533f37e11a8b4e1965d7f52f7a7",
+      "head_sha": "b5fe03755f8062eddbff152d53c19a1f66cfcee1",
       "runner": "ubuntu-24.04 standard GitHub-hosted",
       "python": "3.12.3",
       "langgraph": "1.2.22",
       "hash_locked_packages": 47,
       "pip_check": "PASS_NO_BROKEN_REQUIREMENTS",
-      "full_pytest": "240 passed, 1 skipped, 9 subtests passed",
+      "full_pytest": "242 passed, 1 skipped, 11 subtests passed",
       "real_langgraph_integration": "3 passed"
     }
   },
@@ -200,7 +200,7 @@
     "candidate_lock_generated": true,
     "full_test_suite_executed": true,
     "actual_langgraph_integration": "PASS_3_REAL_TESTS",
-    "branch_aware_state_store_ci": "PASS_240_1_9"
+    "branch_aware_state_store_ci": "PASS_242_1_11"
   },
   "branch_separation": {
     "code_branch": "main",

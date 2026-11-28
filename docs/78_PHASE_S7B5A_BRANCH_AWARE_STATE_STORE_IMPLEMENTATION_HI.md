@@ -80,12 +80,12 @@ StateRepository.bootstrap_empty_ledger() जोड़ा गया। यह bra
 
 PASS
 
-GitHub Actions run: 46103503398  
-Job: 140851005008  
-Commit: 5cde956e596f7533f37e11a8b4e1965d7f52f7a7
+GitHub Actions run: 46103992252  
+Job: 140852520683  
+Commit: b5fe03755f8062eddbff152d53c19a1f66cfcee1
 
 Exact workflow run:
-https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/46103503398
+https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actions/runs/46103992252
 
 - Runner: ubuntu-24.04 standard GitHub-hosted.
 - Python: 3.12.3.
@@ -93,7 +93,7 @@ https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actio
 - Hash-locked packages: 47.
 - pip check: PASS, no broken requirements.
 - Real LangGraph runtime integration: 3 passed.
-- Full suite: 240 passed, 1 skipped, 9 subtests passed.
+- Full suite: 242 passed, 1 skipped, 11 subtests passed.
 - Git Data branch and commit-ancestry behavior: FakeTransport tests only.
 - Bootstrap behavior: FakeDurableStore synthetic tests only.
 
@@ -101,7 +101,7 @@ https://github.com/manish91082-coder/zero-cost-internet-revenue-automation/actio
 - Run 46103124196: LangGraph resume fixture में पुराना main namespace.
 - Run 46103199673: दो mission contexts में state_branch missing और checkpoint-chain closure diagnostic की आवश्यकता.
 
-Fixtures और tests ठीक किए गए। Run 46103359605 में 238 passed, 1 skipped, 9 subtests हुए। इसके बाद commit-SHA ancestry enforcement और दो अतिरिक्त FakeTransport tests जोड़े गए। अंतिम run 46103503398 exact-head पर PASS हुआ।
+Fixtures और tests ठीक किए गए। Run 46103359605 में 238 passed, 1 skipped, 9 subtests हुए। इसके बाद commit-SHA ancestry enforcement और दो अतिरिक्त FakeTransport tests जोड़े गए। Run 46103503398 पर 240 passed हुए। अंतिम strict-zero bootstrap hardening में JSON boolean false और JSON integer zero के exact type checks जोड़े गए; boolean/float coercion reject होता है। अंतिम run 46103992252 exact-head पर PASS हुआ।
 
 ## 5. Fetch-back verification
 
@@ -110,12 +110,13 @@ Code implementation commits:
 - 4b33dfe0643d69a9fffbb452dd6e29b144541652
 - 4807adc7222860012d7d3b883625cf2cfdd4fd73
 - 5cde956e596f7533f37e11a8b4e1965d7f52f7a7
+- b5fe03755f8062eddbff152d53c19a1f66cfcee1
 
-सभी बदले हुए code/schema/config/test artifacts को GitHub से दोबारा fetch करके exact blob SHA मिलाया गया। 34 unique paths के 35 fetch-back checks में mismatch नहीं मिला।
+सभी बदले हुए code/schema/config/test artifacts को GitHub से दोबारा fetch करके exact blob SHA मिलाया गया। 34 unique paths के 37 fetch-back checks में mismatch नहीं मिला।
 
 Representative blob SHAs:
 - src/zcira_control/github_state.py: f701ed7cc835baab6d901cc36e7b9da6ddc88e13
-- src/zcira_control/state_repository.py: ab2f2b445f2cfaa3789f718344b74152580a2feb
+- src/zcira_control/state_repository.py: 5a676ac35ab92b7ce71127649a0c3b186715715a
 - src/zcira_control/policy.py: 5af09a5fdd4e6a253b2b3396216c26139074db9c
 - src/zcira_control/leases.py: 71ce219ac6cfd123fc97b90ff27ee016f3bdeeaa
 - src/zcira_control/langgraph_adapter.py: 530564e09937855960dca3adcb0d6b5f1d2e1078
@@ -123,7 +124,7 @@ Representative blob SHAs:
 - schemas/v1/resource_lease.schema.json: 177f7b700bee85083d648e526730613eb7ab084a
 - schemas/v1/run_state.schema.json: cc16d06d3dfc0c79cad2c407c3d778639bd86fc2
 - tests/test_github_state.py: bd35fff29768911f81cf9426a56697a53f682541
-- tests/test_state_persistence.py: 5d216f2c057fad6cc05aaeb78047013e0abc7f19
+- tests/test_state_persistence.py: c424eabd8dd666493894651628c4dc2349b27f82
 - tests/test_contract_schemas.py: 844f6df2f1889eb11998937be464f42060be25a4
 
 ## 6. Actual repository and runtime status
