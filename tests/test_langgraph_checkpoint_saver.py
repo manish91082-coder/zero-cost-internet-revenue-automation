@@ -313,6 +313,22 @@ def test_real_langgraph_interrupt_resume_across_two_saver_instances():
         policy_path=ROOT / "config" / "s5_checkpoint_policy.v1.json",
     )
     saver2.bind_graph_nodes(("node_a", "node_b"))
+    head_after_lease, manifest_after_lease = repository2.load()
+    checkpoint_payloads = [
+        repository2.load_object("langgraph_checkpoint", entry["object_id"], head_after_lease, manifest_after_lease)
+        for entry in manifest_after_lease["objects"]
+        if entry["kind"] == "langgraph_checkpoint"
+    ]
+    checkpoint_ids = {item["checkpoint_id"] for item in checkpoint_payloads if item["run_id"] == run_id}
+    parent_pairs = [
+        (item["checkpoint_id"], item["parent_checkpoint_id"], item["run_id"])
+        for item in checkpoint_payloads
+    ]
+    print("ZCIRA_CHECKPOINT_CHAIN_DEBUG", json.dumps(parent_pairs, sort_keys=True))
+    assert all(
+        item["parent_checkpoint_id"] is None or item["parent_checkpoint_id"] in checkpoint_ids
+        for item in checkpoint_payloads if item["run_id"] == run_id
+    ), parent_pairs
     graph2 = builder.compile(checkpointer=saver2)
     resumed = graph2.invoke(None, config)
     assert calls == {"node_a": 1, "node_b": 1}

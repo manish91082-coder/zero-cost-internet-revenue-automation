@@ -17,8 +17,8 @@ PAGE = b"<html><head><title>Apify actor docs</title></head><body><p>Actor runtim
 ROOT_REPO = "manish91082-coder/zero-cost-internet-revenue-automation"
 MISSION = {
     "project_id": "ZCIRA-2026-11-13", "mission_id": "ZCIRA-2026-11-13",
-    "canonical_repo": ROOT_REPO, "branch": "main",
-    "environment_namespace": "zcira-readonly-research", "state_namespace": "zcira-2026-11-13/main",
+    "canonical_repo": ROOT_REPO, "branch": "main", "state_branch": "evidence-ledger",
+    "environment_namespace": "zcira-readonly-research", "state_namespace": "zcira-2026-11-13/evidence-ledger",
     "max_parallel_research_workers": 2, "single_writer_role": "evidence_publisher", "spend_cap_inr": 0,
     "paid_fallback_allowed": False, "trial_credit_dependency_allowed": False,
     "shared_state_with_other_missions": False, "cross_mission_write_allowed": False, "active": True,
